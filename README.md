@@ -1,2 +1,84 @@
-# Mano-Operations-Workbench
-Mano's French platform provides a comprehensive collaborative assistant for operations, serving the operations team throughout the entire work cycle, from daily monitoring and event review to product selection and inventory optimization.
+# Mano 跨境电商运营工作台 · 周报监控看板
+
+> 法国 Mano.fr 平台卖家一站式运营管理工具 — 数据中心 / 店铺健康 / 预警规则 / 周报看板 / 异常升级
+
+---
+
+## 🚀 一键部署（GitHub Pages）
+
+### 1. Fork / 上传到 GitHub
+
+1. 创建仓库：`你的用户名.github.io`（必须是 Public）
+2. 上传本项目所有文件（保持目录结构）
+3. Settings → Pages → Source: `GitHub Actions` → 保存
+4. 等待 1-3 分钟，访问 `https://你的用户名.github.io`
+
+### 2. 自动部署
+
+本仓库已包含 `.github/workflows/deploy-pages.yml`，每次 push 到 `main` 分支会自动部署。
+
+---
+
+## 📋 功能模块
+
+| 模块 | 说明 |
+|------|------|
+| 📊 工作台仪表盘 | 周报看板 + 实时概览 + 预警中心 + 推送设置 + 历史周报 |
+| 🗄️ 数据中心 | 销售/流量/广告/库存/利润/差评/关键词/竞品数据统一管理，支持 CSV/JSON 导入 |
+| 🏪 店铺健康监控 | 日常检查清单 + KPI 指标 + 转化率/ROAS/库存三级预警规则 |
+| 🔍 选品与Listing | 关键词词库 + Listing优化清单 |
+| 📣 广告与促销 | 盈亏平衡ROAS计算器 + 广告活动监控 + 预警联动 |
+| 📦 库存与供应链 | 库存仪表盘 + 补货规则 + 季节性备货 + SKU异常列表 |
+| ⭐ 评价与客服 | 差评分类统计 + 回复模板 |
+| 🔎 竞品调研 | 竞品监控清单 |
+| 📈 数据复盘 | 销售/利润趋势对比 |
+
+---
+
+## 💾 数据存储
+
+所有运营数据保存在**浏览器本地存储**中：
+
+- **localStorage**：配置数据、预警规则、KPI 指标、周报设置（~5MB）
+- **IndexedDB**：大型报表文件数据（容量几乎无限）
+
+⚠️ 数据**不上传到任何服务器**。建议每周至少导出一次备份（JSON 文件），更换设备/浏览器时需手动导入恢复。
+
+### 数据管理
+
+点击左侧边栏「💾 数据管理」：
+- **导出全部数据**：下载 JSON 备份文件
+- **导入数据恢复**：从备份文件恢复所有数据
+- **清除所有数据**：重置为初始状态
+
+---
+
+## 🛠 技术栈
+
+- HTML5 + CSS3 + Vanilla JavaScript（零依赖、零构建步骤）
+- Canvas API（趋势图表）
+- localStorage + IndexedDB（数据持久化）
+- Browser Notification API（推送提醒）
+- GitHub Actions + GitHub Pages（自动部署）
+
+---
+
+## 📦 文件结构
+
+```
+.
+├── index.html              # 主页面（单文件应用）
+├── README.md               # 本文件
+├── .gitignore
+└── .github/
+    └── workflows/
+        └── deploy-pages.yml # GitHub Pages 自动部署
+```
+
+---
+
+## 🔒 隐私与安全
+
+- 本工具为纯前端应用，**所有数据仅存在于您的浏览器中**
+- 不上传任何数据到 GitHub 或第三方服务器
+- 清除浏览器缓存会导致数据丢失，请定期导出备份
