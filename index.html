@@ -704,6 +704,150 @@ body {
 .migration-progress.show { display: block; }
 .migration-bar { height: 6px; background: var(--gray-200); border-radius: 3px; margin-top: 8px; overflow: hidden; }
 .migration-bar-fill { height: 100%; background: var(--primary); border-radius: 3px; transition: width 0.3s; }
+
+/* ============ 选品信息来源管理 ============ */
+.src-stats-board { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
+@media (max-width: 900px) { .src-stats-board { grid-template-columns: repeat(2, 1fr); } }
+.src-stat-card { background: #fff; border: 1px solid var(--gray-200); border-radius: var(--radius-sm); padding: 16px; text-align: center; cursor: pointer; transition: all var(--transition); }
+.src-stat-card:hover { box-shadow: var(--shadow-sm); border-color: var(--primary-light); }
+.src-stat-num { font-size: 28px; font-weight: 800; color: var(--gray-900); }
+.src-stat-label { font-size: 12px; color: var(--gray-500); font-weight: 600; margin-top: 4px; }
+.src-stat-card.total { border-left: 4px solid var(--primary); }
+.src-stat-card.pending { border-left: 4px solid var(--warning); }
+.src-stat-card.reviewing { border-left: 4px solid #8b5cf6; }
+.src-stat-card.adopted { border-left: 4px solid var(--success); }
+.src-type-bar { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; justify-content: center; font-size: 12px; color: var(--gray-500); }
+.src-type-bar span { padding: 2px 8px; border-radius: 10px; background: var(--gray-100); font-weight: 500; }
+
+.src-list { display: flex; flex-direction: column; gap: 10px; }
+.src-card { background: #fff; border: 1px solid var(--gray-200); border-radius: var(--radius-sm); padding: 16px; transition: all var(--transition); position: relative; }
+.src-card:hover { box-shadow: var(--shadow-sm); border-color: var(--primary-light); }
+.src-card-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
+.src-card-title { font-size: 15px; font-weight: 600; color: var(--gray-900); flex: 1; }
+.src-card-badge { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; white-space: nowrap; }
+.src-card-badge.type-kw { background: #eff6ff; color: #2563eb; }
+.src-card-badge.type-rank { background: #f5f3ff; color: #7c3aed; }
+.src-card-badge.type-trend { background: #ecfdf5; color: #059669; }
+.src-card-badge.type-supplier { background: #fffbeb; color: #d97706; }
+.src-card-badge.status-pending { background: var(--warning-bg); color: var(--warning); }
+.src-card-badge.status-reviewing { background: #f5f3ff; color: #7c3aed; }
+.src-card-badge.status-adopted { background: var(--success-bg); color: var(--success); }
+.src-card-badge.status-abandoned { background: var(--gray-100); color: var(--gray-500); }
+.src-card-meta { display: flex; gap: 12px; flex-wrap: wrap; font-size: 12px; color: var(--gray-500); margin-bottom: 8px; }
+.src-card-summary { font-size: 13px; color: var(--gray-600); line-height: 1.6; margin-bottom: 10px; }
+.src-card-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+.src-status-select { padding: 4px 8px; border: 1px solid var(--gray-300); border-radius: 6px; font-size: 12px; background: #fff; cursor: pointer; }
+
+.src-form-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; }
+.src-form-overlay.show { display: flex; }
+.src-form { background: #fff; border-radius: var(--radius); width: 90%; max-width: 620px; max-height: 85vh; overflow-y: auto; box-shadow: var(--shadow-lg); }
+.src-form-header { padding: 18px 24px; border-bottom: 1px solid var(--gray-200); display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; background: #fff; z-index: 1; }
+.src-form-body { padding: 20px 24px; }
+.src-form-footer { padding: 14px 24px; border-top: 1px solid var(--gray-200); display: flex; gap: 10px; justify-content: flex-end; }
+.src-form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.src-form-grid .full { grid-column: 1 / -1; }
+.src-form-group { display: flex; flex-direction: column; gap: 4px; }
+.src-form-group label { font-size: 13px; font-weight: 600; color: var(--gray-700); }
+.src-form-group label .req { color: var(--danger); }
+.src-form-group input, .src-form-group select, .src-form-group textarea {
+  padding: 8px 12px; border: 1px solid var(--gray-300); border-radius: var(--radius-sm);
+  font-size: 13px; background: #fff; color: var(--gray-800); font-family: inherit;
+}
+.src-form-group input:focus, .src-form-group select:focus, .src-form-group textarea:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
+.src-form-group textarea { min-height: 80px; resize: vertical; }
+
+/* ============ 竞品分析工作台 ============ */
+.ca-step-bar { display: flex; align-items: center; gap: 0; margin-bottom: 24px; background: var(--gray-50); border-radius: var(--radius-sm); padding: 6px; flex-wrap: wrap; }
+.ca-step-item { display: flex; align-items: center; gap: 8px; padding: 10px 16px; border-radius: var(--radius-sm); font-size: 13px; font-weight: 600; color: var(--gray-400); cursor: pointer; transition: all var(--transition); white-space: nowrap; }
+.ca-step-item.active { background: var(--primary); color: #fff; }
+.ca-step-item.done { color: var(--success); }
+.ca-step-item .step-num { width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; background: var(--gray-200); color: var(--gray-500); }
+.ca-step-item.active .step-num { background: rgba(255,255,255,0.3); color: #fff; }
+.ca-step-item.done .step-num { background: var(--success-bg); color: var(--success); }
+.ca-step-arrow { color: var(--gray-300); font-size: 14px; margin: 0 4px; }
+
+.ca-project-list { display: flex; flex-direction: column; gap: 10px; }
+.ca-project-card { background: #fff; border: 1px solid var(--gray-200); border-radius: var(--radius-sm); padding: 16px; cursor: pointer; transition: all var(--transition); }
+.ca-project-card:hover { box-shadow: var(--shadow-sm); border-color: var(--primary-light); }
+.ca-project-card.active { border-color: var(--primary); box-shadow: 0 0 0 2px rgba(37,99,235,0.15); }
+.ca-project-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 6px; }
+.ca-project-name { font-size: 15px; font-weight: 600; color: var(--gray-900); }
+.ca-project-meta { font-size: 12px; color: var(--gray-500); display: flex; gap: 12px; flex-wrap: wrap; }
+
+.ca-top20-table-wrap { overflow-x: auto; max-height: 500px; overflow-y: auto; }
+.ca-top20-table { width: 100%; border-collapse: collapse; font-size: 12px; min-width: 1000px; }
+.ca-top20-table th { background: var(--gray-100); padding: 8px 6px; text-align: left; font-weight: 600; font-size: 11px; color: var(--gray-600); border-bottom: 2px solid var(--gray-200); position: sticky; top: 0; z-index: 1; }
+.ca-top20-table td { padding: 6px; border-bottom: 1px solid var(--gray-100); }
+.ca-top20-table input { width: 100%; padding: 4px 6px; border: 1px solid transparent; border-radius: 4px; font-size: 12px; background: transparent; transition: all var(--transition); }
+.ca-top20-table input:hover { border-color: var(--gray-300); background: #fff; }
+.ca-top20-table input:focus { border-color: var(--primary); background: #fff; outline: none; }
+.ca-top20-table .num-col { width: 36px; text-align: center; color: var(--gray-400); font-size: 11px; }
+
+.ca-stats-bar { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin: 14px 0; }
+.ca-stat-mini { background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: var(--radius-sm); padding: 10px 14px; }
+.ca-stat-mini-label { font-size: 11px; color: var(--gray-500); font-weight: 600; }
+.ca-stat-mini-value { font-size: 16px; font-weight: 700; color: var(--gray-800); margin-top: 2px; }
+
+.ca-listing-form { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.ca-listing-form .full { grid-column: 1 / -1; }
+.ca-listing-field { display: flex; flex-direction: column; gap: 4px; }
+.ca-listing-field label { font-size: 13px; font-weight: 600; color: var(--gray-700); }
+.ca-listing-field input, .ca-listing-field textarea { padding: 8px 12px; border: 1px solid var(--gray-300); border-radius: var(--radius-sm); font-size: 13px; background: #fff; font-family: inherit; }
+.ca-listing-field textarea { min-height: 60px; resize: vertical; }
+.ca-listing-field input:focus, .ca-listing-field textarea:focus { border-color: var(--primary); outline: none; }
+.ca-summary-box { background: var(--primary-bg); border: 1px solid #bfdbfe; border-radius: var(--radius-sm); padding: 16px; font-size: 13px; line-height: 1.8; color: var(--gray-700); }
+.ca-report-panel { background: #fff; border: 1px solid var(--gray-200); border-radius: var(--radius-sm); padding: 20px; font-size: 13px; line-height: 1.9; color: var(--gray-700); white-space: pre-wrap; font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace; }
+
+/* ============ 选品打分卡 ============ */
+.sc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; }
+.sc-card { background: #fff; border: 1px solid var(--gray-200); border-radius: var(--radius-sm); padding: 18px; cursor: pointer; transition: all var(--transition); position: relative; overflow: hidden; }
+.sc-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+.sc-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; }
+.sc-card.rating-highly::before { background: var(--success); }
+.sc-card.rating-recommended::before { background: #f59e0b; }
+.sc-card.rating-cautious::before { background: #f97316; }
+.sc-card.rating-not::before { background: var(--danger); }
+.sc-card-name { font-size: 16px; font-weight: 700; color: var(--gray-900); margin-bottom: 4px; }
+.sc-card-category { font-size: 12px; color: var(--gray-500); margin-bottom: 12px; }
+.sc-card-score-wrap { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.sc-card-score { font-size: 28px; font-weight: 800; }
+.sc-card-score.highly { color: var(--success); }
+.sc-card-score.recommended { color: #f59e0b; }
+.sc-card-score.cautious { color: #f97316; }
+.sc-card-score.not { color: var(--danger); }
+.sc-card-rating { padding: 3px 12px; border-radius: 12px; font-size: 12px; font-weight: 700; }
+.sc-card-rating.highly { background: var(--success-bg); color: var(--success); }
+.sc-card-rating.recommended { background: var(--warning-bg); color: #d97706; }
+.sc-card-rating.cautious { background: #fff7ed; color: #ea580c; }
+.sc-card-rating.not { background: var(--danger-bg); color: var(--danger); }
+.sc-card-dims { display: flex; flex-direction: column; gap: 4px; margin-top: 8px; }
+.sc-dim-row { display: flex; align-items: center; gap: 8px; font-size: 12px; }
+.sc-dim-label { width: 70px; color: var(--gray-600); flex-shrink: 0; }
+.sc-dim-bar-wrap { flex: 1; height: 6px; background: var(--gray-100); border-radius: 3px; overflow: hidden; }
+.sc-dim-bar { height: 100%; border-radius: 3px; transition: width 0.3s; }
+.sc-dim-bar.demand { background: #3b82f6; }
+.sc-dim-bar.competition { background: #8b5cf6; }
+.sc-dim-bar.profit { background: #059669; }
+.sc-dim-bar.supply { background: #f59e0b; }
+.sc-dim-score { width: 36px; text-align: right; font-weight: 700; color: var(--gray-700); }
+.sc-card-date { font-size: 11px; color: var(--gray-400); margin-top: 10px; }
+
+.score-slider-group { display: flex; align-items: center; gap: 12px; }
+.score-slider { flex: 1; -webkit-appearance: none; height: 8px; border-radius: 4px; background: linear-gradient(to right, var(--danger), var(--warning), var(--success)); outline: none; }
+.score-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; border-radius: 50%; background: #fff; border: 3px solid var(--primary); cursor: pointer; box-shadow: var(--shadow-sm); }
+.score-num-input { width: 52px; padding: 6px 8px; border: 2px solid var(--gray-300); border-radius: var(--radius-sm); font-size: 16px; font-weight: 700; text-align: center; color: var(--primary); }
+.score-num-input:focus { border-color: var(--primary); outline: none; }
+.sc-calc-panel { background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: var(--radius-sm); padding: 20px; margin-top: 16px; }
+.sc-calc-dim { display: flex; align-items: center; gap: 12px; padding: 8px 0; }
+.sc-calc-dim .dim-label { width: 90px; font-size: 13px; font-weight: 600; color: var(--gray-700); }
+.sc-calc-dim .dim-bar-wrap { flex: 1; height: 10px; background: var(--gray-200); border-radius: 5px; overflow: hidden; }
+.sc-calc-result { text-align: center; padding: 16px; background: #fff; border: 2px solid var(--primary-light); border-radius: var(--radius-sm); margin-top: 12px; }
+.sc-decision-panel { background: #fff; border: 1px solid var(--gray-200); border-radius: var(--radius-sm); padding: 20px; margin-top: 16px; font-size: 13px; line-height: 1.9; white-space: pre-wrap; font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace; }
+
+/* Empty state */
+.empty-state { text-align: center; padding: 50px 20px; color: var(--gray-400); }
+.empty-state-icon { font-size: 48px; margin-bottom: 12px; }
+.empty-state-text { font-size: 14px; color: var(--gray-500); margin-bottom: 16px; }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm" type="module"></script>
 </head>
@@ -1420,12 +1564,107 @@ body {
       <div class="card">
         <div class="card-header"><span class="card-title">🔍 选品分析与Listing优化</span></div>
         <div class="card-body">
-          <div class="tabs">
-            <button class="tab-btn active" data-tab="m2-checklist">优化清单</button>
+          <div class="tabs" style="flex-wrap:wrap;">
+            <button class="tab-btn active" data-tab="m2-sourcing">选品信息来源</button>
+            <button class="tab-btn" data-tab="m2-compete">竞品分析工作台</button>
+            <button class="tab-btn" data-tab="m2-scorecard">选品打分卡</button>
+            <button class="tab-btn" data-tab="m2-checklist">优化清单</button>
             <button class="tab-btn" data-tab="m2-keywords">关键词词表</button>
             <button class="tab-btn" data-tab="m2-template">Listing模板</button>
           </div>
-          <div class="tab-panel active" id="tab-m2-checklist">
+
+          <!-- TAB: 选品信息来源 -->
+          <div class="tab-panel active" id="tab-m2-sourcing">
+            <!-- 追踪看板 -->
+            <div class="src-stats-board" id="src-stats-board"></div>
+            <div class="filter-bar">
+              <select class="filter-select" id="src-filter-type" onchange="renderSourcingList()">
+                <option value="all">全部类型</option><option value="平台热搜词">平台热搜词</option><option value="竞品榜单">竞品榜单</option><option value="品类趋势报告">品类趋势报告</option><option value="供应商推荐">供应商推荐</option>
+              </select>
+              <select class="filter-select" id="src-filter-status" onchange="renderSourcingList()">
+                <option value="all">全部状态</option><option value="待评估">待评估</option><option value="评估中">评估中</option><option value="已采纳">已采纳</option><option value="已放弃">已放弃</option>
+              </select>
+              <select class="filter-select" id="src-filter-category" onchange="renderSourcingList()">
+                <option value="all">全部品类</option>
+              </select>
+              <select class="filter-select" id="src-sort" onchange="renderSourcingList()">
+                <option value="date-desc">采集日期 ↓</option><option value="date-asc">采集日期 ↑</option>
+              </select>
+              <button class="btn btn-primary btn-sm" onclick="openSourcingForm()">+ 新增信息源</button>
+            </div>
+            <div class="src-list" id="src-list"></div>
+            <div class="empty-state" id="src-empty" style="display:none;"><div class="empty-state-icon">📡</div><div class="empty-state-text">暂无选品信息源，点击"新增信息源"开始录入</div></div>
+          </div>
+
+          <!-- TAB: 竞品分析工作台 -->
+          <div class="tab-panel" id="tab-m2-compete">
+            <!-- 步骤引导条 -->
+            <div class="ca-step-bar" id="ca-step-bar">
+              <div class="ca-step-item active" data-step="1"><span class="step-num">1</span>搜索关键词</div><span class="ca-step-arrow">→</span>
+              <div class="ca-step-item" data-step="2"><span class="step-num">2</span>TOP20分析</div><span class="ca-step-arrow">→</span>
+              <div class="ca-step-item" data-step="3"><span class="step-num">3</span>Listing拆解</div><span class="ca-step-arrow">→</span>
+              <div class="ca-step-item" data-step="4"><span class="step-num">4</span>生成报告</div>
+            </div>
+            <!-- 项目列表 -->
+            <div style="margin-bottom:16px;">
+              <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+                <span style="font-weight:600;font-size:14px;">📋 分析项目</span>
+                <button class="btn btn-primary btn-sm" onclick="openCAProjectForm()">+ 新建项目</button>
+              </div>
+              <div class="ca-project-list" id="ca-project-list"></div>
+              <div class="empty-state" id="ca-empty" style="display:none;"><div class="empty-state-icon">📊</div><div class="empty-state-text">暂无竞品分析项目，点击"新建项目"开始</div></div>
+            </div>
+            <!-- 分析详情区（选中项目后显示） -->
+            <div id="ca-detail" style="display:none;">
+              <div class="alert alert-info" id="ca-basic-info"></div>
+              <!-- Step 2: TOP20 -->
+              <div id="ca-step2" style="display:none;">
+                <h4 style="margin-bottom:10px;">📊 TOP 20 竞品数据</h4>
+                <div class="ca-stats-bar" id="ca-top20-stats"></div>
+                <div class="ca-top20-table-wrap"><table class="ca-top20-table" id="ca-top20-table"></table></div>
+                <button class="btn btn-primary btn-sm" style="margin-top:10px;" onclick="saveTop20Data()">💾 保存TOP20数据</button>
+                <button class="btn btn-outline btn-sm" style="margin-top:10px;margin-left:6px;" onclick="exportTop20CSV()">📥 导出CSV</button>
+              </div>
+              <!-- Step 3: Listing结构 -->
+              <div id="ca-step3" style="display:none;">
+                <h4 style="margin-bottom:10px;">📝 竞品 Listing 结构分析</h4>
+                <div class="ca-listing-form" id="ca-listing-form"></div>
+                <button class="btn btn-primary btn-sm" style="margin-top:12px;" onclick="saveListingAnalysis()">💾 保存Listing分析</button>
+                <div class="ca-summary-box" id="ca-listing-summary" style="margin-top:14px;display:none;"></div>
+              </div>
+              <!-- Step 4: 报告 -->
+              <div id="ca-step4" style="display:none;">
+                <h4 style="margin-bottom:10px;">📄 竞品分析报告</h4>
+                <div class="ca-report-panel" id="ca-report-content"></div>
+                <div style="margin-top:12px;display:flex;gap:8px;">
+                  <button class="btn btn-primary btn-sm" onclick="generateCAReport()">🔄 生成/刷新报告</button>
+                  <button class="btn btn-outline btn-sm" onclick="copyCAReport()">📋 复制报告</button>
+                  <button class="btn btn-success btn-sm" onclick="createScorecardFromCA()">📊 创建选品打分卡</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB: 选品打分卡 -->
+          <div class="tab-panel" id="tab-m2-scorecard">
+            <div class="filter-bar">
+              <select class="filter-select" id="sc-filter-rating" onchange="renderScorecardList()">
+                <option value="all">全部评级</option><option value="强烈推荐">🟢 强烈推荐</option><option value="建议分析">🟡 建议分析</option><option value="谨慎考虑">🟠 谨慎考虑</option><option value="不推荐">🔴 不推荐</option>
+              </select>
+              <select class="filter-select" id="sc-filter-category" onchange="renderScorecardList()">
+                <option value="all">全部品类</option>
+              </select>
+              <select class="filter-select" id="sc-sort" onchange="renderScorecardList()">
+                <option value="score-desc">综合得分 ↓</option><option value="score-asc">综合得分 ↑</option><option value="date-desc">评估日期 ↓</option>
+              </select>
+              <button class="btn btn-primary btn-sm" onclick="openScorecardForm()">+ 新增打分卡</button>
+            </div>
+            <div class="sc-grid" id="sc-grid"></div>
+            <div class="empty-state" id="sc-empty" style="display:none;"><div class="empty-state-icon">📊</div><div class="empty-state-text">暂无选品打分卡，点击"新增打分卡"开始评估</div></div>
+          </div>
+
+          <!-- TAB: 优化清单（原有） -->
+          <div class="tab-panel" id="tab-m2-checklist">
             <ul class="checklist">
               <li><input type="checkbox" onchange="this.parentElement.classList.toggle('checked')"> 标题 ≤ 80字符（品牌+品类+卖点+场景）</li>
               <li><input type="checkbox" onchange="this.parentElement.classList.toggle('checked')"> 描述 300-500字，含长尾关键词</li>
@@ -1437,6 +1676,8 @@ body {
               <li><input type="checkbox" onchange="this.parentElement.classList.toggle('checked')"> 关注平台主打类目趋势，评估新品跟款可行性</li>
             </ul>
           </div>
+
+          <!-- TAB: 关键词词表（原有） -->
           <div class="tab-panel" id="tab-m2-keywords">
             <div class="filter-bar">
               <input class="filter-input" placeholder="搜索关键词...">
@@ -1445,6 +1686,8 @@ body {
             </div>
             <table class="task-table" id="m2-kw-table"></table>
           </div>
+
+          <!-- TAB: Listing模板（原有） -->
           <div class="tab-panel" id="tab-m2-template">
             <div class="alert alert-info">💡 <strong>标题公式：</strong>品牌 + 核心关键词 + 属性词 + 卖点 + 适用场景</div>
             <div style="background:var(--gray-50);padding:16px;border-radius:8px;margin-bottom:12px;">
@@ -1456,6 +1699,106 @@ body {
               1️⃣ Accroche → 2️⃣ Solution → 3️⃣ Caractéristiques → 4️⃣ Spécifications → 5️⃣ Garantie & SAV
             </div>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 选品信息源录入弹窗 -->
+    <div class="src-form-overlay" id="src-form-overlay">
+      <div class="src-form">
+        <div class="src-form-header"><h3 id="src-form-title">新增选品信息源</h3><button class="modal-close" onclick="closeSourcingForm()">✕</button></div>
+        <div class="src-form-body">
+          <div class="src-form-grid">
+            <div class="src-form-group"><label>信息标题 <span class="req">*</span></label><input type="text" id="src-form-title-inp" placeholder="简短概括信息内容"></div>
+            <div class="src-form-group"><label>信息源类型 <span class="req">*</span></label><select id="src-form-type"><option value="平台热搜词">平台热搜词</option><option value="竞品榜单">竞品榜单</option><option value="品类趋势报告">品类趋势报告</option><option value="供应商推荐">供应商推荐</option></select></div>
+            <div class="src-form-group"><label>来源渠道 <span class="req">*</span></label><input type="text" id="src-form-channel" placeholder="如：Mano后台热搜词、Mano新品榜"></div>
+            <div class="src-form-group"><label>采集日期 <span class="req">*</span></label><input type="date" id="src-form-date"></div>
+            <div class="src-form-group"><label>关联品类 <span class="req">*</span></label><input type="text" id="src-form-category" placeholder="如：厨房电器、DIY工具"></div>
+            <div class="src-form-group"><label>处理状态 <span class="req">*</span></label><select id="src-form-status"><option value="待评估">待评估</option><option value="评估中">评估中</option><option value="已采纳">已采纳</option><option value="已放弃">已放弃</option></select></div>
+            <div class="src-form-group full"><label>信息摘要 <span class="req">*</span></label><textarea id="src-form-summary" placeholder="详细描述该信息源的核心内容..."></textarea></div>
+            <div class="src-form-group full"><label>附件/链接</label><input type="text" id="src-form-link" placeholder="粘贴来源链接或文件路径"></div>
+          </div>
+        </div>
+        <div class="src-form-footer">
+          <button class="btn btn-outline" onclick="closeSourcingForm()">取消</button>
+          <button class="btn btn-primary" id="src-form-submit-btn" onclick="saveSourcingInfo()">💾 保存</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 竞品分析项目创建弹窗 -->
+    <div class="src-form-overlay" id="ca-project-overlay">
+      <div class="src-form">
+        <div class="src-form-header"><h3 id="ca-project-title">新建竞品分析项目</h3><button class="modal-close" onclick="closeCAProjectForm()">✕</button></div>
+        <div class="src-form-body">
+          <div class="src-form-grid">
+            <div class="src-form-group full"><label>分析项目名称 <span class="req">*</span></label><input type="text" id="ca-form-name" placeholder="如：厨房电器品类竞品分析_202607"></div>
+            <div class="src-form-group"><label>目标关键词（法语） <span class="req">*</span></label><input type="text" id="ca-form-keyword" placeholder="如：friteuse sans huile"></div>
+            <div class="src-form-group"><label>搜索结果总数 <span class="req">*</span></label><input type="number" id="ca-form-count" placeholder="如：186"></div>
+            <div class="src-form-group"><label>分析日期 <span class="req">*</span></label><input type="date" id="ca-form-date"></div>
+            <div class="src-form-group"><label>分析人</label><input type="text" id="ca-form-analyst" placeholder="自动填入当前用户" value="运营专员"></div>
+          </div>
+        </div>
+        <div class="src-form-footer">
+          <button class="btn btn-outline" onclick="closeCAProjectForm()">取消</button>
+          <button class="btn btn-primary" onclick="saveCAProject()">💾 创建项目</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 选品打分卡录入弹窗 -->
+    <div class="src-form-overlay" id="sc-form-overlay">
+      <div class="src-form">
+        <div class="src-form-header"><h3 id="sc-form-title">新增选品打分卡</h3><button class="modal-close" onclick="closeScorecardForm()">✕</button></div>
+        <div class="src-form-body">
+          <div class="src-form-grid">
+            <div class="src-form-group full"><label>产品名称 <span class="req">*</span></label><input type="text" id="sc-form-name" placeholder="被评估的产品/品类名称"></div>
+            <div class="src-form-group"><label>品类 <span class="req">*</span></label><input type="text" id="sc-form-category" placeholder="如：厨房电器"></div>
+            <div class="src-form-group"><label>关联竞品分析</label><select id="sc-form-ca"><option value="">无关联</option></select></div>
+            <div class="src-form-group"><label>关联信息源</label><select id="sc-form-src"><option value="">无关联</option></select></div>
+          </div>
+          <h4 style="margin-top:16px;margin-bottom:8px;">📈 评分维度</h4>
+          <div class="src-form-grid">
+            <div class="src-form-group full">
+              <label>市场需求 <span style="font-size:11px;color:var(--gray-400);font-weight:400;">1-3:搜索量低 / 4-6:中等 / 7-8:高增长 / 9-10:极高</span></label>
+              <div class="score-slider-group"><input type="range" class="score-slider" id="sc-form-demand" min="1" max="10" value="5" oninput="document.getElementById('sc-form-demand-num').value=this.value;updateSCPreview()"><input type="number" class="score-num-input" id="sc-form-demand-num" value="5" min="1" max="10" onchange="document.getElementById('sc-form-demand').value=this.value;updateSCPreview()"></div>
+            </div>
+            <div class="src-form-group full">
+              <label>竞争度 <span style="font-size:11px;color:var(--gray-400);font-weight:400;">1-3:>500评价 / 4-6:100-500 / 7-8:50-100 / 9-10:<50评价</span></label>
+              <div class="score-slider-group"><input type="range" class="score-slider" id="sc-form-competition" min="1" max="10" value="5" oninput="document.getElementById('sc-form-competition-num').value=this.value;updateSCPreview()"><input type="number" class="score-num-input" id="sc-form-competition-num" value="5" min="1" max="10" onchange="document.getElementById('sc-form-competition').value=this.value;updateSCPreview()"></div>
+            </div>
+            <div class="src-form-group full">
+              <label>利润空间 <span style="font-size:11px;color:var(--gray-400);font-weight:400;">1-3:毛利<20% / 4-6:20-35% / 7-8:35-50% / 9-10:>50%</span></label>
+              <div class="score-slider-group"><input type="range" class="score-slider" id="sc-form-profit" min="1" max="10" value="5" oninput="document.getElementById('sc-form-profit-num').value=this.value;updateSCPreview()"><input type="number" class="score-num-input" id="sc-form-profit-num" value="5" min="1" max="10" onchange="document.getElementById('sc-form-profit').value=this.value;updateSCPreview()"></div>
+            </div>
+            <div class="src-form-group full">
+              <label>供应链可行性 <span style="font-size:11px;color:var(--gray-400);font-weight:400;">1-3:无稳定供应商 / 4-6:交期30-60天 / 7-8:交期15-30天 / 9-10:<15天</span></label>
+              <div class="score-slider-group"><input type="range" class="score-slider" id="sc-form-supply" min="1" max="10" value="5" oninput="document.getElementById('sc-form-supply-num').value=this.value;updateSCPreview()"><input type="number" class="score-num-input" id="sc-form-supply-num" value="5" min="1" max="10" onchange="document.getElementById('sc-form-supply').value=this.value;updateSCPreview()"></div>
+            </div>
+            <div class="src-form-group full"><label>评分备注</label><textarea id="sc-form-note" placeholder="记录各维度评分的依据和理由"></textarea></div>
+          </div>
+          <div class="sc-calc-panel" id="sc-preview-panel">
+            <div style="font-weight:700;font-size:14px;margin-bottom:10px;">📊 评分预览</div>
+            <div id="sc-preview-dims"></div>
+            <div class="sc-calc-result"><span style="font-size:14px;color:var(--gray-500);">⭐ 综合得分：</span><span style="font-size:28px;font-weight:800;" id="sc-preview-score">5.00</span><span style="font-size:14px;color:var(--gray-500);"> / 10</span><div style="margin-top:4px;" id="sc-preview-rating"></div></div>
+          </div>
+        </div>
+        <div class="src-form-footer">
+          <button class="btn btn-outline" onclick="closeScorecardForm()">取消</button>
+          <button class="btn btn-primary" id="sc-form-submit-btn" onclick="saveScorecard()">💾 保存打分卡</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 打分卡详情/决策建议弹窗 -->
+    <div class="src-form-overlay" id="sc-detail-overlay">
+      <div class="src-form" style="max-width:680px;">
+        <div class="src-form-header"><h3 id="sc-detail-title">选品决策建议</h3><button class="modal-close" onclick="closeSCDetail()">✕</button></div>
+        <div class="src-form-body" id="sc-detail-body"></div>
+        <div class="src-form-footer">
+          <button class="btn btn-outline" onclick="closeSCDetail()">关闭</button>
+          <button class="btn btn-outline btn-sm" onclick="copySCDecision()" style="margin-right:auto;">📋 复制决策建议</button>
+          <button class="btn btn-primary" onclick="exportSCDecision()">📥 导出文本</button>
         </div>
       </div>
     </div>
@@ -1820,7 +2163,7 @@ const Router = {
     if (page === 'dashboard') { renderDashboardFromDS(); weeklyReport.render(); }
     if (page === 'tasks') { renderTasks(); }
     if (page === 'module1') { renderM1KPI(); alertRules.init(); }
-    if (page === 'module2') { renderM2Keywords(); }
+    if (page === 'module2') { renderM2All(); }
     if (page === 'module4') { renderM4Inventory(); }
     if (page === 'module5') { renderM5NegReviews(); }
     if (page === 'module6') { renderM6Competitors(); }
@@ -2145,7 +2488,7 @@ function refreshAllModuleViews() {
   renderDashboardFromDS();
   if (typeof weeklyReport !== 'undefined' && weeklyReport.weeks.length) weeklyReport.render();
   renderM1KPI();
-  renderM2Keywords();
+  renderM2All();
   renderM4Inventory();
   renderM5NegReviews();
   renderM6Competitors();
@@ -4909,7 +5252,7 @@ const CloudSync = {
     try { weeklyReport.buildWeeks(); weeklyReport.loadSettings(); weeklyReport.render(); weeklyReport.bindEvents(); } catch (e) { console.warn('wr init:', e.message); }
     try { refreshAllModuleViews(); } catch (e) { console.warn('refresh:', e.message); }
     try { renderTasks(); renderAllDSCategories(); reportRenderList(); } catch (e) { console.warn('tasks:', e.message); }
-    try { renderDashboardFromDS(); renderM1KPI(); renderM2Keywords(); } catch (e) { console.warn('dash:', e.message); }
+    try { renderDashboardFromDS(); renderM1KPI(); renderM2All(); } catch (e) { console.warn('dash:', e.message); }
     try { renderM4Inventory(); renderM5NegReviews(); renderM6Competitors(); renderM7Sales(); } catch (e) { console.warn('mods:', e.message); }
     try { alertRules.init(); } catch (e) { console.warn('alert:', e.message); }
     try { DataManager.init(); } catch (e) { console.warn('dm:', e.message); }
@@ -4924,7 +5267,7 @@ const CloudSync = {
   // ---- Periodic sync ----
   async syncAll() {
     if (!this.user) return;
-    const keys = ['mano_datasource', 'mano_report_db', 'mano_task_statuses', 'mano_alert_rules', 'mano_wr_settings', 'mano_wr_alerts'];
+    const keys = ['mano_datasource', 'mano_report_db', 'mano_task_statuses', 'mano_alert_rules', 'mano_wr_settings', 'mano_wr_alerts', 'mano_sourcing_info', 'mano_competitor_analysis', 'mano_scorecards'];
     for (const k of keys) {
       const v = localStorage.getItem(k);
       if (v) {
@@ -4962,6 +5305,789 @@ const origReportSaveDB = reportSaveDB;
 reportSaveDB = function() { origReportSaveDB(); CloudSync.hookDataSave('mano_report_db'); };
 const origAlertSave = alertSave;
 alertSave = function() { origAlertSave(); CloudSync.hookDataSave('mano_alert_rules'); };
+
+// ============================================================
+// 8. 选品与Listing升级 — 三大新功能模块
+// ============================================================
+
+// --- 8.1 选品信息来源管理 ---
+const SOURCE_TYPES = ['平台热搜词','竞品榜单','品类趋势报告','供应商推荐'];
+const SOURCE_STATUSES = ['待评估','评估中','已采纳','已放弃'];
+const TYPE_BADGE_CLASS = {'平台热搜词':'type-kw','竞品榜单':'type-rank','品类趋势报告':'type-trend','供应商推荐':'type-supplier'};
+
+let sourcingData = JSON.parse(localStorage.getItem('mano_sourcing_info') || '[]');
+function saveSourcingData() { localStorage.setItem('mano_sourcing_info', JSON.stringify(sourcingData)); }
+
+function renderSourcingStats() {
+  const board = document.getElementById('src-stats-board');
+  if (!board) return;
+  const total = sourcingData.length;
+  const pending = sourcingData.filter(s => s.status === '待评估').length;
+  const reviewing = sourcingData.filter(s => s.status === '评估中').length;
+  const adopted = sourcingData.filter(s => s.status === '已采纳').length;
+  const byType = {};
+  SOURCE_TYPES.forEach(t => { byType[t] = sourcingData.filter(s => s.source_type === t).length; });
+  const typeLabels = {'平台热搜词':'🔍热搜词','竞品榜单':'📊竞品榜单','品类趋势报告':'📈趋势报告','供应商推荐':'🏭供应商'};
+  const typeBar = SOURCE_TYPES.map(t => typeLabels[t]+' '+byType[t]).join(' | ');
+  board.innerHTML = [
+    {num:total,label:'总线索数',cls:'total'},
+    {num:pending,label:'待评估',cls:'pending'},
+    {num:reviewing,label:'评估中',cls:'reviewing'},
+    {num:adopted,label:'已采纳',cls:'adopted'}
+  ].map(s => `<div class="src-stat-card ${s.cls}" onclick="document.getElementById('src-filter-status').value='${s.cls==='total'?'all':s.label}';renderSourcingList();"><div class="src-stat-num">${s.num}</div><div class="src-stat-label">${s.label}</div></div>`).join('')
+  + `<div style="grid-column:1/-1;text-align:center;font-size:12px;color:var(--gray-500);padding:8px 0;">按类型：${typeBar}</div>`;
+  // Update category filter
+  const catFilter = document.getElementById('src-filter-category');
+  if (catFilter) {
+    const cats = [...new Set(sourcingData.map(s => s.category).filter(Boolean))];
+    catFilter.innerHTML = '<option value="all">全部品类</option>' + cats.map(c => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('');
+  }
+}
+
+function renderSourcingList() {
+  const list = document.getElementById('src-list');
+  const empty = document.getElementById('src-empty');
+  if (!list) return;
+  const typeFilter = document.getElementById('src-filter-type')?.value || 'all';
+  const statusFilter = document.getElementById('src-filter-status')?.value || 'all';
+  const catFilter = document.getElementById('src-filter-category')?.value || 'all';
+  const sort = document.getElementById('src-sort')?.value || 'date-desc';
+  let filtered = sourcingData.filter(s => {
+    if (typeFilter !== 'all' && s.source_type !== typeFilter) return false;
+    if (statusFilter !== 'all' && s.status !== statusFilter) return false;
+    if (catFilter !== 'all' && s.category !== catFilter) return false;
+    return true;
+  });
+  filtered.sort((a,b) => {
+    const va = a.collect_date || ''; const vb = b.collect_date || '';
+    return sort === 'date-desc' ? vb.localeCompare(va) : va.localeCompare(vb);
+  });
+  if (filtered.length === 0) { list.innerHTML = ''; empty.style.display = ''; return; }
+  empty.style.display = 'none';
+  list.innerHTML = filtered.map((s,i) => {
+    const origIdx = sourcingData.indexOf(s);
+    const typeCls = TYPE_BADGE_CLASS[s.source_type] || '';
+    const statusCls = 'status-' + (s.status === '待评估' ? 'pending' : s.status === '评估中' ? 'reviewing' : s.status === '已采纳' ? 'adopted' : 'abandoned');
+    return `<div class="src-card">
+      <div class="src-card-header">
+        <div class="src-card-title">${escapeHtml(s.title)}</div>
+        <div style="display:flex;gap:6px;">
+          <span class="src-card-badge ${typeCls}">${escapeHtml(s.source_type)}</span>
+          <span class="src-card-badge ${statusCls}">${escapeHtml(s.status)}</span>
+        </div>
+      </div>
+      <div class="src-card-meta">
+        <span>📡 ${escapeHtml(s.channel)}</span><span>📅 ${escapeHtml(s.collect_date)}</span><span>📂 ${escapeHtml(s.category)}</span>
+      </div>
+      <div class="src-card-summary">${escapeHtml(s.summary || '').substring(0,200)}${(s.summary||'').length>200?'...':''}</div>
+      ${s.link ? `<div style="font-size:12px;color:var(--gray-400);margin-bottom:6px;">🔗 ${escapeHtml(s.link).substring(0,80)}</div>` : ''}
+      <div class="src-card-actions">
+        <select class="src-status-select" onchange="updateSourcingStatus(${origIdx},this.value)" title="状态变更">
+          ${SOURCE_STATUSES.map(st => `<option value="${st}" ${s.status===st?'selected':''}>${st}</option>`).join('')}
+        </select>
+        <button class="btn btn-outline btn-sm" onclick="openSourcingForm(${origIdx})">✏️ 编辑</button>
+        <button class="btn btn-outline btn-sm" style="color:var(--danger);" onclick="deleteSourcing(${origIdx})">🗑️</button>
+        ${s.status==='已采纳' ? `<button class="btn btn-success btn-sm" onclick="createScorecardFromSource(${origIdx})">📊 创建打分卡</button>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+  renderSourcingStats();
+}
+
+function openSourcingForm(editIdx) {
+  const overlay = document.getElementById('src-form-overlay');
+  const titleEl = document.getElementById('src-form-title');
+  const btn = document.getElementById('src-form-submit-btn');
+  overlay.dataset.editIdx = editIdx !== undefined ? editIdx : '';
+  if (editIdx !== undefined) {
+    const s = sourcingData[editIdx];
+    titleEl.textContent = '编辑选品信息源'; btn.textContent = '💾 更新';
+    document.getElementById('src-form-title-inp').value = s.title || '';
+    document.getElementById('src-form-type').value = s.source_type || '平台热搜词';
+    document.getElementById('src-form-channel').value = s.channel || '';
+    document.getElementById('src-form-date').value = s.collect_date || new Date().toISOString().split('T')[0];
+    document.getElementById('src-form-category').value = s.category || '';
+    document.getElementById('src-form-status').value = s.status || '待评估';
+    document.getElementById('src-form-summary').value = s.summary || '';
+    document.getElementById('src-form-link').value = s.link || '';
+  } else {
+    titleEl.textContent = '新增选品信息源'; btn.textContent = '💾 保存';
+    document.getElementById('src-form-date').value = new Date().toISOString().split('T')[0];
+    ['src-form-title-inp','src-form-channel','src-form-category','src-form-summary','src-form-link'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('src-form-status').value = '待评估';
+  }
+  overlay.classList.add('show');
+}
+
+function closeSourcingForm() { document.getElementById('src-form-overlay').classList.remove('show'); }
+
+function saveSourcingInfo() {
+  const title = document.getElementById('src-form-title-inp').value.trim();
+  const source_type = document.getElementById('src-form-type').value;
+  const channel = document.getElementById('src-form-channel').value.trim();
+  const collect_date = document.getElementById('src-form-date').value;
+  const category = document.getElementById('src-form-category').value.trim();
+  const status = document.getElementById('src-form-status').value;
+  const summary = document.getElementById('src-form-summary').value.trim();
+  const link = document.getElementById('src-form-link').value.trim();
+  if (!title || !channel || !collect_date || !category || !summary) { showToast('⚠️ 请填写所有必填字段'); return; }
+  const overlay = document.getElementById('src-form-overlay');
+  const editIdx = overlay.dataset.editIdx;
+  const record = { id: 'src_' + Date.now(), title, source_type, channel, collect_date, category, summary, link, status, created_at: new Date().toISOString() };
+  if (editIdx !== '') {
+    record.id = sourcingData[editIdx].id;
+    record.created_at = sourcingData[editIdx].created_at;
+    sourcingData[editIdx] = record;
+    showToast('✅ 信息源已更新');
+  } else {
+    sourcingData.unshift(record);
+    showToast('📡 信息源已添加');
+  }
+  saveSourcingData();
+  closeSourcingForm();
+  renderSourcingList();
+}
+
+function updateSourcingStatus(idx, newStatus) {
+  const oldStatus = sourcingData[idx].status;
+  sourcingData[idx].status = newStatus;
+  // 操作日志
+  if (!sourcingData[idx].log) sourcingData[idx].log = [];
+  sourcingData[idx].log.push({ time: new Date().toISOString(), from: oldStatus, to: newStatus });
+  saveSourcingData();
+  renderSourcingList();
+  showToast(`🔄 状态已变更为「${newStatus}」`);
+}
+
+function deleteSourcing(idx) {
+  if (!confirm('确定删除此信息源吗？此操作不可恢复。')) return;
+  sourcingData.splice(idx, 1);
+  saveSourcingData();
+  renderSourcingList();
+  showToast('🗑️ 信息源已删除');
+}
+
+function createScorecardFromSource(idx) {
+  const s = sourcingData[idx];
+  openScorecardForm(null, { related_source_id: s.id, product_name: s.title, category: s.category });
+}
+
+// --- 8.2 竞品分析工作台 ---
+let competitorData = JSON.parse(localStorage.getItem('mano_competitor_analysis') || '[]');
+let caCurrentId = null;
+function saveCAData() { localStorage.setItem('mano_competitor_analysis', JSON.stringify(competitorData)); }
+
+function renderCAProjectList() {
+  const list = document.getElementById('ca-project-list');
+  const empty = document.getElementById('ca-empty');
+  if (!list) return;
+  if (competitorData.length === 0) { list.innerHTML = ''; empty.style.display = ''; return; }
+  empty.style.display = 'none';
+  list.innerHTML = competitorData.map((p,i) => {
+    const isActive = caCurrentId === p.id;
+    const top20Count = (p.top20_data||[]).filter(r=>r.product_name).length;
+    const steps = [];
+    if (p.keyword) steps.push('Step1✅');
+    if (top20Count > 0) steps.push('Step2✅('+top20Count+')');
+    if (p.listing_analysis) steps.push('Step3✅');
+    if (p.report_generated) steps.push('Step4✅');
+    return `<div class="ca-project-card ${isActive?'active':''}" onclick="selectCAProject('${p.id}')">
+      <div class="ca-project-header">
+        <div class="ca-project-name">${escapeHtml(p.project_name)}</div>
+        <div style="display:flex;gap:4px;">${steps.map(s => `<span style="font-size:10px;background:var(--gray-100);padding:2px 6px;border-radius:8px;">${s}</span>`).join('')}</div>
+      </div>
+      <div class="ca-project-meta">
+        <span>🔑 ${escapeHtml(p.keyword||'—')}</span><span>📊 ${p.search_result_count||'—'} 结果</span><span>📅 ${escapeHtml(p.analysis_date||'')}</span><span>👤 ${escapeHtml(p.analyst||'')}</span>
+      </div>
+      <div style="margin-top:8px;display:flex;gap:6px;">
+        <button class="btn btn-outline btn-sm" style="font-size:11px;" onclick="event.stopPropagation();editCAProject('${p.id}')">✏️</button>
+        <button class="btn btn-outline btn-sm" style="font-size:11px;color:var(--danger);" onclick="event.stopPropagation();deleteCAProject('${p.id}')">🗑️</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function selectCAProject(id) {
+  caCurrentId = id;
+  renderCAProjectList();
+  const p = competitorData.find(c => c.id === id);
+  if (!p) return;
+  const detail = document.getElementById('ca-detail');
+  detail.style.display = '';
+  document.getElementById('ca-basic-info').innerHTML = `<strong>📋 ${escapeHtml(p.project_name)}</strong> | 关键词：${escapeHtml(p.keyword)} | 搜索结果：${p.search_result_count} | 日期：${escapeHtml(p.analysis_date)} | 分析人：${escapeHtml(p.analyst)}`;
+  // Determine current step
+  let currentStep = 1;
+  if (p.keyword) currentStep = 1;
+  const top20Filled = (p.top20_data||[]).filter(r=>r.product_name).length;
+  if (top20Filled >= 1) currentStep = 2;
+  if (p.listing_analysis) currentStep = 3;
+  if (p.report_generated) currentStep = 4;
+  updateCASteps(currentStep);
+  renderCAStepContent(p, currentStep);
+}
+
+function updateCASteps(currentStep) {
+  document.querySelectorAll('#ca-step-bar .ca-step-item').forEach(el => {
+    const step = parseInt(el.dataset.step);
+    el.classList.remove('active','done');
+    if (step < currentStep) el.classList.add('done');
+    if (step === currentStep) el.classList.add('active');
+  });
+}
+
+function renderCAStepContent(p, currentStep) {
+  // Step 2
+  document.getElementById('ca-step2').style.display = currentStep >= 2 ? '' : 'none';
+  if (currentStep >= 2) renderTop20Table(p);
+  // Step 3
+  document.getElementById('ca-step3').style.display = currentStep >= 3 ? '' : 'none';
+  if (currentStep >= 3) renderListingForm(p);
+  // Step 4
+  document.getElementById('ca-step4').style.display = currentStep >= 4 ? '' : 'none';
+  if (currentStep >= 4 && p.report_generated) renderCAReportContent(p);
+}
+
+// Step bar click handler
+document.addEventListener('click', function(e) {
+  const stepItem = e.target.closest('#ca-step-bar .ca-step-item');
+  if (stepItem && caCurrentId) {
+    const step = parseInt(stepItem.dataset.step);
+    const p = competitorData.find(c => c.id === caCurrentId);
+    if (p) {
+      updateCASteps(step);
+      renderCAStepContent(p, step);
+    }
+  }
+});
+
+function renderTop20Table(p) {
+  if (!p.top20_data || p.top20_data.length === 0) {
+    p.top20_data = [];
+    for (let i = 0; i < 20; i++) { p.top20_data.push({ rank: i+1, product_name: '', brand: '', price: '', shop_rating: '', review_count: '', review_rating: '', monthly_sales: '', listing_date: '', note: '' }); }
+  }
+  const tbody = document.getElementById('ca-top20-table');
+  if (!tbody) return;
+  const headers = ['#','产品名称','品牌','价格(€)','店铺评分','Review数','Review评分','月销量(估)','上架时间','备注'];
+  const fields = ['product_name','brand','price','shop_rating','review_count','review_rating','monthly_sales','listing_date','note'];
+  tbody.innerHTML = `<thead><tr>${headers.map(h => `<th>${h}</th>`).join('')}</tr></thead><tbody>` +
+    p.top20_data.map((r,i) => `<tr>
+      <td class="num-col">${r.rank}</td>
+      ${fields.map(f => `<td><input value="${escapeHtml(r[f]||'')}" data-field="${f}" data-idx="${i}" onchange="updateTop20Cell('${p.id}',${i},'${f}',this.value)"></td>`).join('')}
+    </tr>`).join('') + '</tbody>';
+  updateTop20Stats(p);
+}
+
+function updateTop20Cell(projId, idx, field, value) {
+  const p = competitorData.find(c => c.id === projId);
+  if (!p) return;
+  if (!p.top20_data) p.top20_data = [];
+  if (!p.top20_data[idx]) p.top20_data[idx] = { rank: idx+1 };
+  p.top20_data[idx][field] = field === 'price' || field === 'review_count' || field === 'monthly_sales' ? (parseFloat(value)||0) : value;
+  if (field === 'shop_rating' || field === 'review_rating') p.top20_data[idx][field] = parseFloat(value)||0;
+  updateTop20Stats(p);
+}
+
+function updateTop20Stats(p) {
+  const statsEl = document.getElementById('ca-top20-stats');
+  if (!statsEl || !p.top20_data) return;
+  const filled = p.top20_data.filter(r => r.product_name && r.product_name.trim());
+  if (filled.length === 0) { statsEl.innerHTML = '<div class="ca-stat-mini"><div class="ca-stat-mini-label">填写数据后自动统计</div></div>'; return; }
+  const prices = filled.map(r => parseFloat(r.price)||0).filter(v=>v>0);
+  const reviews = filled.map(r => parseInt(r.review_count)||0);
+  const ratings = filled.map(r => parseFloat(r.review_rating)||0).filter(v=>v>0);
+  const priceMin = prices.length ? Math.min(...prices).toFixed(2) : '—';
+  const priceMax = prices.length ? Math.max(...prices).toFixed(2) : '—';
+  const priceAvg = prices.length ? (prices.reduce((a,b)=>a+b,0)/prices.length).toFixed(2) : '—';
+  const highRated = ratings.filter(r=>r>=4.5).length;
+  const midRated = ratings.filter(r=>r>=4.0&&r<4.5).length;
+  const lowRated = ratings.filter(r=>r<4.0).length;
+  const manyReviews = reviews.filter(r=>r>1000).length;
+  const midReviews = reviews.filter(r=>r>=100&&r<=1000).length;
+  const fewReviews = reviews.filter(r=>r<100&&r>0).length;
+  const reviewAvg = reviews.length ? Math.round(reviews.reduce((a,b)=>a+b,0)/reviews.length) : '—';
+  statsEl.innerHTML = `
+    <div class="ca-stat-mini"><div class="ca-stat-mini-label">已录入</div><div class="ca-stat-mini-value">${filled.length}/20</div></div>
+    <div class="ca-stat-mini"><div class="ca-stat-mini-label">价格区间</div><div class="ca-stat-mini-value">€${priceMin} ~ €${priceMax}</div></div>
+    <div class="ca-stat-mini"><div class="ca-stat-mini-label">平均价格</div><div class="ca-stat-mini-value">€${priceAvg}</div></div>
+    <div class="ca-stat-mini"><div class="ca-stat-mini-label">评分分布</div><div class="ca-stat-mini-value">≥4.5:${highRated} | 4.0-4.5:${midRated} | <4.0:${lowRated}</div></div>
+    <div class="ca-stat-mini"><div class="ca-stat-mini-label">Review分布</div><div class="ca-stat-mini-value">>1K:${manyReviews} | 100-1K:${midReviews} | <100:${fewReviews}</div></div>
+    <div class="ca-stat-mini"><div class="ca-stat-mini-label">平均Review</div><div class="ca-stat-mini-value">${reviewAvg}</div></div>`;
+}
+
+function saveTop20Data() {
+  if (!caCurrentId) return;
+  saveCAData();
+  showToast('💾 TOP20数据已保存');
+}
+
+function exportTop20CSV() {
+  const p = competitorData.find(c => c.id === caCurrentId);
+  if (!p || !p.top20_data) return;
+  const headers = ['序号','产品名称','品牌','价格(€)','店铺评分','Review数','Review评分','月销量(估)','上架时间','备注'];
+  const rows = p.top20_data.map(r => [r.rank,r.product_name||'',r.brand||'',r.price||'',r.shop_rating||'',r.review_count||'',r.review_rating||'',r.monthly_sales||'',r.listing_date||'',r.note||'']);
+  const csv = [headers.join(','), ...rows.map(r => r.map(c => '"'+String(c).replace(/"/g,'""')+'"').join(','))].join('\n');
+  const blob = new Blob(['\uFEFF'+csv], {type:'text/csv;charset=utf-8;'});
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'top20_competitor_analysis.csv'; a.click();
+  showToast('📥 CSV已导出');
+}
+
+function renderListingForm(p) {
+  const form = document.getElementById('ca-listing-form');
+  if (!form) return;
+  if (!p.listing_analysis) p.listing_analysis = { title_formula:'', image_style:'', image_count_avg:0, description_structure:'', has_aplus:false, aplus_content:'', keyword_pattern:'' };
+  const la = p.listing_analysis;
+  form.innerHTML = `
+    <div class="ca-listing-field full"><label>标题公式</label><textarea id="ca-la-title" placeholder="如：品牌 + 核心词 + 属性词1 + 属性词2 + 场景词">${escapeHtml(la.title_formula||'')}</textarea></div>
+    <div class="ca-listing-field full"><label>主图风格</label><textarea id="ca-la-image" placeholder="如：白底主图 + 4-5张场景/细节图">${escapeHtml(la.image_style||'')}</textarea></div>
+    <div class="ca-listing-field"><label>平均图片数量</label><input type="number" id="ca-la-imgcount" value="${la.image_count_avg||''}" placeholder="如：6"></div>
+    <div class="ca-listing-field"><label>是否有A+内容</label><select id="ca-la-aplus"><option value="1" ${la.has_aplus?'selected':''}>有</option><option value="0" ${!la.has_aplus?'selected':''}>无</option></select></div>
+    <div class="ca-listing-field full"><label>描述结构</label><textarea id="ca-la-desc" placeholder="如：痛点引入 → 产品参数 → 使用场景 → 售后服务">${escapeHtml(la.description_structure||'')}</textarea></div>
+    <div class="ca-listing-field full"><label>A+内容模块</label><textarea id="ca-la-aplus-content" placeholder="A+页面展示哪些内容模块">${escapeHtml(la.aplus_content||'')}</textarea></div>
+    <div class="ca-listing-field full"><label>关键词布局</label><textarea id="ca-la-kw" placeholder="后台关键词填写规律总结">${escapeHtml(la.keyword_pattern||'')}</textarea></div>`;
+  // 自动汇总
+  updateListingSummary(p);
+}
+
+function updateListingSummary(p) {
+  const box = document.getElementById('ca-listing-summary');
+  if (!box) return;
+  const la = p.listing_analysis || {};
+  const filled_top20 = (p.top20_data||[]).filter(r=>r.product_name&&r.product_name.trim());
+  const titlePct = filled_top20.length > 0 ? '（基于'+filled_top20.length+'个竞品分析）' : '';
+  const imgAvg = la.image_count_avg ? `平均图片数：${la.image_count_avg}张` : '';
+  box.style.display = '';
+  box.innerHTML = `<strong>📝 竞品 Listing 规律总结：</strong><br>
+  ${la.title_formula ? '• 标题公式：'+la.title_formula+titlePct : '• 标题公式：待分析'}
+  ${la.image_style ? '<br>• 主图风格：'+la.image_style : ''} ${imgAvg ? '<br>• '+imgAvg : ''}
+  ${la.description_structure ? '<br>• 描述结构：'+la.description_structure : ''}
+  ${la.has_aplus ? '<br>• A+内容：是'+(la.aplus_content?' — '+la.aplus_content:'') : '<br>• A+内容：无'}
+  ${la.keyword_pattern ? '<br>• 关键词布局：'+la.keyword_pattern : ''}`;
+}
+
+function saveListingAnalysis() {
+  if (!caCurrentId) return;
+  const p = competitorData.find(c => c.id === caCurrentId);
+  if (!p) return;
+  p.listing_analysis = {
+    title_formula: document.getElementById('ca-la-title')?.value || '',
+    image_style: document.getElementById('ca-la-image')?.value || '',
+    image_count_avg: parseInt(document.getElementById('ca-la-imgcount')?.value) || 0,
+    description_structure: document.getElementById('ca-la-desc')?.value || '',
+    has_aplus: document.getElementById('ca-la-aplus')?.value === '1',
+    aplus_content: document.getElementById('ca-la-aplus-content')?.value || '',
+    keyword_pattern: document.getElementById('ca-la-kw')?.value || ''
+  };
+  updateListingSummary(p);
+  saveCAData();
+  showToast('💾 Listing分析已保存');
+}
+
+function generateCAReport() {
+  if (!caCurrentId) return;
+  const p = competitorData.find(c => c.id === caCurrentId);
+  if (!p) return;
+  const filled = (p.top20_data||[]).filter(r=>r.product_name&&r.product_name.trim());
+  const prices = filled.map(r=>parseFloat(r.price)||0).filter(v=>v>0);
+  const ratings = filled.map(r=>parseFloat(r.review_rating)||0).filter(v=>v>0);
+  const reviews = filled.map(r=>parseInt(r.review_count)||0);
+  const la = p.listing_analysis || {};
+  const priceMin = prices.length ? Math.min(...prices).toFixed(2) : '—';
+  const priceMax = prices.length ? Math.max(...prices).toFixed(2) : '—';
+  const priceAvg = prices.length ? (prices.reduce((a,b)=>a+b,0)/prices.length).toFixed(2) : '—';
+  const avgRating = ratings.length ? (ratings.reduce((a,b)=>a+b,0)/ratings.length).toFixed(1) : '—';
+  const avgReview = reviews.length ? Math.round(reviews.reduce((a,b)=>a+b,0)/reviews.length) : '—';
+  const highRated = ratings.filter(r=>r>=4.5).length;
+  const lowRated = ratings.filter(r=>r<4.0).length;
+
+  p.report_generated = true;
+  p.report_content = `📄 竞品分析报告 — ${p.project_name}
+═══════════════════════════════════════
+【基本信息】
+- 目标关键词：${p.keyword} | 搜索结果数：${p.search_result_count} | 分析日期：${p.analysis_date}
+
+【TOP ${filled.length} 竞品分析】
+- 价格区间：€${priceMin} ~ €${priceMax} | 平均价格：€${priceAvg}
+- 平均评分：${avgRating} ★ | 平均 Review 数：${avgReview}
+- 评分分布：≥4.5星 ${highRated}个 | 4.0-4.5星 ${ratings.length-highRated-lowRated}个 | <4.0星 ${lowRated}个
+
+【Listing 结构规律总结】
+${la.title_formula ? '• 标题公式：'+la.title_formula : '• 标题公式：待分析'}
+${la.image_style ? '• 主图风格：'+la.image_style+'（平均'+la.image_count_avg+'张）' : '• 主图：待分析'}
+${la.description_structure ? '• 描述结构：'+la.description_structure : ''}
+${la.has_aplus ? '• A+内容：是，包含 '+la.aplus_content : '• A+内容：无'}
+${la.keyword_pattern ? '• 关键词布局：'+la.keyword_pattern : ''}
+
+【机会点洞察】
+- 价格带机会：€${priceAvg} 为中位，可围绕此价格带 ±15% 定位
+- 差异化方向：关注低评分竞品的差评痛点，在${la.title_formula ? '标题和描述中突出差异化卖点' : 'Listing中突出差异化卖点'}
+- 关键词机会：${la.keyword_pattern ? '参考关键词布局规律进行优化' : '根据竞品标题和描述提取高频关键词'}
+
+【建议行动】
+1. 建议发起选品评估：基于上述分析发起打分卡评估
+2. 建议优化方向：参考竞品Listing规律优化自身产品页面`;
+
+  saveCAData();
+  renderCAReportContent(p);
+  updateCASteps(4);
+  document.getElementById('ca-step4').style.display = '';
+  showToast('📄 竞品分析报告已生成');
+}
+
+function renderCAReportContent(p) {
+  const el = document.getElementById('ca-report-content');
+  if (el && p.report_content) el.textContent = p.report_content;
+}
+
+function copyCAReport() {
+  const p = competitorData.find(c => c.id === caCurrentId);
+  if (!p || !p.report_content) { showToast('⚠️ 请先生成报告'); return; }
+  navigator.clipboard.writeText(p.report_content).then(() => showToast('📋 报告已复制到剪贴板'));
+}
+
+function createScorecardFromCA() {
+  const p = competitorData.find(c => c.id === caCurrentId);
+  if (!p) return;
+  openScorecardForm(null, { related_analysis_id: p.id, product_name: p.project_name, category: p.keyword });
+}
+
+function openCAProjectForm(editId) {
+  const overlay = document.getElementById('ca-project-overlay');
+  const titleEl = document.getElementById('ca-project-title');
+  overlay.dataset.editId = editId || '';
+  if (editId) {
+    const p = competitorData.find(c => c.id === editId);
+    if (!p) return;
+    titleEl.textContent = '编辑竞品分析项目';
+    document.getElementById('ca-form-name').value = p.project_name || '';
+    document.getElementById('ca-form-keyword').value = p.keyword || '';
+    document.getElementById('ca-form-count').value = p.search_result_count || '';
+    document.getElementById('ca-form-date').value = p.analysis_date || '';
+    document.getElementById('ca-form-analyst').value = p.analyst || '运营专员';
+  } else {
+    titleEl.textContent = '新建竞品分析项目';
+    document.getElementById('ca-form-name').value = '';
+    document.getElementById('ca-form-keyword').value = '';
+    document.getElementById('ca-form-count').value = '';
+    document.getElementById('ca-form-date').value = new Date().toISOString().split('T')[0];
+    document.getElementById('ca-form-analyst').value = '运营专员';
+  }
+  overlay.classList.add('show');
+}
+
+function closeCAProjectForm() { document.getElementById('ca-project-overlay').classList.remove('show'); }
+
+function saveCAProject() {
+  const name = document.getElementById('ca-form-name').value.trim();
+  const keyword = document.getElementById('ca-form-keyword').value.trim();
+  const count = parseInt(document.getElementById('ca-form-count').value) || 0;
+  const date = document.getElementById('ca-form-date').value;
+  const analyst = document.getElementById('ca-form-analyst').value.trim();
+  if (!name || !keyword || !count || !date) { showToast('⚠️ 请填写所有必填字段'); return; }
+  const overlay = document.getElementById('ca-project-overlay');
+  const editId = overlay.dataset.editId;
+  if (editId) {
+    const p = competitorData.find(c => c.id === editId);
+    if (p) {
+      p.project_name = name; p.keyword = keyword; p.search_result_count = count; p.analysis_date = date; p.analyst = analyst;
+    }
+    showToast('✅ 项目已更新');
+  } else {
+    competitorData.unshift({
+      id: 'ca_' + Date.now(), project_name: name, keyword, search_result_count: count, analysis_date: date, analyst,
+      top20_data: [], listing_analysis: null, report_generated: false, report_content: '', status: '进行中', created_at: new Date().toISOString()
+    });
+    showToast('📊 竞品分析项目已创建，请按步骤完成分析');
+  }
+  saveCAData();
+  closeCAProjectForm();
+  renderCAProjectList();
+}
+
+function editCAProject(id) {
+  openCAProjectForm(id);
+}
+
+function deleteCAProject(id) {
+  if (!confirm('确定删除此竞品分析项目吗？所有数据将丢失。')) return;
+  competitorData = competitorData.filter(c => c.id !== id);
+  if (caCurrentId === id) { caCurrentId = null; document.getElementById('ca-detail').style.display = 'none'; }
+  saveCAData();
+  renderCAProjectList();
+  showToast('🗑️ 项目已删除');
+}
+
+// --- 8.3 选品打分卡 ---
+let scorecardData = JSON.parse(localStorage.getItem('mano_scorecards') || '[]');
+let scEditId = null;
+function saveScorecardData() { localStorage.setItem('mano_scorecards', JSON.stringify(scorecardData)); }
+
+const SCORE_WEIGHTS = { market_demand: 0.30, competition: 0.25, profit_margin: 0.25, supply_chain: 0.20 };
+
+function getRating(totalScore) {
+  if (totalScore >= 8.0) return { label: '强烈推荐', cls: 'highly', action: '优先推进，启动样品采购和Listing准备' };
+  if (totalScore >= 6.0) return { label: '建议分析', cls: 'recommended', action: '深入分析风险点，优化方案后再决策' };
+  if (totalScore >= 4.0) return { label: '谨慎考虑', cls: 'cautious', action: '存在明显短板，需确认是否有改进空间' };
+  return { label: '不推荐', cls: 'not', action: '放弃或大幅调整选品方向' };
+}
+
+function calcWeightedScore(scores) {
+  return Object.entries(SCORE_WEIGHTS).reduce((sum, [key, w]) => {
+    return sum + ((scores[key]||5) * w);
+  }, 0);
+}
+
+function renderScorecardList() {
+  const grid = document.getElementById('sc-grid');
+  const empty = document.getElementById('sc-empty');
+  if (!grid) return;
+  const ratingFilter = document.getElementById('sc-filter-rating')?.value || 'all';
+  const catFilter = document.getElementById('sc-filter-category')?.value || 'all';
+  const sort = document.getElementById('sc-sort')?.value || 'score-desc';
+  let filtered = scorecardData.filter(s => {
+    if (ratingFilter !== 'all' && s.rating !== ratingFilter) return false;
+    if (catFilter !== 'all' && s.category !== catFilter) return false;
+    return true;
+  });
+  filtered.sort((a,b) => {
+    if (sort === 'score-desc') return b.total_score - a.total_score;
+    if (sort === 'score-asc') return a.total_score - b.total_score;
+    return (b.created_at||'').localeCompare(a.created_at||'');
+  });
+  if (filtered.length === 0) { grid.innerHTML = ''; empty.style.display = ''; return; }
+  empty.style.display = 'none';
+  grid.innerHTML = filtered.map(s => {
+    const rating = getRating(s.total_score);
+    const dims = [
+      {key:'market_demand',label:'市场需求',val:s.scores.market_demand||5,cls:'demand'},
+      {key:'competition',label:'竞争度',val:s.scores.competition||5,cls:'competition'},
+      {key:'profit_margin',label:'利润空间',val:s.scores.profit_margin||5,cls:'profit'},
+      {key:'supply_chain',label:'供应链',val:s.scores.supply_chain||5,cls:'supply'}
+    ];
+    return `<div class="sc-card rating-${rating.cls}" onclick="openSCDetail('${s.id}')">
+      <div class="sc-card-name">${escapeHtml(s.product_name)}</div>
+      <div class="sc-card-category">📂 ${escapeHtml(s.category)}</div>
+      <div class="sc-card-score-wrap">
+        <span class="sc-card-score ${rating.cls}">${s.total_score.toFixed(2)}</span>
+        <span class="sc-card-rating ${rating.cls}">${rating.label}</span>
+      </div>
+      <div class="sc-card-dims">${dims.map(d => `<div class="sc-dim-row"><span class="sc-dim-label">${d.label}</span><div class="sc-dim-bar-wrap"><div class="sc-dim-bar ${d.cls}" style="width:${d.val*10}%"></div></div><span class="sc-dim-score">${d.val}/10</span></div>`).join('')}</div>
+      <div class="sc-card-date">📅 ${escapeHtml(s.created_at ? new Date(s.created_at).toLocaleDateString('zh-CN') : '')}</div>
+      <div style="margin-top:8px;display:flex;gap:6px;" onclick="event.stopPropagation();">
+        <button class="btn btn-outline btn-sm" style="font-size:11px;" onclick="openScorecardForm('${s.id}')">✏️</button>
+        <button class="btn btn-outline btn-sm" style="font-size:11px;color:var(--danger);" onclick="deleteScorecard('${s.id}')">🗑️</button>
+      </div>
+    </div>`;
+  }).join('');
+  // Update filters
+  const catFilterEl = document.getElementById('sc-filter-category');
+  if (catFilterEl) {
+    const cats = [...new Set(scorecardData.map(s => s.category).filter(Boolean))];
+    catFilterEl.innerHTML = '<option value="all">全部品类</option>' + cats.map(c => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('');
+  }
+}
+
+function updateSCPreview() {
+  const scores = {
+    market_demand: parseInt(document.getElementById('sc-form-demand')?.value) || 5,
+    competition: parseInt(document.getElementById('sc-form-competition')?.value) || 5,
+    profit_margin: parseInt(document.getElementById('sc-form-profit')?.value) || 5,
+    supply_chain: parseInt(document.getElementById('sc-form-supply')?.value) || 5
+  };
+  const total = calcWeightedScore(scores);
+  const rating = getRating(total);
+  const dimsPreview = document.getElementById('sc-preview-dims');
+  if (dimsPreview) {
+    dimsPreview.innerHTML = Object.entries(SCORE_WEIGHTS).map(([key,w]) => {
+      const labels = {market_demand:'市场需求',competition:'竞争度',profit_margin:'利润空间',supply_chain:'供应链可行性'};
+      const val = scores[key];
+      const weighted = (val * w).toFixed(2);
+      return `<div class="sc-calc-dim"><span class="dim-label">${labels[key]}</span><div class="dim-bar-wrap"><div class="progress-fill ${val>=7?'success':val>=4?'warning':'danger'}" style="width:${val*10}%"></div></div><span style="font-size:13px;font-weight:700;">${val}/10 × ${Math.round(w*100)}% = ${weighted}</span></div>`;
+    }).join('');
+  }
+  const scoreEl = document.getElementById('sc-preview-score');
+  if (scoreEl) scoreEl.textContent = total.toFixed(2);
+  const ratingEl = document.getElementById('sc-preview-rating');
+  if (ratingEl) ratingEl.innerHTML = `<span class="sc-card-rating ${rating.cls}">${rating.label}</span> <span style="font-size:12px;color:var(--gray-500);">— ${rating.action}</span>`;
+}
+
+function openScorecardForm(editId, presetData) {
+  const overlay = document.getElementById('sc-form-overlay');
+  const titleEl = document.getElementById('sc-form-title');
+  scEditId = editId || null;
+  // Update CA and source dropdowns
+  const caSel = document.getElementById('sc-form-ca');
+  const srcSel = document.getElementById('sc-form-src');
+  if (caSel) caSel.innerHTML = '<option value="">无关联</option>' + competitorData.map(c => `<option value="${c.id}">${escapeHtml(c.project_name||c.id)}</option>`).join('');
+  if (srcSel) srcSel.innerHTML = '<option value="">无关联</option>' + sourcingData.filter(s=>s.status==='已采纳').map(s => `<option value="${s.id}">${escapeHtml(s.title||s.id)}</option>`).join('');
+
+  if (editId) {
+    const s = scorecardData.find(c => c.id === editId);
+    if (!s) return;
+    titleEl.textContent = '编辑选品打分卡';
+    document.getElementById('sc-form-name').value = s.product_name || '';
+    document.getElementById('sc-form-category').value = s.category || '';
+    document.getElementById('sc-form-ca').value = s.related_analysis_id || '';
+    document.getElementById('sc-form-src').value = s.related_source_id || '';
+    document.getElementById('sc-form-demand').value = s.scores.market_demand||5;
+    document.getElementById('sc-form-demand-num').value = s.scores.market_demand||5;
+    document.getElementById('sc-form-competition').value = s.scores.competition||5;
+    document.getElementById('sc-form-competition-num').value = s.scores.competition||5;
+    document.getElementById('sc-form-profit').value = s.scores.profit_margin||5;
+    document.getElementById('sc-form-profit-num').value = s.scores.profit_margin||5;
+    document.getElementById('sc-form-supply').value = s.scores.supply_chain||5;
+    document.getElementById('sc-form-supply-num').value = s.scores.supply_chain||5;
+    document.getElementById('sc-form-note').value = s.decision_note || '';
+  } else {
+    titleEl.textContent = '新增选品打分卡';
+    document.getElementById('sc-form-name').value = presetData?.product_name || '';
+    document.getElementById('sc-form-category').value = presetData?.category || '';
+    document.getElementById('sc-form-ca').value = presetData?.related_analysis_id || '';
+    document.getElementById('sc-form-src').value = presetData?.related_source_id || '';
+    [1,2,3,4].forEach(v => { ['demand','competition','profit','supply'].forEach((k,i) => {
+      document.getElementById('sc-form-'+k).value = 5; document.getElementById('sc-form-'+k+'-num').value = 5;
+    });});
+    document.getElementById('sc-form-note').value = '';
+  }
+  updateSCPreview();
+  overlay.classList.add('show');
+}
+
+function closeScorecardForm() { document.getElementById('sc-form-overlay').classList.remove('show'); scEditId = null; }
+
+function saveScorecard() {
+  const name = document.getElementById('sc-form-name').value.trim();
+  const category = document.getElementById('sc-form-category').value.trim();
+  if (!name || !category) { showToast('⚠️ 请填写产品名称和品类'); return; }
+  const scores = {
+    market_demand: parseInt(document.getElementById('sc-form-demand')?.value) || 5,
+    competition: parseInt(document.getElementById('sc-form-competition')?.value) || 5,
+    profit_margin: parseInt(document.getElementById('sc-form-profit')?.value) || 5,
+    supply_chain: parseInt(document.getElementById('sc-form-supply')?.value) || 5
+  };
+  const total = calcWeightedScore(scores);
+  const rating = getRating(total);
+  const record = {
+    id: scEditId || 'ps_' + Date.now(),
+    product_name: name, category,
+    related_analysis_id: document.getElementById('sc-form-ca')?.value || '',
+    related_source_id: document.getElementById('sc-form-src')?.value || '',
+    scores,
+    total_score: total,
+    rating: rating.label,
+    decision_note: document.getElementById('sc-form-note')?.value || '',
+    created_at: new Date().toISOString()
+  };
+  if (scEditId) {
+    const idx = scorecardData.findIndex(s => s.id === scEditId);
+    if (idx >= 0) { record.created_at = scorecardData[idx].created_at; scorecardData[idx] = record; }
+    showToast('✅ 打分卡已更新！综合评分：'+total.toFixed(1)+'分，评级：'+rating.label);
+  } else {
+    scorecardData.unshift(record);
+    showToast('📊 打分卡已保存！综合评分：'+total.toFixed(1)+'分，评级：'+rating.label);
+  }
+  saveScorecardData();
+  closeScorecardForm();
+  renderScorecardList();
+}
+
+function deleteScorecard(id) {
+  if (!confirm('确定删除此打分卡吗？')) return;
+  scorecardData = scorecardData.filter(s => s.id !== id);
+  saveScorecardData();
+  renderScorecardList();
+  showToast('🗑️ 打分卡已删除');
+}
+
+function openSCDetail(id) {
+  const s = scorecardData.find(c => c.id === id);
+  if (!s) return;
+  const rating = getRating(s.total_score);
+  const dimLabels = {market_demand:'市场需求',competition:'竞争度',profit_margin:'利润空间',supply_chain:'供应链可行性'};
+  const strengths = Object.entries(s.scores).filter(([k,v])=>v>=7).map(([k,v])=>`✅ ${dimLabels[k]}：${v}分 — 表现良好`).join('\n');
+  const risks = Object.entries(s.scores).filter(([k,v])=>v<5).map(([k,v])=>`⚠️ ${dimLabels[k]}：${v}分 — 存在风险`).join('\n');
+  const improvements = Object.entries(s.scores).filter(([k,v])=>v<7).map(([k,v]) => {
+    const tips = {market_demand:'建议关注搜索趋势变化，确认品类增长潜力',competition:'建议差异化定位，避开头部竞品正面竞争',profit_margin:'建议优化供应链成本或调整定价策略',supply_chain:'建议寻找更多供应商备选，缩短交期'};
+    return `${v<5?'🔴':'🟡'} ${dimLabels[k]}（${v}分）：建议${tips[k]}`;
+  }).join('\n');
+  const decision = `📋 选品决策建议 — ${s.product_name}
+═══════════════════════════════════════
+【综合评估结论】
+- 综合得分：${s.total_score.toFixed(2)}/10 | 评级：${rating.label}
+- 建议行动：${rating.action}
+
+【优势分析】
+${strengths || '✅ 各维度表现均衡，无明显突出优势'}
+
+【风险提示】
+${risks || '⚠️ 各维度均在可接受范围内'}
+
+【改进建议】
+${improvements || '• 保持当前策略，持续监控市场变化'}
+
+【关联信息】
+- 关联竞品分析：${s.related_analysis_id || '无'}
+- 关联信息源：${s.related_source_id || '无'}
+- 评估日期：${new Date(s.created_at).toLocaleDateString('zh-CN')}
+${s.decision_note ? '- 备注：'+s.decision_note : ''}
+
+【决策建议】
+${rating.label === '强烈推荐' ? '✅ 立即推进，启动样品采购和Listing准备工作' :
+  rating.label === '建议分析' ? '🟡 建议深入分析风险点，优化方案后再决策。优先改进低分维度。' :
+  rating.label === '谨慎考虑' ? '🟠 存在明显短板，建议先解决核心问题后再重新评估。暂缓推进。' :
+  '🔴 当前综合评分偏低，建议放弃此选品方向或进行大的策略调整后重新评估。'}`;
+
+  document.getElementById('sc-detail-title').textContent = '选品决策建议 — ' + s.product_name;
+  document.getElementById('sc-detail-body').innerHTML = `<div class="sc-decision-panel" style="border:none;padding:0;">${decision.replace(/\n/g,'<br>')}</div>`;
+  document.getElementById('sc-detail-overlay').dataset.scId = id;
+  document.getElementById('sc-detail-overlay').classList.add('show');
+}
+
+function closeSCDetail() { document.getElementById('sc-detail-overlay').classList.remove('show'); }
+
+function copySCDecision() {
+  const body = document.getElementById('sc-detail-body');
+  if (!body) return;
+  navigator.clipboard.writeText(body.textContent).then(() => showToast('📋 决策建议已复制到剪贴板'));
+}
+
+function exportSCDecision() {
+  const id = document.getElementById('sc-detail-overlay').dataset.scId;
+  const s = scorecardData.find(c => c.id === id);
+  if (!s) return;
+  const blob = new Blob([document.getElementById('sc-detail-body').textContent], {type:'text/plain;charset=utf-8'});
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+  a.download = 'scorecard_' + s.product_name.replace(/[^a-zA-Z0-9\u4e00-\u9fa5]/g,'_') + '.txt';
+  a.click(); showToast('📥 决策建议已导出');
+}
+
+// --- 8.4 Module 2 统一渲染 & 弹窗关闭事件 ---
+function renderM2All() {
+  renderSourcingStats();
+  renderSourcingList();
+  renderCAProjectList();
+  renderScorecardList();
+  renderM2Keywords();
+}
+
+// Init
+// 关闭弹窗的背景点击事件
+// fix: 替换 Router navigate 中对 module2 的调用
+document.addEventListener('DOMContentLoaded', function() {
+  // Close overlays on Escape and backdrop click
+  ['src-form-overlay','ca-project-overlay','sc-form-overlay','sc-detail-overlay'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.addEventListener('click', function(e) {
+        if (e.target === el) {
+          if (id === 'src-form-overlay') closeSourcingForm();
+          else if (id === 'ca-project-overlay') closeCAProjectForm();
+          else if (id === 'sc-form-overlay') closeScorecardForm();
+          else if (id === 'sc-detail-overlay') closeSCDetail();
+        }
+      });
+    }
+  });
+});
 
 // ============================================================
 // 9. INIT
@@ -5025,7 +6151,7 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('convertio-modal').addEventListener('click', function(e) { if (e.target === this) this.classList.remove('show'); });
   document.getElementById('dm-modal').addEventListener('click', function(e) { if (e.target === this) DataManager.closeModal(); });
   document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') { closeModal(); closeDSModal(); reportCloseModal(); document.getElementById('convertio-modal').classList.remove('show'); weeklyReport.closeAlertModal(); weeklyReport.closeReportModal(); weeklyReport.closeDrill(); DataManager.closeModal(); }
+    if (e.key === 'Escape') { closeModal(); closeDSModal(); reportCloseModal(); closeSourcingForm(); closeCAProjectForm(); closeScorecardForm(); closeSCDetail(); document.getElementById('convertio-modal').classList.remove('show'); weeklyReport.closeAlertModal(); weeklyReport.closeReportModal(); weeklyReport.closeDrill(); DataManager.closeModal(); }
   });
 
   // Menu toggle mobile
