@@ -677,9 +677,56 @@ body {
   .sidebar, .topbar { display: none; }
   .main-content { margin-left: 0; }
 }
+/* Login overlay */
+.login-overlay { display: none; position: fixed; inset: 0; z-index: 9999; background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); align-items: center; justify-content: center; }
+.login-overlay.show { display: flex; }
+.login-box { background: #fff; border-radius: 16px; padding: 40px 36px; width: 100%; max-width: 400px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+.login-box h2 { font-size: 22px; font-weight: 800; color: var(--gray-900); margin-bottom: 4px; }
+.login-box .login-sub { font-size: 13px; color: var(--gray-500); margin-bottom: 24px; }
+.login-field { margin-bottom: 16px; }
+.login-field label { display: block; font-size: 13px; font-weight: 600; color: var(--gray-700); margin-bottom: 5px; }
+.login-field input { width: 100%; padding: 11px 14px; border: 1px solid var(--gray-300); border-radius: var(--radius-sm); font-size: 14px; transition: border-color var(--transition); }
+.login-field input:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
+.login-error { background: var(--danger-bg); color: var(--danger); padding: 10px 14px; border-radius: var(--radius-sm); font-size: 13px; margin-bottom: 12px; display: none; }
+.login-error.show { display: block; }
+.login-actions { display: flex; gap: 10px; margin-top: 20px; }
+.login-actions .btn { flex: 1; justify-content: center; padding: 12px; font-size: 14px; }
+.login-switch { text-align: center; margin-top: 16px; font-size: 13px; color: var(--gray-500); }
+.login-switch a { color: var(--primary); cursor: pointer; font-weight: 600; text-decoration: none; }
+.login-switch a:hover { text-decoration: underline; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.login-spinner { display: none; width: 18px; height: 18px; margin: 8px auto 0; border: 2px solid var(--gray-300); border-top-color: var(--primary); border-radius: 50%; animation: spin 0.6s linear infinite; }
+.cloud-indicator { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; padding: 2px 10px; border-radius: 10px; }
+.cloud-indicator.online { background: var(--success-bg); color: var(--success); }
+.cloud-indicator.offline { background: var(--gray-100); color: var(--gray-500); }
+.cloud-indicator.syncing { background: var(--primary-bg); color: var(--primary); }
+.migration-progress { padding: 14px; background: var(--primary-bg); border-radius: var(--radius-sm); margin-bottom: 14px; display: none; }
+.migration-progress.show { display: block; }
+.migration-bar { height: 6px; background: var(--gray-200); border-radius: 3px; margin-top: 8px; overflow: hidden; }
+.migration-bar-fill { height: 100%; background: var(--primary); border-radius: 3px; transition: width 0.3s; }
 </style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm" type="module"></script>
 </head>
 <body>
+
+<!-- ===== Login Overlay ===== -->
+<div class="login-overlay show" id="login-overlay">
+  <div class="login-box">
+    <h2>🔐 登录 Mano 运营工作台</h2>
+    <p class="login-sub" id="login-sub">所有数据云端保存 · 换设备数据依旧</p>
+    <div class="login-error" id="login-error"></div>
+    <div class="login-field"><label>📧 邮箱地址</label><input type="email" id="login-email" placeholder="you@example.com" autocomplete="email"></div>
+    <div class="login-field" id="login-name-field" style="display:none;"><label>👤 昵称</label><input type="text" id="login-name" placeholder="你的名字"></div>
+    <div class="login-field"><label>🔑 密码</label><input type="password" id="login-password" placeholder="至少 6 位" autocomplete="current-password"></div>
+    <div class="login-actions">
+      <button class="btn btn-outline" id="login-btn-register" onclick="CloudSync.register()">注册</button>
+      <button class="btn btn-primary" id="login-btn-signin" onclick="CloudSync.signIn()">登录</button>
+    </div>
+    <div class="login-spinner" id="login-spinner"></div>
+    <div class="login-switch"><a id="login-switch-link" onclick="CloudSync.toggleMode()">没有账号？去注册 →</a></div>
+    <div class="login-switch" style="margin-top:8px;"><a style="color:var(--gray-400);font-size:11px;" onclick="CloudSync.skipLogin()">跳过登录，使用本地模式</a></div>
+  </div>
+</div>
 
 <div class="app-layout">
   <!-- Sidebar -->
@@ -742,7 +789,8 @@ body {
           <button class="topbar-nav-btn" id="btn-forward" title="前进 (Alt+→)" onclick="history.forward()">→</button>
         </div>
         <div class="topbar-date" id="current-date"></div>
-        <div class="topbar-avatar">OP</div>
+        <div class="topbar-avatar" id="user-avatar" style="cursor:pointer;" title="点击管理账号" onclick="if(CloudSync.user){if(confirm('确定退出登录吗？'))CloudSync.signOut()}else{DataManager.openModal()}">OP</div>
+        <span class="cloud-indicator offline" id="cloud-indicator" style="margin-left:4px;">☁️ 离线</span>
       </div>
     </header>
 
@@ -4673,6 +4721,262 @@ const DataManager = {
 };
 
 // ============================================================
+// 9.5 CLOUD SYNC — Supabase 云端数据持久化
+// ============================================================
+const CloudSync = {
+  supabase: null,
+  user: null,
+  _config: { url: 'https://jspvznxtmsevicxhcdwi.supabase.co', key: 'sb_publishable_noRj1R71Aa8nPVYaQrH-Ww__zFmBnui' },
+  _mode: 'signin', // 'signin' | 'register'
+  _syncing: false,
+
+  async initSupabase() {
+    if (this.supabase) return;
+    const m = await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm');
+    this.supabase = m.createClient(this._config.url, this._config.key);
+    // 检查已有 session
+    const { data: { session } } = await this.supabase.auth.getSession();
+    if (session) { this.user = session.user; this.onLogin(); } else this.showLogin();
+  },
+
+  // ---- Auth ----
+  showLogin() {
+    document.getElementById('login-overlay').classList.add('show');
+  },
+  hideLogin() { document.getElementById('login-overlay').classList.remove('show'); },
+  toggleMode() {
+    this._mode = this._mode === 'signin' ? 'register' : 'signin';
+    document.getElementById('login-name-field').style.display = this._mode === 'register' ? '' : 'none';
+    document.getElementById('login-btn-register').style.display = this._mode === 'register' ? '' : 'none';
+    document.getElementById('login-btn-signin').style.display = this._mode === 'signin' ? '' : 'none';
+    document.getElementById('login-switch-link').textContent = this._mode === 'signin' ? '没有账号？去注册 →' : '已有账号？去登录 →';
+    document.getElementById('login-sub').textContent = this._mode === 'signin' ? '所有数据云端保存 · 换设备数据依旧' : '注册后数据云端保存 · 永久可访问';
+    document.getElementById('login-error').classList.remove('show');
+  },
+  _loginError(msg) { const e = document.getElementById('login-error'); e.textContent = msg; e.classList.add('show'); },
+  _setLoading(v) { document.getElementById('login-spinner').style.display = v ? 'block' : 'none'; },
+
+  async signIn() {
+    this._setLoading(true); document.getElementById('login-error').classList.remove('show');
+    const email = document.getElementById('login-email').value.trim();
+    const password = document.getElementById('login-password').value;
+    if (!email || !password) { this._loginError('请输入邮箱和密码'); this._setLoading(false); return; }
+    const { data, error } = await this.supabase.auth.signInWithPassword({ email, password });
+    this._setLoading(false);
+    if (error) { this._loginError(error.message.includes('Invalid') ? '邮箱或密码错误' : error.message); return; }
+    this.user = data.user; this.onLogin();
+  },
+
+  async register() {
+    this._setLoading(true); document.getElementById('login-error').classList.remove('show');
+    const email = document.getElementById('login-email').value.trim();
+    const password = document.getElementById('login-password').value;
+    const name = document.getElementById('login-name').value.trim() || email.split('@')[0];
+    if (!email || !password) { this._loginError('请输入邮箱和密码'); this._setLoading(false); return; }
+    if (password.length < 6) { this._loginError('密码至少 6 位'); this._setLoading(false); return; }
+    const { data, error } = await this.supabase.auth.signUp({ 
+      email, password,
+      options: { data: { display_name: name } }
+    });
+    this._setLoading(false);
+    if (error) { this._loginError(error.message.includes('already') ? '该邮箱已注册，请直接登录' : error.message); return; }
+    if (data.user && data.session) { this.user = data.user; this.onLogin(); }
+    else { this._loginError('注册成功！请检查邮箱确认链接（或直接尝试登录）'); this._mode = 'signin'; this.toggleMode(); }
+  },
+
+  async signOut() {
+    await this.supabase.auth.signOut();
+    this.user = null;
+    document.getElementById('user-avatar').textContent = 'OP';
+    this.setIndicator('offline');
+    this.showLogin();
+    showToast('👋 已退出登录');
+  },
+
+  onLogin() {
+    this.hideLogin();
+    const name = this.user.user_metadata?.display_name || this.user.email?.split('@')[0] || 'ME';
+    document.getElementById('user-avatar').textContent = name.slice(0, 2).toUpperCase();
+    // 检查是否需要迁移本地数据
+    if (this._hasLocalData()) {
+      setTimeout(() => this._promptMigration(), 600);
+    } else {
+      this.setIndicator('online');
+      this.loadCloudData().then(() => {
+        showToast('☁️ 已连接到云端 · 数据同步完成');
+      });
+    }
+  },
+
+  // ---- UI helpers ----
+  setIndicator(state) {
+    const el = document.getElementById('cloud-indicator');
+    el.className = 'cloud-indicator ' + state;
+    el.textContent = { online: '☁️ 在线', offline: '☁️ 离线', syncing: '🔄 同步中...' }[state] || '';
+  },
+
+  // ---- Data CRUD (user_data key-value) ----
+  async _upsert(key, value) {
+    if (!this.user) return;
+    try {
+      const { error } = await this.supabase.from('user_data').upsert({
+        user_id: this.user.id, key, value: JSON.stringify(value), updated_at: new Date().toISOString()
+      }, { onConflict: 'user_id,key' });
+      if (error && error.code === 'PGRST404') { /* table not yet created, silently skip */ }
+      else if (error) console.warn('CloudSync upsert failed:', key, error.message);
+    } catch (e) {}
+  },
+  async _get(key) {
+    if (!this.user) return null;
+    try {
+      const { data, error } = await this.supabase.from('user_data').select('value').eq('user_id', this.user.id).eq('key', key).maybeSingle();
+      if (error) { if (error.code !== 'PGRST404') console.warn('CloudSync get failed:', key, error.message); return null; }
+      return data ? JSON.parse(data.value) : null;
+    } catch (e) { return null; }
+  },
+  async _getAll() {
+    if (!this.user) return [];
+    try {
+      const { data, error } = await this.supabase.from('user_data').select('key,value').eq('user_id', this.user.id);
+      if (error) return [];
+      return (data || []).map(r => ({ key: r.key, value: JSON.parse(r.value) }));
+    } catch (e) { return []; }
+  },
+
+  // ---- Save / Load helpers ----
+  async saveCloud(key, data) {
+    if (!this.user) return;
+    this.setIndicator('syncing');
+    await this._upsert(key, data);
+    // 同时写本地缓存
+    localStorage.setItem('cloud_' + key, JSON.stringify(data));
+    this.setIndicator('online');
+  },
+  async loadCloud(key) { return this._get(key); },
+  async loadAllCloud() { return this._getAll(); },
+
+  // ---- Migration ----
+  _hasLocalData() {
+    for (let i = 0; i < localStorage.length; i++) {
+      if (localStorage.key(i).startsWith('mano_')) return true;
+    }
+    return false;
+  },
+  _promptMigration() {
+    if (!confirm('检测到本机有历史运营数据。\n\n是否迁移到云端账号（' + (this.user.email || '') + '）？\n\n选"确定"：上传本地数据到云端\n选"取消"：放弃本地数据，从云端加载')) return;
+    this.migrateToCloud();
+  },
+  async migrateToCloud() {
+    const el = document.getElementById('dm-modal');
+    const wasOpen = el.classList.contains('show');
+    if (!wasOpen) DataManager.openModal();
+    document.getElementById('migration-progress').classList.add('show');
+    const fill = document.getElementById('migration-bar-fill');
+    const msg = document.getElementById('migration-msg');
+    const keys = []; for (let i = 0; i < localStorage.length; i++) { const k = localStorage.key(i); if (k.startsWith('mano_')) keys.push(k); }
+    let done = 0;
+    msg.textContent = `正在迁移 ${keys.length} 条数据到云端...`;
+    this.setIndicator('syncing');
+    for (const key of keys) {
+      try {
+        let val = localStorage.getItem(key);
+        try { val = JSON.parse(val); } catch (e) {}
+        await this._upsert(key, val);
+      } catch (e) {}
+      done++;
+      fill.style.width = (done / keys.length * 100) + '%';
+    }
+    msg.textContent = `✅ 迁移完成！${done} 条数据已同步到云端`;
+    this.setIndicator('online');
+    localStorage.setItem('mano_cloud_migrated', Date.now().toString());
+    showToast('✅ 数据已迁移到云端 · 任何设备登录都能看到');
+    setTimeout(() => {
+      document.getElementById('migration-progress').classList.remove('show');
+      if (!wasOpen) DataManager.closeModal();
+    }, 2000);
+  },
+
+  // ---- Load all cloud data ----
+  async loadCloudData() {
+    this.setIndicator('syncing');
+    const all = await this.loadAllCloud();
+    if (!all.length) { this.setIndicator('online'); this._runLocalInit(); return; }
+    let count = 0;
+    for (const { key, value } of all) {
+      if (key.startsWith('mano_')) {
+        localStorage.setItem(key, typeof value === 'string' ? value : JSON.stringify(value));
+        count++;
+      }
+    }
+    this.setIndicator('online');
+    if (count > 0) {
+      DS = loadDS(); reportDB = JSON.parse(localStorage.getItem('mano_report_db') || '[]');
+      taskStatuses = JSON.parse(localStorage.getItem('mano_task_statuses') || '{}');
+      alertData = JSON.parse(localStorage.getItem('mano_alert_rules') || 'null');
+      if (!alertData) alertData = JSON.parse(JSON.stringify(ALERT_DEFAULTS));
+      try { weeklyReport.loadSettings(); weeklyReport.buildWeeks(); } catch (e) {}
+    }
+    this._runLocalInit();
+  },
+  _runLocalInit() {
+    try { weeklyReport.buildWeeks(); weeklyReport.loadSettings(); weeklyReport.render(); weeklyReport.bindEvents(); } catch (e) { console.warn('wr init:', e.message); }
+    try { refreshAllModuleViews(); } catch (e) { console.warn('refresh:', e.message); }
+    try { renderTasks(); renderAllDSCategories(); reportRenderList(); } catch (e) { console.warn('tasks:', e.message); }
+    try { renderDashboardFromDS(); renderM1KPI(); renderM2Keywords(); } catch (e) { console.warn('dash:', e.message); }
+    try { renderM4Inventory(); renderM5NegReviews(); renderM6Competitors(); renderM7Sales(); } catch (e) { console.warn('mods:', e.message); }
+    try { alertRules.init(); } catch (e) { console.warn('alert:', e.message); }
+    try { DataManager.init(); } catch (e) { console.warn('dm:', e.message); }
+  },
+  skipLogin() {
+    this.hideLogin();
+    CloudSync.setIndicator('offline');
+    this._runLocalInit();
+    showToast('💻 离线模式 · 数据保存在本机');
+  },
+
+  // ---- Periodic sync ----
+  async syncAll() {
+    if (!this.user) return;
+    const keys = ['mano_datasource', 'mano_report_db', 'mano_task_statuses', 'mano_alert_rules', 'mano_wr_settings', 'mano_wr_alerts'];
+    for (const k of keys) {
+      const v = localStorage.getItem(k);
+      if (v) {
+        let pv = v; try { pv = JSON.parse(v); } catch (e) {}
+        await this._upsert(k, pv);
+      }
+    }
+    showToast('☁️ 数据已同步到云端');
+  },
+
+  // Hook into DataManager operations
+  hookDataSave(key) {
+    if (!this.user) return;
+    const v = localStorage.getItem(key);
+    if (v) {
+      let pv = v; try { pv = JSON.parse(v); } catch (e) {}
+      this._upsert(key, pv);
+    }
+  }
+};
+
+// Patch DataManager to sync to cloud on export
+const _origCloseModal = DataManager.closeModal;
+DataManager.closeModal = function() {
+  // Auto-sync on close
+  CloudSync.hookDataSave('mano_datasource');
+  CloudSync.hookDataSave('mano_alert_rules');
+  _origCloseModal.call(DataManager);
+};
+
+// Patch save functions to trigger cloud sync
+const origSaveDS = saveDS;
+saveDS = function(ds) { origSaveDS(ds); CloudSync.hookDataSave('mano_datasource'); };
+const origReportSaveDB = reportSaveDB;
+reportSaveDB = function() { origReportSaveDB(); CloudSync.hookDataSave('mano_report_db'); };
+const origAlertSave = alertSave;
+alertSave = function() { origAlertSave(); CloudSync.hookDataSave('mano_alert_rules'); };
+
+// ============================================================
 // 9. INIT
 // ============================================================
 document.addEventListener('DOMContentLoaded', function() {
@@ -4683,21 +4987,10 @@ document.addEventListener('DOMContentLoaded', function() {
   // Router init
   Router.init();
 
-  // Initial renders
+  // Initial renders (defer to CloudSync flow)
   renderTasks();
   renderSOPTable();
-  renderAllDSCategories();
-  reportRenderList();
-  renderDashboardFromDS();
-  renderM1KPI();
-  renderM2Keywords();
-  renderM4Inventory();
-  renderM5NegReviews();
-  renderM6Competitors();
-  renderM7Sales();
-  alertRules.init();
-  weeklyReport.init();
-  DataManager.init();
+  CloudSync.initSupabase();
   document.addEventListener('click', function(e) {
     // Alert sub-tabs
     if (e.target.hasAttribute('data-alert-tab')) {
@@ -4788,6 +5081,10 @@ document.addEventListener('DOMContentLoaded', function() {
         <div class="modal-header"><h3>💾 数据管理</h3><button class="modal-close" onclick="DataManager.closeModal()">×</button></div>
         <div class="modal-body">
           <div class="backup-reminder" id="backup-reminder"><span>⚠️ 距上次备份已超过 7 天，建议立即导出备份！</span><button class="br-close" onclick="this.parentElement.classList.remove('show')">×</button></div>
+          <div class="migration-progress" id="migration-progress">
+            <div style="font-size:13px;color:var(--gray-700);font-weight:600;" id="migration-msg">正在迁移数据到云端...</div>
+            <div class="migration-bar"><div class="migration-bar-fill" id="migration-bar-fill" style="width:0%;"></div></div>
+          </div>
           <div class="dm-storage-bar">
             <span>📦 存储用量：</span><span class="bar-track"><span class="bar-fill ok" id="dm-bar-fill"></span></span><span id="dm-bar-text">0 / 10 MB</span>
           </div>
