@@ -3097,38 +3097,210 @@ body {
 
     <!-- ============ PAGE: Module 6 ============ -->
     <div class="page" id="page-module6">
+      <!-- 竞品监控清单 -->
       <div class="card">
-        <div class="card-header"><span class="card-title">🔎 竞品与市场调研</span></div>
+        <div class="card-header">
+          <span class="card-title">🎯 竞品监控清单</span>
+          <div style="display:flex;gap:8px;align-items:center;">
+            <select class="filter-select" id="m6-comp-filter" onchange="renderM6Competitors()">
+              <option value="all">全部类型</option>
+              <option value="direct">直接竞品</option>
+              <option value="benchmark">头部标杆</option>
+              <option value="newcomer">新进入者</option>
+            </select>
+            <button class="btn btn-primary btn-sm" onclick="dsAddRecord('竞品监控')">+ 添加竞品</button>
+          </div>
+        </div>
         <div class="card-body">
-          <div class="tabs">
-            <button class="tab-btn active" data-tab="m6-monitor">竞品监控清单</button>
-            <button class="tab-btn" data-tab="m6-trend">法国市场趋势</button>
-            <button class="tab-btn" data-tab="m6-report">周报模板</button>
-          </div>
-          <div class="tab-panel active" id="tab-m6-monitor">
+          <div class="stats-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:16px;" id="m6-summary-stats"></div>
+          <div style="overflow-x:auto;">
             <table class="task-table" id="m6-comp-table"></table>
-            <button class="btn btn-outline btn-sm" style="margin-top:12px;" onclick="dsAddRecord('竞品监控')">+ 添加竞品</button>
           </div>
-          <div class="tab-panel" id="tab-m6-trend">
-            <div class="alert alert-info">
-              📅 <strong>近期法国市场节点：</strong><br>
-              • 法国夏季大促 (Soldes d'été)：6月底-7月 • 开学季 (Rentrée scolaire)：8月底-9月<br>
-              • 黑五 (Black Friday)：11月 • 圣诞 (Noël)：12月
+        </div>
+      </div>
+
+      <!-- 竞品监控操作SOP -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">📋 竞品监控操作 SOP</span>
+          <span style="font-size:12px;color:var(--gray-500);background:var(--gray-100);padding:4px 12px;border-radius:12px;">建议每周四执行</span>
+        </div>
+        <div class="card-body">
+          <div class="grid-2col">
+            <!-- 左：采集流程 -->
+            <div>
+              <h4 style="font-size:15px;margin-bottom:12px;color:var(--gray-800);">📥 数据采集流程</h4>
+              <div class="timeline">
+                <div class="timeline-item done">
+                  <div class="timeline-time">Step 1 · 每周四 09:00</div>
+                  <div class="timeline-content"><strong>前台搜索核心品类关键词</strong>，筛选 TOP 10-20 竞品 ASIN/店铺</div>
+                </div>
+                <div class="timeline-item done">
+                  <div class="timeline-time">Step 2 · 每周四 10:00</div>
+                  <div class="timeline-content"><strong>记录竞品信息维度：</strong>价格/变体/主图/标题关键词/促销标签/评分/Review数量</div>
+                </div>
+                <div class="timeline-item">
+                  <div class="timeline-time">Step 3 · 每周四 11:00</div>
+                  <div class="timeline-content"><strong>对比分析：</strong>与上周数据对比，标注变化项（涨/跌/改/新）</div>
+                </div>
+                <div class="timeline-item">
+                  <div class="timeline-time">Step 4 · 每周四 14:00</div>
+                  <div class="timeline-content"><strong>输出竞品周报</strong>，列出需关注的威胁和机会，抄送团队负责人</div>
+                </div>
+              </div>
             </div>
-            <div style="margin-top:12px;"><strong>🔥 当前法国热点品类：</strong>
-              <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;">
-                <span class="tag">环保家居</span><span class="tag">智能家电</span><span class="tag">DIY工具</span><span class="tag">宠物用品</span><span class="tag">户外家具</span>
+            <!-- 右：分析框架 -->
+            <div>
+              <h4 style="font-size:15px;margin-bottom:12px;color:var(--gray-800);">🔍 竞品变化分析框架</h4>
+              <div style="display:flex;flex-direction:column;gap:10px;">
+                <div class="alert alert-warning" style="margin:0;">
+                  <div><strong>💰 竞品降价 → 我方是否跟进？</strong></div>
+                  <div style="font-size:12px;margin-top:4px;">
+                    检查：①降价幅度（<5%观望 / 5-15%评估 / >15%必须应对）②我方利润空间 ③竞品是否为清仓行为
+                  </div>
+                </div>
+                <div class="alert" style="margin:0;background:#f5f3ff;color:#5b21b6;border:1px solid #ddd6fe;">
+                  <div><strong>🆕 竞品上新 → 是否构成威胁？</strong></div>
+                  <div style="font-size:12px;margin-top:4px;">
+                    评估：①功能/设计差异化程度 ②价格定位 ③是否进入我方核心价格带 ④首发促销力度
+                  </div>
+                </div>
+                <div class="alert alert-success" style="margin:0;">
+                  <div><strong>📉 竞品差评增多 → 是否机会点？</strong></div>
+                  <div style="font-size:12px;margin-top:4px;">
+                    分析：①差评集中在哪些问题(质量/物流/描述) ②我方是否有对应优势 ③可在Listing中强化该卖点
+                  </div>
+                </div>
+                <div class="alert alert-info" style="margin:0;">
+                  <div><strong>🏷️ 竞品排名跃升 → 学习其策略</strong></div>
+                  <div style="font-size:12px;margin-top:4px;">
+                    反向拆解：广告投放策略/促销节奏/关键词布局/Review获取速度
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-          <div class="tab-panel" id="tab-m6-report">
-            <div style="background:var(--gray-50);padding:16px;border-radius:8px;">
-              <strong>📋 竞品周报结构：</strong>
-              <ol style="margin-top:8px;padding-left:20px;font-size:14px;color:var(--gray-600);">
-                <li>竞品Listing变化（价格/促销/主图/标题）</li><li>竞品排名变化趋势</li>
-                <li>竞品新品上架动态</li><li>竞品Review新增情况及正面/负面反馈摘要</li><li>下周优化对策建议</li>
-              </ol>
+          <!-- 信息记录维度清单 -->
+          <div style="margin-top:20px;background:var(--gray-50);border-radius:var(--radius-sm);padding:16px;">
+            <h4 style="font-size:14px;margin-bottom:10px;color:var(--gray-700);">📊 竞品信息记录维度（每竞品必填）</h4>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;">
+              <span class="tag">📷 主图变化</span><span class="tag">🏷️ 标题关键词</span><span class="tag">💶 售价 & 促销价</span>
+              <span class="tag">⭐ 评分趋势</span><span class="tag">📝 Review数量</span><span class="tag">🏆 类目排名</span>
+              <span class="tag">📦 变体数量</span><span class="tag">🎯 广告位出现频率</span><span class="tag">🖼️ A+/视频内容</span>
+              <span class="tag">🚚 配送方式</span><span class="tag">📅 上架时间</span><span class="tag">🏪 店铺属地</span>
             </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 市场趋势情报站 -->
+      <div class="card">
+        <div class="card-header"><span class="card-title">🌍 法国市场趋势情报站</span></div>
+        <div class="card-body">
+          <div class="grid-2col">
+            <!-- Mano 平台内部 -->
+            <div class="ds-category-card open">
+              <div class="ds-category-header" onclick="this.parentElement.classList.toggle('open')">
+                <h4>🏪 Mano 平台内部趋势信号</h4>
+                <span class="ds-category-arrow">▼</span>
+              </div>
+              <div class="ds-category-body">
+                <table class="task-table" style="font-size:13px;">
+                  <tr><th>信号来源</th><th>获取方式</th><th>更新频率</th><th>用途</th></tr>
+                  <tr><td>🔍 热搜关键词</td><td>SellerCenter → 数据洞察 → 搜索词报告</td><td><span class="status-badge done">每周</span></td><td>发现上升品类，指导选品和广告词</td></tr>
+                  <tr><td>🏆 品类榜单</td><td>Mano 前台 → 各品类 Best Sellers / New Releases</td><td><span class="status-badge done">每周</span></td><td>识别头部竞品和热门新品</td></tr>
+                  <tr><td>📣 促销活动日历</td><td>SellerCenter → 营销推广 → 活动报名</td><td><span class="status-badge pending">每月</span></td><td>提前规划促销选品和备货</td></tr>
+                  <tr><td>📊 类目分析报告</td><td>SellerCenter → 数据洞察 → 类目分析</td><td><span class="status-badge pending">每月</span></td><td>了解品类整体趋势和市场份额</td></tr>
+                </table>
+              </div>
+            </div>
+            <!-- 外部趋势 -->
+            <div class="ds-category-card open">
+              <div class="ds-category-header" onclick="this.parentElement.classList.toggle('open')">
+                <h4>🌐 外部趋势数据源</h4>
+                <span class="ds-category-arrow">▼</span>
+              </div>
+              <div class="ds-category-body">
+                <table class="task-table" style="font-size:13px;">
+                  <tr><th>数据源</th><th>获取内容</th><th>更新频率</th><th>链接/方式</th></tr>
+                  <tr><td>🔎 Google Trends</td><td>关键词搜索趋势、区域热度</td><td><span class="status-badge done">每周</span></td><td>trends.google.fr（选 France）</td></tr>
+                  <tr><td>📰 Fevad 电商报告</td><td>法国电商市场规模、品类数据</td><td><span class="status-badge pending">季度</span></td><td>fevad.com → 研究报告</td></tr>
+                  <tr><td>🏭 行业协会报告</td><td>家居/DIY/家电品类趋势</td><td><span class="status-badge pending">半年</span></td><td>FNAEM / UNIBAL 等</td></tr>
+                  <tr><td>📱 社交媒体</td><td>法国消费者热议话题、种草趋势</td><td><span class="status-badge done">每周</span></td><td>TikTok/Instagram 法国区热搜</td></tr>
+                </table>
+              </div>
+            </div>
+          </div>
+          <!-- 法国市场日历 -->
+          <div style="margin-top:16px;">
+            <h4 style="font-size:15px;margin-bottom:12px;color:var(--gray-800);">📅 法国市场年度关键节点</h4>
+            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px;" id="m6-calendar-grid"></div>
+          </div>
+          <!-- 热点品类 -->
+          <div style="margin-top:16px;background:var(--warning-bg);border:1px solid #fde68a;border-radius:var(--radius-sm);padding:16px;">
+            <strong>🔥 当前法国热点品类（持续关注）：</strong>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;">
+              <span class="tag" style="background:#fef3c7;color:#92400e;font-size:13px;padding:6px 14px;">🌿 环保家居 (éco-responsable)</span>
+              <span class="tag" style="background:#fef3c7;color:#92400e;font-size:13px;padding:6px 14px;">🤖 智能家电 (connecté)</span>
+              <span class="tag" style="background:#fef3c7;color:#92400e;font-size:13px;padding:6px 14px;">🔧 DIY工具 (bricolage)</span>
+              <span class="tag" style="background:#fef3c7;color:#92400e;font-size:13px;padding:6px 14px;">🐾 宠物用品 (animalerie)</span>
+              <span class="tag" style="background:#fef3c7;color:#92400e;font-size:13px;padding:6px 14px;">🪴 户外花园 (jardin)</span>
+              <span class="tag" style="background:#fef3c7;color:#92400e;font-size:13px;padding:6px 14px;">💡 节能照明 (LED/économie énergie)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 竞品趋势周报模板 -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">📰 竞品趋势周报模板</span>
+          <button class="btn btn-outline btn-sm" onclick="generateM6WeeklyReport()">📄 生成本周报告</button>
+        </div>
+        <div class="card-body">
+          <div style="background:var(--gray-50);padding:20px;border-radius:var(--radius-sm);border:1px solid var(--gray-200);">
+            <div style="text-align:center;margin-bottom:20px;">
+              <div style="font-size:18px;font-weight:700;color:var(--gray-900);">📊 Mano 竞品与市场周报</div>
+              <div style="font-size:12px;color:var(--gray-500);margin-top:4px;">报告周期：<span id="m6-report-week">--</span> | 编制人：运营专员 | 抄送：团队负责人</div>
+            </div>
+            <table style="width:100%;border-collapse:collapse;font-size:13px;">
+              <tr style="background:var(--gray-100);">
+                <th style="padding:10px 14px;text-align:left;border:1px solid var(--gray-200);width:40px;">#</th>
+                <th style="padding:10px 14px;text-align:left;border:1px solid var(--gray-200);">报告板块</th>
+                <th style="padding:10px 14px;text-align:left;border:1px solid var(--gray-200);">核心内容</th>
+                <th style="padding:10px 14px;text-align:left;border:1px solid var(--gray-200);width:80px;">状态</th>
+              </tr>
+              <tr>
+                <td style="padding:10px 14px;border:1px solid var(--gray-200);font-weight:700;">1</td>
+                <td style="padding:10px 14px;border:1px solid var(--gray-200);font-weight:600;">竞品 Listing 变化</td>
+                <td style="padding:10px 14px;border:1px solid var(--gray-200);font-size:12px;color:var(--gray-600);">价格调整 / 促销活动 / 主图更换 / 标题关键词变化 / A+ 内容更新</td>
+                <td style="padding:10px 14px;border:1px solid var(--gray-200);text-align:center;"><span class="status-badge pending">待填写</span></td>
+              </tr>
+              <tr>
+                <td style="padding:10px 14px;border:1px solid var(--gray-200);font-weight:700;">2</td>
+                <td style="padding:10px 14px;border:1px solid var(--gray-200);font-weight:600;">竞品排名变化趋势</td>
+                <td style="padding:10px 14px;border:1px solid var(--gray-200);font-size:12px;color:var(--gray-600);">核心关键词排名变动 / 类目 Best Seller Rank 变化 / 广告位出现频率</td>
+                <td style="padding:10px 14px;border:1px solid var(--gray-200);text-align:center;"><span class="status-badge pending">待填写</span></td>
+              </tr>
+              <tr>
+                <td style="padding:10px 14px;border:1px solid var(--gray-200);font-weight:700;">3</td>
+                <td style="padding:10px 14px;border:1px solid var(--gray-200);font-weight:600;">新品上架动态</td>
+                <td style="padding:10px 14px;border:1px solid var(--gray-200);font-size:12px;color:var(--gray-600);">本周新上架竞品 / 产品功能创新 / 定价策略 / 首发促销力度</td>
+                <td style="padding:10px 14px;border:1px solid var(--gray-200);text-align:center;"><span class="status-badge pending">待填写</span></td>
+              </tr>
+              <tr>
+                <td style="padding:10px 14px;border:1px solid var(--gray-200);font-weight:700;">4</td>
+                <td style="padding:10px 14px;border:1px solid var(--gray-200);font-weight:600;">竞品 Review 新增</td>
+                <td style="padding:10px 14px;border:1px solid var(--gray-200);font-size:12px;color:var(--gray-600);">正面反馈摘要（可借鉴卖点）/ 负面反馈摘要（我方机会点）/ 新 Review 数量</td>
+                <td style="padding:10px 14px;border:1px solid var(--gray-200);text-align:center;"><span class="status-badge pending">待填写</span></td>
+              </tr>
+              <tr style="background:var(--primary-bg);">
+                <td style="padding:10px 14px;border:1px solid var(--gray-200);font-weight:700;">5</td>
+                <td style="padding:10px 14px;border:1px solid var(--gray-200);font-weight:600;">下周优化对策建议</td>
+                <td style="padding:10px 14px;border:1px solid var(--gray-200);font-size:12px;color:var(--gray-600);">基于本周发现的具体行动建议 / 需调整的 Listing / 需跟进的价格策略</td>
+                <td style="padding:10px 14px;border:1px solid var(--gray-200);text-align:center;"><span class="status-badge pending">待填写</span></td>
+              </tr>
+            </table>
           </div>
         </div>
       </div>
@@ -3136,29 +3308,229 @@ body {
 
     <!-- ============ PAGE: Module 7 ============ -->
     <div class="page" id="page-module7">
+      <!-- 销售趋势概览 -->
       <div class="card">
-        <div class="card-header"><span class="card-title">📈 销售数据分析与策略调整</span></div>
+        <div class="card-header">
+          <span class="card-title">📈 销售趋势概览</span>
+          <div style="display:flex;gap:8px;align-items:center;">
+            <select class="filter-select" id="m7-period-select" onchange="renderM7Sales()">
+              <option value="monthly">本月 vs 上月</option>
+              <option value="quarterly">本季 vs 上季</option>
+              <option value="yearly">本年 vs 去年</option>
+            </select>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="stats-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:16px;" id="m7-kpi-stats"></div>
+          <table class="task-table" id="m7-sales-table"></table>
+        </div>
+      </div>
+
+      <!-- 品类结构分析 -->
+      <div class="card">
+        <div class="card-header"><span class="card-title">📊 品类结构分析</span></div>
+        <div class="card-body">
+          <div style="overflow-x:auto;">
+            <table class="task-table" id="m7-category-table"></table>
+          </div>
+        </div>
+      </div>
+
+      <!-- 利润分析 -->
+      <div class="card">
+        <div class="card-header"><span class="card-title">💰 利润分析（扣除全成本）</span></div>
+        <div class="card-body">
+          <div class="grid-2col">
+            <div>
+              <table class="task-table" id="m7-profit-table"></table>
+            </div>
+            <div>
+              <div style="background:var(--gray-50);border-radius:var(--radius-sm);padding:20px;">
+                <h4 style="font-size:14px;margin-bottom:12px;color:var(--gray-700);">📐 利润率计算公式</h4>
+                <div style="font-size:13px;color:var(--gray-600);line-height:2;">
+                  <div><strong>毛利润</strong> = 销售收入 - 产品成本</div>
+                  <div><strong>平台费用</strong> = 佣金(通常8-15%) + 固定费用</div>
+                  <div><strong>广告成本</strong> = 广告总支出</div>
+                  <div><strong>物流成本</strong> = FBA费用 / 自发货运费 + 包装</div>
+                  <div><strong>退换货损耗</strong> = 退货率 × (产品成本 + 往返运费)</div>
+                  <div style="border-top:2px solid var(--gray-300);margin-top:8px;padding-top:8px;font-weight:700;color:var(--gray-900);">
+                    <strong>净利润</strong> = 销售收入 - 产品成本 - 平台费用 - 广告成本 - 物流成本 - 退换货损耗
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 流量来源与转化效率 -->
+      <div class="card">
+        <div class="card-header"><span class="card-title">🔍 流量来源与转化效率</span></div>
+        <div class="card-body">
+          <table class="task-table" id="m7-traffic-table"></table>
+        </div>
+      </div>
+
+      <!-- 复盘报告模板 -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">📋 复盘报告模板</span>
+        </div>
         <div class="card-body">
           <div class="tabs">
-            <button class="tab-btn active" data-tab="m7-sales">销售趋势</button>
-            <button class="tab-btn" data-tab="m7-profit">利润分析</button>
-            <button class="tab-btn" data-tab="m7-strategy">策略调整</button>
+            <button class="tab-btn active" data-tab="m7-weekly-template">📅 周报模板</button>
+            <button class="tab-btn" data-tab="m7-monthly-template">📆 月报模板</button>
+            <button class="tab-btn" data-tab="m7-quarterly-template">📊 季报模板</button>
           </div>
-          <div class="tab-panel active" id="tab-m7-sales">
-            <table class="task-table" id="m7-sales-table"></table>
+
+          <!-- 周报模板 -->
+          <div class="tab-panel active" id="tab-m7-weekly-template">
+            <div style="background:var(--gray-50);padding:20px;border-radius:var(--radius-sm);border:1px solid var(--gray-200);">
+              <div style="text-align:center;margin-bottom:16px;">
+                <div style="font-size:16px;font-weight:700;">📊 Mano 销售数据周报</div>
+                <div style="font-size:12px;color:var(--gray-500);">报告周期：____年__月__日 ~ __月__日 | 编制人：_______</div>
+              </div>
+              <table class="task-table">
+                <tr><th style="width:30px;">#</th><th>模块</th><th style="width:60%;">填写内容</th></tr>
+                <tr><td>1</td><td><strong>核心指标速览</strong></td><td style="font-size:12px;color:var(--gray-500);">本周 GMV / 订单量 / 客单价 / 转化率 及环比变化</td></tr>
+                <tr><td>2</td><td><strong>广告速报</strong></td><td style="font-size:12px;color:var(--gray-500);">花费 / ROAS / ACOS / TOP3高消耗Campaign表现</td></tr>
+                <tr><td>3</td><td><strong>库存预警</strong></td><td style="font-size:12px;color:var(--gray-500);">即将断货 SKU（<7天可售）/ 冗余库存（>90天）</td></tr>
+                <tr><td>4</td><td><strong>异常提醒</strong></td><td style="font-size:12px;color:var(--gray-500);">流量骤降 / 转化率下跌 / 差评激增 / 退货异常</td></tr>
+                <tr><td>5</td><td><strong>本周行动项</strong></td><td style="font-size:12px;color:var(--gray-500);">需下周处理的紧急事项（≤3条）</td></tr>
+              </table>
+            </div>
           </div>
-          <div class="tab-panel" id="tab-m7-profit">
-            <table class="task-table" id="m7-profit-table"></table>
+
+          <!-- 月报模板 -->
+          <div class="tab-panel" id="tab-m7-monthly-template">
+            <div style="background:var(--gray-50);padding:20px;border-radius:var(--radius-sm);border:1px solid var(--gray-200);">
+              <div style="text-align:center;margin-bottom:16px;">
+                <div style="font-size:16px;font-weight:700;">📊 Mano 销售数据月报</div>
+                <div style="font-size:12px;color:var(--gray-500);">报告周期：____年__月 | 编制人：_______ | 审批人：_______</div>
+              </div>
+              <table class="task-table">
+                <tr><th style="width:30px;">#</th><th>模块</th><th style="width:60%;">填写内容</th></tr>
+                <tr><td>1</td><td><strong>整体销售趋势</strong></td><td style="font-size:12px;color:var(--gray-500);">月度 GMV / 订单量 / 客单价（含趋势图）| 环比 & 同比</td></tr>
+                <tr><td>2</td><td><strong>品类结构分析</strong></td><td style="font-size:12px;color:var(--gray-500);">各品类销售额占比 / 增长率 / 新品贡献度</td></tr>
+                <tr><td>3</td><td><strong>流量与转化</strong></td><td style="font-size:12px;color:var(--gray-500);">流量来源占比（自然/广告/活动/外部）/ 各渠道转化率</td></tr>
+                <tr><td>4</td><td><strong>广告效果</strong></td><td style="font-size:12px;color:var(--gray-500);">总花费 / ROAS / ACOS / TOP10关键词表现</td></tr>
+                <tr><td>5</td><td><strong>利润分析</strong></td><td style="font-size:12px;color:var(--gray-500);">净利润 = 销售收入 - 产品成本 - 佣金 - 广告费 - 物流 - 退货损耗</td></tr>
+                <tr><td>6</td><td><strong>促销拉动效果</strong></td><td style="font-size:12px;color:var(--gray-500);">活动前后销量对比 / 折扣深度 vs 销量增量 / ROI</td></tr>
+                <tr><td>7</td><td><strong>问题与机会</strong></td><td style="font-size:12px;color:var(--gray-500);">问题品类/产品 / 增长机会点 / 竞品动态影响</td></tr>
+                <tr><td>8</td><td><strong>下月策略</strong></td><td style="font-size:12px;color:var(--gray-500);">定价调整 / 广告优化 / 选品方向 / 库存策略</td></tr>
+              </table>
+            </div>
           </div>
-          <div class="tab-panel" id="tab-m7-strategy">
-            <div class="alert alert-info">💡 <strong>本月策略建议：</strong></div>
-            <ul class="checklist">
-              <li><input type="checkbox"> 转化率下降5%：排查Listing页面和竞品动态</li>
-              <li><input type="checkbox"> 广告ACOS改善：保持当前竞价策略</li>
-              <li><input type="checkbox"> 退货率上升：重点检查TOP3退货SKU的产品质量</li>
-              <li><input type="checkbox"> 下月新品广告组预算上调20%</li>
-              <li><input type="checkbox"> 清理3个月以上低转化率Campaign</li>
-            </ul>
+
+          <!-- 季报模板 -->
+          <div class="tab-panel" id="tab-m7-quarterly-template">
+            <div style="background:var(--gray-50);padding:20px;border-radius:var(--radius-sm);border:1px solid var(--gray-200);">
+              <div style="text-align:center;margin-bottom:16px;">
+                <div style="font-size:16px;font-weight:700;">📊 Mano 季度运营复盘报告</div>
+                <div style="font-size:12px;color:var(--gray-500);">报告周期：____年 Q_ | 编制人：_______ | 审批人：团队负责人</div>
+              </div>
+              <table class="task-table">
+                <tr><th style="width:30px;">#</th><th>模块</th><th style="width:60%;">填写内容</th></tr>
+                <tr><td>1</td><td><strong>季度业绩总览</strong></td><td style="font-size:12px;color:var(--gray-500);">Q累计 GMV/利润 vs 目标达成率 | 同比/环比 | 年度目标进度</td></tr>
+                <tr><td>2</td><td><strong>品类深度分析</strong></td><td style="font-size:12px;color:var(--gray-500);">TOP/Bottom品类表现 | 品类利润率排名 | 资源投入产出比</td></tr>
+                <tr><td>3</td><td><strong>产品矩阵评估</strong></td><td style="font-size:12px;color:var(--gray-500);">明星/金牛/问题/瘦狗产品分类 | 滞销SKU清理决策</td></tr>
+                <tr><td>4</td><td><strong>广告策略复盘</strong></td><td style="font-size:12px;color:var(--gray-500);">季度广告总投入占比(目标5-10%) | 各类型广告ROI | 预算分配优化</td></tr>
+                <tr><td>5</td><td><strong>竞品格局变化</strong></td><td style="font-size:12px;color:var(--gray-500);">新进入者影响 | 头部竞品策略变化 | 我方市场份额变化</td></tr>
+                <tr><td>6</td><td><strong>运营效率评估</strong></td><td style="font-size:12px;color:var(--gray-500);">库存周转率 | 退货率趋势 | 客服响应时效 | 店铺评分变化</td></tr>
+                <tr><td>7</td><td><strong>下季度战略规划</strong></td><td style="font-size:12px;color:var(--gray-500);">目标设定 | 资源分配 | 选品方向 | 关键战役 | 风险预案</td></tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 策略调整流程 -->
+      <div class="card">
+        <div class="card-header"><span class="card-title">🔄 策略调整流程与审批</span></div>
+        <div class="card-body">
+          <div class="grid-2col">
+            <!-- 左：调整类型 -->
+            <div>
+              <h4 style="font-size:15px;margin-bottom:12px;color:var(--gray-800);">📌 复盘后行动项类型</h4>
+              <div style="display:flex;flex-direction:column;gap:8px;">
+                <div class="alert alert-info" style="margin:0;">
+                  <strong>💲 定价调整</strong>
+                  <div style="font-size:12px;margin-top:2px;">触发条件：竞品降价>10% / 利润率偏离目标 / 季节性调价</div>
+                  <div style="font-size:11px;color:var(--warning);margin-top:2px;">⚠️ 审批：价格变动>15%需团队负责人确认</div>
+                </div>
+                <div class="alert alert-warning" style="margin:0;">
+                  <strong>📣 广告优化</strong>
+                  <div style="font-size:12px;margin-top:2px;">触发条件：ACOS>目标 / ROAS下降 / 新Campaign上线</div>
+                  <div style="font-size:11px;color:var(--warning);margin-top:2px;">⚠️ 审批：日预算调整>50%需团队负责人确认</div>
+                </div>
+                <div class="alert" style="margin:0;background:#f5f3ff;color:#5b21b6;border:1px solid #ddd6fe;">
+                  <strong>🔍 选品方向调整</strong>
+                  <div style="font-size:12px;margin-top:2px;">触发条件：品类趋势变化 / 竞品新品冲击 / 我方新品表现评估</div>
+                  <div style="font-size:11px;color:var(--warning);margin-top:2px;">⚠️ 审批：新品类/大额首批采购需团队负责人确认</div>
+                </div>
+                <div class="alert alert-success" style="margin:0;">
+                  <strong>📦 库存策略调整</strong>
+                  <div style="font-size:12px;margin-top:2px;">触发条件：周转天数偏离 / 大促备货 / 滞销品清仓</div>
+                  <div style="font-size:11px;color:var(--warning);margin-top:2px;">⚠️ 审批：大批量补货(>€5000)需团队负责人确认</div>
+                </div>
+              </div>
+            </div>
+            <!-- 右：审批流程 -->
+            <div>
+              <h4 style="font-size:15px;margin-bottom:12px;color:var(--gray-800);">⚡ 策略调整审批流程</h4>
+              <div class="timeline">
+                <div class="timeline-item done">
+                  <div class="timeline-time">Step 1</div>
+                  <div class="timeline-content"><strong>运营专员</strong>：基于复盘数据提出调整建议，填写《策略调整申请表》</div>
+                </div>
+                <div class="timeline-item done">
+                  <div class="timeline-time">Step 2</div>
+                  <div class="timeline-content"><strong>运营专员</strong>：附数据分析截图/竞品截图佐证</div>
+                </div>
+                <div class="timeline-item urgent">
+                  <div class="timeline-time">Step 3 · 决策点</div>
+                  <div class="timeline-content"><strong>团队负责人</strong>审批：同意 / 修改后同意 / 驳回（附理由）<br><span style="font-size:11px;color:var(--danger);">重大调整（标记⚠️项）必须获得审批</span></div>
+                </div>
+                <div class="timeline-item">
+                  <div class="timeline-time">Step 4</div>
+                  <div class="timeline-content"><strong>运营专员</strong>：执行调整 → 记录调整前配置（截图）→ 监控调整后效果</div>
+                </div>
+                <div class="timeline-item">
+                  <div class="timeline-time">Step 5</div>
+                  <div class="timeline-content"><strong>运营专员</strong>：调整后1周/2周分别复盘效果，记录到行动项追踪表</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 行动项追踪表 -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">✅ 行动项追踪表</span>
+          <div style="display:flex;gap:8px;">
+            <select class="filter-select" id="m7-action-filter" onchange="renderM7Actions()">
+              <option value="all">全部状态</option>
+              <option value="pending">待执行</option>
+              <option value="in_progress">执行中</option>
+              <option value="done">已完成</option>
+              <option value="cancelled">已取消</option>
+            </select>
+            <button class="btn btn-primary btn-sm" onclick="addM7Action()">+ 新增行动项</button>
+          </div>
+        </div>
+        <div class="card-body">
+          <div style="overflow-x:auto;">
+            <table class="task-table" id="m7-actions-table">
+              <thead>
+                <tr>
+                  <th>策略类型</th><th>具体行动</th><th>负责人</th>
+                  <th>截止时间</th><th>优先级</th><th>审批状态</th><th>完成状态</th><th>效果评估</th>
+                </tr>
+              </thead>
+              <tbody id="m7-actions-tbody"></tbody>
+            </table>
           </div>
         </div>
       </div>
@@ -3337,7 +3709,7 @@ const Router = {
     if (page === 'module4') { renderM4Inventory(); }
     if (page === 'module5') { renderM5NegReviews(); }
     if (page === 'module6') { renderM6Competitors(); }
-    if (page === 'module7') { renderM7Sales(); }
+    if (page === 'module7') { renderM7Sales(); renderM7Actions(); }
   },
 
   navigate(page, pushState = true) {
@@ -3463,11 +3835,49 @@ const DS_DEFAULTS = {
   '竞品监控': {
     label: '竞品监控清单',
     icon: '🔎',
-    fields: ['竞品名称','价格','评分','Review数','近期变化','监控状态'],
+    fields: ['竞品名称','类型','价格','评分','Review数','近期变化','监控状态'],
     data: [
-      ['Concurrent A','€89.99','4.3','245','降价10%','关注'],
-      ['Concurrent B','€129.00','4.6','512','新增变体','关注'],
-      ['Concurrent C','€69.99','4.1','89','主图更新','稳定']
+      ['Concurrent A (同品类同价格带)','直接竞品','€89.99','4.3','245','降价10%','🔴 关注'],
+      ['Concurrent B (品类TOP卖家)','头部标杆','€129.00','4.6','512','新增变体','🔴 关注'],
+      ['Concurrent C (近期上架新卖家)','新进入者','€69.99','4.1','89','主图更新','🟡 稳定'],
+      ['Concurrent D (同品类同价格带)','直接竞品','€95.00','4.4','178','参加促销','🔴 关注'],
+      ['Concurrent E (品类TOP卖家)','头部标杆','€149.00','4.7','890','无变化','🟢 稳定']
+    ]
+  },
+  '品类分析': {
+    label: '品类结构分析',
+    icon: '📊',
+    fields: ['品类','本月销售额','占比','上月销售额','环比增长','利润率','TOP产品'],
+    data: [
+      ['Meubles TV (电视柜)','€28,500','32.6%','€25,100','+13.5%','22%','TV-140-BL / TV-160-WH'],
+      ['Tables basses (茶几)','€18,200','20.8%','€15,800','+15.2%','18%','TB-MRB-80 / TB-IND-100'],
+      ['Étagères (搁架)','€14,800','16.9%','€13,600','+8.8%','20%','ETG-FLT-120 / ETG-CUB-3'],
+      ['Luminaires (灯具)','€12,400','14.2%','€11,200','+10.7%','25%','LMP-LED-DSK / LMP-PDT-60'],
+      ['Décoration (装饰)','€7,450','8.5%','€7,100','+4.9%','15%','DCR-MIR-RND / DCR-VAS-CT'],
+      ['其他','€6,000','6.9%','€5,400','+11.1%','12%','—']
+    ]
+  },
+  '流量来源': {
+    label: '流量来源分析',
+    icon: '🔍',
+    fields: ['流量来源','曝光量','点击量','点击率','转化率','销售额贡献','环比变化'],
+    data: [
+      ['自然搜索','48,500','5,820','12.0%','4.2%','€41,200','+8.5%'],
+      ['广告流量','22,300','2,007','9.0%','3.1%','€22,800','+15.2%'],
+      ['活动页面','8,900','712','8.0%','5.5%','€15,600','+22.1%'],
+      ['外部引流','5,200','312','6.0%','2.8%','€5,100','+3.2%'],
+      ['其他','3,100','186','6.0%','2.5%','€2,650','-1.5%']
+    ]
+  },
+  '行动项': {
+    label: '策略行动项追踪',
+    icon: '✅',
+    fields: ['策略类型','具体行动','负责人','截止时间','优先级','审批状态','完成状态','效果评估'],
+    data: [
+      ['广告优化','降低ACOS>25%的Campaign出价10%','运营专员','2024-07-15','P1','已审批','执行中','—'],
+      ['定价调整','TV-140-BL 价格上调5%测试','运营专员','2024-07-10','P2','已审批','已完成','销量未降，利润+3%'],
+      ['库存策略','Meubles TV 品类补货500件','运营专员','2024-07-20','P0','待审批','待执行','—'],
+      ['选品方向','评估「宠物用品」品类进入可行性','运营专员','2024-07-30','P2','待审批','待执行','—']
     ]
   }
 };
@@ -3476,7 +3886,19 @@ const DS_DEFAULTS = {
 function loadDS() {
   try {
     const saved = localStorage.getItem('mano_datasource');
-    if (saved) return JSON.parse(saved);
+    if (saved) {
+      const ds = JSON.parse(saved);
+      // Migration: ensure 竞品监控 has 7 fields (added '类型')
+      if (ds['竞品监控'] && ds['竞品监控'].fields && ds['竞品监控'].fields.length === 6) {
+        ds['竞品监控'].fields = ['竞品名称','类型','价格','评分','Review数','近期变化','监控状态'];
+        ds['竞品监控'].data = ds['竞品监控'].data.map(r => {
+          if (r.length === 6) { r.splice(1, 0, '直接竞品'); }
+          return r;
+        });
+        saveDS(ds);
+      }
+      return ds;
+    }
   } catch(e) {}
   return JSON.parse(JSON.stringify(DS_DEFAULTS));
 }
@@ -6114,26 +6536,102 @@ function renderM5NegReviews() { M5Reviews.init(); }
 
 function renderM6Competitors() {
   const tbody = document.getElementById('m6-comp-table');
+  const summaryEl = document.getElementById('m6-summary-stats');
+  const calendarEl = document.getElementById('m6-calendar-grid');
+  const filterVal = document.getElementById('m6-comp-filter')?.value || 'all';
   const comp = dsGet('竞品监控');
   if (!comp || !tbody) return;
-  tbody.innerHTML = '<tr><th>竞品名称</th><th>价格</th><th>评分</th><th>Review数</th><th>近期变化</th><th>监控状态</th></tr>' +
-    comp.data.map(r => {
-      const sc = r[5] === '稳定' ? 'done' : 'pending';
-      return `<tr>${r.map((c,i) => i===5 ? `<td><span class="status-badge ${sc}">${c}</span></td>` : `<td>${c}</td>`).join('')}</tr>`;
+
+  // Summary stats
+  if (summaryEl) {
+    const total = comp.data.length;
+    const direct = comp.data.filter(r => r[1] === '直接竞品').length;
+    const benchmark = comp.data.filter(r => r[1] === '头部标杆').length;
+    const newcomer = comp.data.filter(r => r[1] === '新进入者').length;
+    const attention = comp.data.filter(r => r[6] && r[6].includes('关注')).length;
+    summaryEl.innerHTML = `
+      <div class="stat-card"><div class="stat-card-header"><span class="stat-card-label">监控总数</span><div class="stat-card-icon blue">🔎</div></div><div class="stat-card-value">${total}</div><div class="stat-card-change up">竞品</div></div>
+      <div class="stat-card"><div class="stat-card-header"><span class="stat-card-label">直接竞品</span><div class="stat-card-icon blue">🎯</div></div><div class="stat-card-value">${direct}</div><div class="stat-card-change">同品类同价格带</div></div>
+      <div class="stat-card"><div class="stat-card-header"><span class="stat-card-label">头部标杆</span><div class="stat-card-icon amber">🏆</div></div><div class="stat-card-value">${benchmark}</div><div class="stat-card-change">品类TOP卖家</div></div>
+      <div class="stat-card"><div class="stat-card-header"><span class="stat-card-label">需关注</span><div class="stat-card-icon red">⚠️</div></div><div class="stat-card-value">${attention}</div><div class="stat-card-change down">近期有变化</div></div>
+    `;
+  }
+
+  // Filter data
+  const filtered = filterVal === 'all' ? comp.data : comp.data.filter(r => {
+    if (filterVal === 'direct') return r[1] === '直接竞品';
+    if (filterVal === 'benchmark') return r[1] === '头部标杆';
+    if (filterVal === 'newcomer') return r[1] === '新进入者';
+    return true;
+  });
+
+  tbody.innerHTML = '<tr><th>竞品名称</th><th>类型</th><th>价格</th><th>评分</th><th>Review数</th><th>近期变化</th><th>监控状态</th></tr>' +
+    filtered.map(r => {
+      const sc = (r[6] && r[6].includes('稳定')) ? 'done' : 'pending';
+      const typeTag = r[1] === '直接竞品' ? '🎯' : r[1] === '头部标杆' ? '🏆' : '🆕';
+      return `<tr>
+        <td><strong>${r[0]}</strong></td>
+        <td><span style="font-size:12px;">${typeTag} ${r[1]}</span></td>
+        <td>${r[2]}</td><td>${r[3]}</td><td>${r[4]}</td>
+        <td>${r[5]}</td>
+        <td><span class="status-badge ${sc}">${r[6]}</span></td>
+      </tr>`;
     }).join('');
+
+  // French market calendar
+  if (calendarEl) {
+    const events = [
+      { month:'1月', event:'Soldes d\'hiver (冬季大促)', type:'promo', detail:'官方折扣季，约4周' },
+      { month:'2月', event:'Saint-Valentin (情人节)', type:'seasonal', detail:'礼品/家居装饰需求上升' },
+      { month:'3-4月', event:'Pâques (复活节)', type:'seasonal', detail:'花园/户外/DIY品类预热' },
+      { month:'5月', event:'Fête des Mères (母亲节)', type:'seasonal', detail:'家居/厨具/装饰礼品' },
+      { month:'6月', event:'Fête des Pères (父亲节)', type:'seasonal', detail:'DIY工具/电子产品' },
+      { month:'6月底-7月', event:'Soldes d\'été (夏季大促)', type:'promo', detail:'全年最大折扣季之一，约4周' },
+      { month:'8-9月', event:'Rentrée scolaire (开学季)', type:'seasonal', detail:'学生家具/办公用品需求' },
+      { month:'10月', event:'French Days (法国日促销)', type:'promo', detail:'平台联合促销，类似Prime Day' },
+      { month:'11月', event:'Black Friday & Cyber Monday', type:'promo', detail:'11月底，全年流量峰值' },
+      { month:'12月', event:'Noël (圣诞季)', type:'promo', detail:'12月整月，礼品/装饰品类爆发' }
+    ];
+    calendarEl.innerHTML = events.map(e => {
+      const bgMap = { promo: 'var(--primary-bg)', seasonal: 'var(--success-bg)' };
+      const borderMap = { promo: 'var(--primary-light)', seasonal: '#a7f3d0' };
+      return `<div style="background:${bgMap[e.type]};border:1px solid ${borderMap[e.type]};border-radius:var(--radius-sm);padding:12px 14px;">
+        <div style="font-size:13px;font-weight:700;color:var(--gray-800);">${e.month}</div>
+        <div style="font-size:13px;font-weight:600;color:var(--gray-700);margin:4px 0;">${e.event}</div>
+        <div style="font-size:11px;color:var(--gray-500);">${e.detail}</div>
+        <span class="tag" style="font-size:10px;">${e.type === 'promo' ? '🏷️ 促销节点' : '🌸 季节节点'}</span>
+      </div>`;
+    }).join('');
+  }
 }
 
 function renderM7Sales() {
   const salesTable = document.getElementById('m7-sales-table');
   const profitTable = document.getElementById('m7-profit-table');
+  const categoryTable = document.getElementById('m7-category-table');
+  const trafficTable = document.getElementById('m7-traffic-table');
+  const kpiStats = document.getElementById('m7-kpi-stats');
   const sales = dsGet('销售数据');
   const profit = dsGet('利润数据');
+  const category = dsGet('品类分析');
+  const traffic = dsGet('流量来源');
+
+  // KPI stat cards
+  if (kpiStats && sales) {
+    kpiStats.innerHTML = `
+      <div class="stat-card"><div class="stat-card-header"><span class="stat-card-label">月度 GMV</span><div class="stat-card-icon blue">💶</div></div><div class="stat-card-value">€87,350</div><div class="stat-card-change up">环比 +11.7%</div></div>
+      <div class="stat-card"><div class="stat-card-header"><span class="stat-card-label">订单量</span><div class="stat-card-icon green">📦</div></div><div class="stat-card-value">1,245</div><div class="stat-card-change up">环比 +11.2%</div></div>
+      <div class="stat-card"><div class="stat-card-header"><span class="stat-card-label">客单价</span><div class="stat-card-icon amber">🏷️</div></div><div class="stat-card-value">€70.2</div><div class="stat-card-change up">环比 +0.6%</div></div>
+      <div class="stat-card"><div class="stat-card-header"><span class="stat-card-label">净利润率</span><div class="stat-card-icon red">📊</div></div><div class="stat-card-value">17.5%</div><div class="stat-card-change up">同比 +1.8pp</div></div>
+    `;
+  }
 
   if (salesTable && sales) {
     salesTable.innerHTML = '<tr><th>维度</th><th>本月</th><th>上月</th><th>环比</th><th>去年同期</th><th>同比</th></tr>' +
       sales.data.map(r => `<tr>${r.map((c,i) => {
-        if (i >= 3 && c.startsWith('+')) return `<td style="color:var(--success);">${c}</td>`;
-        if (i >= 3 && c.startsWith('-')) return `<td style="color:var(--danger);">${c}</td>`;
+        if (i >= 3 && typeof c === 'string' && c.startsWith('+')) return `<td style="color:var(--success);font-weight:600;">${c}</td>`;
+        if (i >= 3 && typeof c === 'string' && c.startsWith('-')) return `<td style="color:var(--danger);font-weight:600;">${c}</td>`;
+        if (i === 0) return `<td style="font-weight:600;">${c}</td>`;
         return `<td>${c}</td>`;
       }).join('')}</tr>`).join('');
   }
@@ -6142,13 +6640,104 @@ function renderM7Sales() {
     profitTable.innerHTML = '<tr><th>项目</th><th>金额</th><th>占销售收入比例</th></tr>' +
       profit.data.map((r,i) => {
         const isTotal = (i === profit.data.length - 1);
-        const style = isTotal ? 'font-weight:700;background:var(--gray-50);' : '';
+        const style = isTotal ? 'font-weight:700;background:var(--primary-bg);' : '';
         return `<tr style="${style}">${r.map((c,j) => {
-          if (j === 2 && c.includes('%') && !c.startsWith('-') && isTotal) return `<td style="color:var(--success);">${c}</td>`;
+          if (j === 2 && typeof c === 'string' && c.includes('%') && isTotal) return `<td style="color:var(--success);font-weight:700;">${c}</td>`;
+          if (j === 0 && isTotal) return `<td style="font-weight:700;">${c}</td>`;
           return `<td>${c}</td>`;
         }).join('')}</tr>`;
       }).join('');
   }
+
+  // Category analysis
+  if (categoryTable && category) {
+    categoryTable.innerHTML = '<tr><th>品类</th><th>本月销售额</th><th>占比</th><th>上月销售额</th><th>环比增长</th><th>利润率</th><th>TOP产品</th></tr>' +
+      category.data.map(r => `<tr>${r.map((c,i) => {
+        if (i === 1) return `<td style="font-weight:600;">${c}</td>`;
+        if (i === 4 && typeof c === 'string' && c.startsWith('+')) return `<td style="color:var(--success);">${c}</td>`;
+        if (i === 0) return `<td><strong>${c.split(' (')[0]}</strong><br><span style="font-size:11px;color:var(--gray-400);">${c.split(' (')[1]?.replace(')','') || ''}</span></td>`;
+        return `<td>${c}</td>`;
+      }).join('')}</tr>`).join('');
+  }
+
+  // Traffic analysis
+  if (trafficTable && traffic) {
+    trafficTable.innerHTML = '<tr><th>流量来源</th><th>曝光量</th><th>点击量</th><th>点击率</th><th>转化率</th><th>销售额贡献</th><th>环比变化</th></tr>' +
+      traffic.data.map(r => `<tr>${r.map((c,i) => {
+        if (i === 6 && typeof c === 'string' && c.startsWith('+')) return `<td style="color:var(--success);">${c}</td>`;
+        if (i === 6 && typeof c === 'string' && c.startsWith('-')) return `<td style="color:var(--danger);">${c}</td>`;
+        if (i === 0) return `<td style="font-weight:600;">${c}</td>`;
+        return `<td>${c}</td>`;
+      }).join('')}</tr>`).join('');
+  }
+}
+
+function renderM7Actions() {
+  const tbody = document.getElementById('m7-actions-tbody');
+  const filterVal = document.getElementById('m7-action-filter')?.value || 'all';
+  const actions = dsGet('行动项');
+  if (!tbody || !actions) return;
+
+  const filtered = filterVal === 'all' ? actions.data : actions.data.filter(r => {
+    if (filterVal === 'pending') return r[6] === '待执行';
+    if (filterVal === 'in_progress') return r[6] === '执行中';
+    if (filterVal === 'done') return r[6] === '已完成';
+    if (filterVal === 'cancelled') return r[6] === '已取消';
+    return true;
+  });
+
+  const priorityBadge = (p) => {
+    if (p === 'P0') return `<span class="priority-badge p0">P0</span>`;
+    if (p === 'P1') return `<span class="priority-badge p1">P1</span>`;
+    return `<span class="priority-badge p2">P2</span>`;
+  };
+
+  const statusBadge = (s) => {
+    if (s === '已完成') return `<span class="status-badge done">${s}</span>`;
+    if (s === '执行中') return `<span class="status-badge pending">${s}</span>`;
+    if (s === '待审批' || s === '待执行') return `<span class="status-badge pending">${s}</span>`;
+    return `<span class="status-badge overdue">${s}</span>`;
+  };
+
+  tbody.innerHTML = filtered.map(r => `<tr>
+    <td><span class="tag">${r[0]}</span></td>
+    <td style="font-weight:500;">${r[1]}</td>
+    <td>${r[2]}</td>
+    <td>${r[3]}</td>
+    <td>${priorityBadge(r[4])}</td>
+    <td>${r[5]}</td>
+    <td>${statusBadge(r[6])}</td>
+    <td style="font-size:12px;color:var(--gray-500);">${r[7]}</td>
+  </tr>`).join('');
+}
+
+function addM7Action() {
+  const actionType = prompt('策略类型（广告优化 / 定价调整 / 选品方向 / 库存策略）：');
+  if (!actionType) return;
+  const desc = prompt('具体行动描述：');
+  if (!desc) return;
+  const person = prompt('负责人：') || '运营专员';
+  const deadline = prompt('截止时间（如 2024-07-15）：') || '—';
+  const priority = prompt('优先级（P0/P1/P2）：') || 'P2';
+  const actions = dsGet('行动项');
+  if (!actions) return;
+  actions.data.push([actionType, desc, person, deadline, priority, '待审批', '待执行', '—']);
+  saveDS(DS);
+  renderM7Actions();
+  showToast('✅ 行动项已添加');
+}
+
+function generateM6WeeklyReport() {
+  const now = new Date();
+  const start = new Date(now);
+  start.setDate(start.getDate() - start.getDay() + 1);
+  const end = new Date(start);
+  end.setDate(end.getDate() + 6);
+  const fmt = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+  const weekStr = `${fmt(start)} ~ ${fmt(end)}`;
+  const reportEl = document.getElementById('m6-report-week');
+  if (reportEl) reportEl.textContent = weekStr;
+  showToast(`📰 竞品周报模板已就绪，周期：${weekStr}。请逐项填写报告内容。`);
 }
 
 // ============================================================
