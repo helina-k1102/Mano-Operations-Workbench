@@ -965,6 +965,147 @@ body {
 .ot-trend-bar.best { background: var(--primary); }
 .ot-trend-label { font-size: 11px; color: var(--gray-500); margin-top: 6px; text-align: center; }
 .ot-trend-value { font-size: 10px; color: var(--gray-400); }
+
+/* ===== Module 3 新增样式：广告与促销管理模块升级 ===== */
+/* 广告类型指引卡片 */
+.ad-type-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; }
+@media (max-width: 768px) { .ad-type-grid { grid-template-columns: 1fr; } }
+.ad-type-card { background: #fff; border: 1px solid var(--gray-200); border-radius: var(--radius-sm); overflow: hidden; transition: all var(--transition); cursor: pointer; }
+.ad-type-card:hover { box-shadow: var(--shadow-md); border-color: var(--primary-light); }
+.ad-type-card.expanded { border-color: var(--primary); }
+.ad-type-card-header { padding: 14px 16px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid var(--gray-100); font-weight: 600; font-size: 14px; color: var(--gray-800); }
+.ad-type-card-header .ad-icon { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+.ad-type-card-header .ad-icon.sp { background: #eff6ff; color: #2563eb; }
+.ad-type-card-header .ad-icon.sb { background: #fef3c7; color: #d97706; }
+.ad-type-card-header .ad-icon.sd { background: #f0fdf4; color: #059669; }
+.ad-type-card-body { padding: 14px 16px; display: none; max-height: 500px; overflow-y: auto; }
+.ad-type-card.expanded .ad-type-card-body { display: block; }
+.ad-type-card-toggle { margin-left: auto; font-size: 12px; color: var(--gray-400); transition: transform var(--transition); }
+.ad-type-card.expanded .ad-type-card-toggle { transform: rotate(180deg); }
+.ad-type-summary { display: flex; gap: 8px; flex-wrap: wrap; font-size: 12px; }
+.ad-type-detail { margin-top: 12px; }
+.ad-type-detail dt { font-size: 12px; color: var(--gray-500); font-weight: 600; margin-top: 8px; }
+.ad-type-detail dd { font-size: 13px; color: var(--gray-700); margin: 2px 0 0 0; }
+
+/* 快速参考表 */
+.quick-ref-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 10px; }
+.quick-ref-table th { background: var(--gray-100); padding: 8px 12px; text-align: left; font-weight: 600; font-size: 12px; color: var(--gray-600); }
+.quick-ref-table td { padding: 8px 12px; border-bottom: 1px solid var(--gray-100); }
+.quick-ref-table tr:first-child th:first-child { border-radius: 8px 0 0 0; }
+.quick-ref-table tr:first-child th:last-child { border-radius: 0 8px 0 0; }
+
+/* SOP 时间轴 */
+.sop-timeline { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
+.sop-timeline-item { flex: 1; min-width: 160px; padding: 16px; background: #fff; border: 1px solid var(--gray-200); border-radius: var(--radius-sm); position: relative; cursor: pointer; transition: all var(--transition); }
+.sop-timeline-item:hover { box-shadow: var(--shadow-md); }
+.sop-timeline-item.active { border-color: var(--primary); background: var(--primary-bg); }
+.sop-timeline-item .tl-icon { font-size: 24px; margin-bottom: 8px; }
+.sop-timeline-item .tl-title { font-size: 14px; font-weight: 700; color: var(--gray-800); }
+.sop-timeline-item .tl-time { font-size: 12px; color: var(--gray-500); margin-top: 4px; }
+.sop-timeline-item .tl-badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 600; margin-top: 6px; }
+.tl-badge.daily { background: #dbeafe; color: #1d4ed8; }
+.tl-badge.weekly { background: #fef3c7; color: #92400e; }
+.tl-badge.monthly { background: #fce7f3; color: #9d174d; }
+
+/* SOP 步骤表 */
+.sop-steps-panel { display: none; }
+.sop-steps-panel.active { display: block; }
+
+/* 关键词优化矩阵 */
+.kw-matrix { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; margin-top: 12px; }
+.kw-matrix-item { padding: 12px; border-radius: var(--radius-sm); font-size: 13px; border: 1px solid; }
+.kw-matrix-item .kwm-label { font-weight: 700; font-size: 12px; margin-bottom: 4px; }
+.kw-matrix-item .kwm-desc { font-size: 12px; color: var(--gray-600); }
+.kw-matrix-item.green { background: #f0fdf4; border-color: #bbf7d0; }
+.kw-matrix-item.green .kwm-label { color: #065f46; }
+.kw-matrix-item.yellow { background: #fffbeb; border-color: #fde68a; }
+.kw-matrix-item.yellow .kwm-label { color: #92400e; }
+.kw-matrix-item.orange { background: #fff7ed; border-color: #fed7aa; }
+.kw-matrix-item.orange .kwm-label { color: #9a3412; }
+.kw-matrix-item.red { background: #fef2f2; border-color: #fecaca; }
+.kw-matrix-item.red .kwm-label { color: #991b1b; }
+.kw-matrix-item.gray { background: var(--gray-50); border-color: var(--gray-200); }
+.kw-matrix-item.gray .kwm-label { color: var(--gray-600); }
+
+/* 广告调整记录表单 */
+.adj-log-card { background: #fff; border: 1px solid var(--gray-200); border-radius: var(--radius-sm); padding: 16px; margin-bottom: 12px; }
+.adj-log-card:hover { border-color: var(--primary-light); }
+.adj-log-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.adj-log-header .adj-date { font-size: 12px; color: var(--gray-500); }
+.adj-log-header .adj-type { font-size: 12px; padding: 2px 8px; border-radius: 10px; font-weight: 600; }
+.adj-log-header .adj-type.bid { background: #dbeafe; color: #1d4ed8; }
+.adj-log-header .adj-type.budget { background: #fef3c7; color: #92400e; }
+.adj-log-header .adj-type.add { background: #f0fdf4; color: #065f46; }
+.adj-log-header .adj-type.pause { background: #fef2f2; color: #991b1b; }
+.adj-log-body { font-size: 13px; color: var(--gray-700); }
+.adj-log-body .adj-row { margin-bottom: 4px; }
+.adj-log-body .adj-row strong { color: var(--gray-600); }
+
+/* 活动提报检查清单 */
+.promo-checklist { list-style: none; }
+.promo-checklist li { padding: 10px 12px; margin-bottom: 6px; background: #fff; border: 1px solid var(--gray-200); border-radius: 8px; font-size: 13px; }
+.promo-checklist li.pass { border-color: #bbf7d0; background: #f0fdf4; }
+.promo-checklist li.fail { border-color: #fecaca; background: #fef2f2; }
+.promo-checklist .check-group-title { font-weight: 700; color: var(--gray-800); font-size: 13px; display: flex; align-items: center; gap: 8px; }
+.promo-checklist .check-sub { margin: 6px 0 0 28px; display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--gray-600); }
+.promo-checklist .check-icon { font-size: 16px; }
+
+/* 促销活动阶段卡片 */
+.promo-phase-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; margin-top: 10px; }
+@media (max-width: 768px) { .promo-phase-grid { grid-template-columns: 1fr; } }
+.promo-phase-card { border: 1px solid var(--gray-200); border-radius: var(--radius-sm); padding: 14px; }
+.promo-phase-card h4 { font-size: 14px; font-weight: 700; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+.promo-phase-card.pre { border-top: 3px solid #3b82f6; }
+.promo-phase-card.pre h4 { color: #1d4ed8; }
+.promo-phase-card.during { border-top: 3px solid #f59e0b; }
+.promo-phase-card.during h4 { color: #92400e; }
+.promo-phase-card.post { border-top: 3px solid #10b981; }
+.promo-phase-card.post h4 { color: #065f46; }
+.promo-phase-card .phase-task { font-size: 12px; padding: 6px 0; border-bottom: 1px solid var(--gray-100); display: flex; align-items: center; gap: 8px; }
+.promo-phase-card .phase-task:last-child { border-bottom: none; }
+.promo-phase-card .phase-tag { font-size: 10px; padding: 1px 6px; border-radius: 6px; background: var(--gray-100); color: var(--gray-600); white-space: nowrap; }
+
+/* 活动中监控面板 */
+.monitor-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 12px; }
+@media (max-width: 768px) { .monitor-grid { grid-template-columns: 1fr; } }
+.monitor-card { background: #fff; border: 1px solid var(--gray-200); border-radius: var(--radius-sm); padding: 14px; }
+.monitor-card .mc-title { font-size: 12px; color: var(--gray-500); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+.monitor-card .mc-value { font-size: 24px; font-weight: 700; color: var(--gray-800); }
+.monitor-card .mc-target { font-size: 12px; color: var(--gray-500); }
+.monitor-card .mc-status { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 600; margin-top: 4px; }
+.mc-status.on-track { background: #f0fdf4; color: #065f46; }
+.mc-status.warning { background: #fffbeb; color: #92400e; }
+.mc-status.danger { background: #fef2f2; color: #991b1b; }
+
+/* 活动复盘表格 */
+.review-summary-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 12px; margin-top: 12px; }
+@media (max-width: 768px) { .review-summary-grid { grid-template-columns: 1fr; } }
+.review-summary-card { background: #fff; border: 1px solid var(--gray-200); border-radius: var(--radius-sm); padding: 14px; }
+.review-summary-card .rs-label { font-size: 12px; color: var(--gray-500); margin-bottom: 4px; }
+.review-summary-card .rs-value { font-size: 18px; font-weight: 700; color: var(--gray-800); }
+.review-summary-card .rs-delta { font-size: 12px; margin-top: 2px; }
+.rs-delta.up { color: #059669; }
+.rs-delta.down { color: #dc2626; }
+
+/* 划线价/销售价设置说明 */
+.price-rule-box { background: #fffbeb; border: 1px solid #fde68a; border-radius: var(--radius-sm); padding: 14px; margin-top: 10px; }
+.price-rule-box .pr-title { font-size: 13px; font-weight: 700; color: #92400e; margin-bottom: 8px; }
+.price-rule-box .pr-row { display: grid; grid-template-columns: 150px 1fr 1fr; gap: 10px; font-size: 12px; padding: 4px 0; border-bottom: 1px solid #fef3c7; }
+.price-rule-box .pr-row:last-child { border-bottom: none; }
+.price-rule-box .pr-header { font-weight: 600; color: var(--gray-700); }
+
+/* 交互动画 */
+@keyframes fadeSlideIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+.animate-in { animation: fadeSlideIn 0.25s ease forwards; }
+
+/* 关键词分析工具面板 */
+.kw-tool-panel { background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: var(--radius-sm); padding: 16px; margin-top: 12px; }
+.kw-tool-panel h4 { font-size: 14px; font-weight: 700; margin-bottom: 12px; color: var(--gray-800); }
+.kw-bid-row { display: flex; align-items: center; gap: 8px; padding: 8px 0; border-bottom: 1px solid var(--gray-200); font-size: 13px; }
+.kw-bid-row:last-child { border-bottom: none; }
+.kw-bid-row .kw-name { flex: 1; font-weight: 500; }
+.kw-bid-row .kw-metrics { display: flex; gap: 12px; font-size: 12px; color: var(--gray-600); }
+.kw-bid-row .kw-action { display: flex; gap: 4px; flex-shrink: 0; }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm" type="module"></script>
 </head>
@@ -2109,42 +2250,325 @@ body {
         <div class="card-header"><span class="card-title">📣 广告与促销管理</span></div>
         <div class="card-body">
           <div class="tabs">
-            <button class="tab-btn active" data-tab="m3-ad">广告优化</button>
-            <button class="tab-btn" data-tab="m3-promo">促销策划</button>
+            <button class="tab-btn active" data-tab="m3-ad-types">广告类型指引</button>
+            <button class="tab-btn" data-tab="m3-ad-sop">广告日常SOP</button>
+            <button class="tab-btn" data-tab="m3-promo-sop">促销活动SOP</button>
             <button class="tab-btn" data-tab="m3-review">活动复盘</button>
           </div>
-          <div class="tab-panel active" id="tab-m3-ad">
-            <div class="alert alert-warning">⚠️ <strong>提醒：</strong>广告账户调整属于高风险操作，调整前请截图保存当前配置</div>
-            <table class="task-table">
-              <tr><th>检查项</th><th>操作</th><th>频率</th></tr>
-              <tr><td>查看花费/曝光/点击/转化/ACOS</td><td>SellerCenter → 营销推广 → 广告报告</td><td>每周五</td></tr>
-              <tr><td>暂停低效广告组</td><td>ACOS高于毛利率 或 连续2周无转化 → 暂停</td><td>每周五</td></tr>
-              <tr><td>高转化关键词调价</td><td>出价上调 10%-15%</td><td>每周五</td></tr>
-              <tr><td>新品测试广告</td><td>为新品创建测试广告组</td><td>按需</td></tr>
-              <tr><td>添加否定关键词</td><td>从搜索词报告中筛选无效词</td><td>每周五</td></tr>
-              <tr><td>月度广告预算调整</td><td>核算广告总支出占销售收入比例（标准5%-10%）</td><td>每月底</td></tr>
+
+          <!-- Tab 1: 广告类型指引 -->
+          <div class="tab-panel active" id="tab-m3-ad-types">
+            <div class="alert alert-warning" style="margin-bottom:16px;">
+              ⚠️ <strong>提示：</strong>以下内容基于通用电商广告框架。Mano平台后台的实际广告类型名称、设置路径和操作界面可能更新，请以 <strong>Mano Seller Center</strong> 最新实际界面为准，首次操作时截图存档至项目资料库。
+            </div>
+
+            <div class="ad-type-grid">
+              <div class="ad-type-card" onclick="this.classList.toggle('expanded')">
+                <div class="ad-type-card-header">
+                  <div class="ad-icon sp">SP</div>
+                  <div>商品推广<br><span style="font-size:12px;color:var(--gray-500);font-weight:400;">Sponsored Products</span></div>
+                  <span class="ad-type-card-toggle">▼</span>
+                </div>
+                <div class="ad-type-card-body">
+                  <dl class="ad-type-detail">
+                    <dt>投放位置</dt><dd>搜索结果页、商品详情页</dd>
+                    <dt>计费方式</dt><dd>CPC（按点击付费）</dd>
+                    <dt>创建路径</dt><dd>SellerCenter → 营销推广 → 商品广告</dd>
+                    <dt>预算设置</dt><dd>日预算建议 ≥ €10，活动总预算 ≥ €100</dd>
+                    <dt>关键词匹配</dt><dd>广泛匹配 / 词组匹配 / 精准匹配</dd>
+                    <dt>报表查看</dt><dd>SellerCenter → 广告报告 → SP报告</dd>
+                    <dt>报表导出</dt><dd>点击「下载报告」→ 选择格式（Excel/CSV）</dd>
+                    <dt>适用场景</dt><dd>提升单品的曝光和销量</dd>
+                  </dl>
+                </div>
+              </div>
+              <div class="ad-type-card" onclick="this.classList.toggle('expanded')">
+                <div class="ad-type-card-header">
+                  <div class="ad-icon sb">SB</div>
+                  <div>品牌推广<br><span style="font-size:12px;color:var(--gray-500);font-weight:400;">Sponsored Brands</span></div>
+                  <span class="ad-type-card-toggle">▼</span>
+                </div>
+                <div class="ad-type-card-body">
+                  <dl class="ad-type-detail">
+                    <dt>投放位置</dt><dd>搜索结果页顶部</dd>
+                    <dt>计费方式</dt><dd>CPC（按点击付费）</dd>
+                    <dt>创建路径</dt><dd>SellerCenter → 营销推广 → 品牌广告</dd>
+                    <dt>预算设置</dt><dd>日预算建议 ≥ €15</dd>
+                    <dt>关键词匹配</dt><dd>词组匹配 / 精准匹配</dd>
+                    <dt>报表查看</dt><dd>SellerCenter → 广告报告 → SB报告</dd>
+                    <dt>报表导出</dt><dd>点击「下载报告」→ 选择格式（Excel/CSV）</dd>
+                    <dt>适用场景</dt><dd>提升品牌认知度，展示多款产品</dd>
+                  </dl>
+                </div>
+              </div>
+              <div class="ad-type-card" onclick="this.classList.toggle('expanded')">
+                <div class="ad-type-card-header">
+                  <div class="ad-icon sd">SD</div>
+                  <div>展示型推广<br><span style="font-size:12px;color:var(--gray-500);font-weight:400;">Sponsored Display</span></div>
+                  <span class="ad-type-card-toggle">▼</span>
+                </div>
+                <div class="ad-type-card-body">
+                  <dl class="ad-type-detail">
+                    <dt>投放位置</dt><dd>站内外展示位</dd>
+                    <dt>计费方式</dt><dd>CPC / vCPM</dd>
+                    <dt>创建路径</dt><dd>SellerCenter → 营销推广 → 展示广告</dd>
+                    <dt>预算设置</dt><dd>日预算建议 ≥ €8</dd>
+                    <dt>定向方式</dt><dd>受众定向 / 商品定向</dd>
+                    <dt>报表查看</dt><dd>SellerCenter → 广告报告 → SD报告</dd>
+                    <dt>报表导出</dt><dd>点击「下载报告」→ 选择格式（Excel/CSV）</dd>
+                    <dt>适用场景</dt><dd>再营销和受众触达</dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
+
+            <h4 style="font-size:15px;font-weight:700;margin-top:20px;color:var(--gray-800);">⚡ 广告设置快速参考卡</h4>
+            <table class="quick-ref-table" style="margin-top:8px;">
+              <tr><th>配置项</th><th>SP 商品推广</th><th>SB 品牌推广</th><th>SD 展示型推广</th></tr>
+              <tr><td>日预算建议</td><td>≥ €10</td><td>≥ €15</td><td>≥ €8</td></tr>
+              <tr><td>活动周期</td><td>持续投放 / 自定义</td><td>持续投放 / 自定义</td><td>持续投放 / 自定义</td></tr>
+              <tr><td>关键词匹配</td><td>广泛/词组/精准</td><td>词组/精准</td><td>不适用</td></tr>
+              <tr><td>定向方式</td><td>关键词定向</td><td>关键词定向</td><td>受众/商品定向</td></tr>
+              <tr><td>报表更新频率</td><td>T+1</td><td>T+1</td><td>T+1</td></tr>
             </table>
+
+            <div style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap;">
+              <button class="btn btn-outline btn-sm" onclick="M3AdManager.uploadScreenshot()">📸 上传后台截图</button>
+              <button class="btn btn-outline btn-sm" onclick="M3AdManager.downloadAdComparison()">📥 下载广告类型对比表</button>
+            </div>
           </div>
-          <div class="tab-panel" id="tab-m3-promo">
-            <ul class="checklist">
-              <li><input type="checkbox" onchange="this.parentElement.classList.toggle('checked')"> 确定活动目标（销量/清仓/品牌曝光）</li>
-              <li><input type="checkbox" onchange="this.parentElement.classList.toggle('checked')"> 设定折扣力度与预算上限</li>
-              <li><input type="checkbox" onchange="this.parentElement.classList.toggle('checked')"> 筛选活动选品（库存充足/评分达标/有利润空间）</li>
-              <li><input type="checkbox" onchange="this.parentElement.classList.toggle('checked')"> 检查活动提报条件（库存/价格/评分门槛）</li>
-              <li><input type="checkbox" onchange="this.parentElement.classList.toggle('checked')"> 准备活动素材（Banner/促销文案/A+页面）</li>
-              <li><input type="checkbox" onchange="this.parentElement.classList.toggle('checked')"> 活动前48小时：库存确认 & 价格锁定</li>
-              <li><input type="checkbox" onchange="this.parentElement.classList.toggle('checked')"> 活动中：实时监控销量 & 广告花费</li>
-              <li><input type="checkbox" onchange="this.parentElement.classList.toggle('checked')"> 活动后：数据复盘 & 经验沉淀</li>
-            </ul>
+
+          <!-- Tab 2: 广告日常SOP -->
+          <div class="tab-panel" id="tab-m3-ad-sop">
+            <div class="alert alert-warning">⚠️ <strong>提醒：</strong>广告账户调整属于高风险操作，调整前请截图保存当前配置，调整后记录调整日志便于追溯。</div>
+
+            <div class="sop-timeline" id="ad-sop-timeline">
+              <div class="sop-timeline-item active" data-sop="daily" onclick="M3AdManager.switchSOPTab('daily')">
+                <div class="tl-icon">⏰</div>
+                <div class="tl-title">每日操作</div>
+                <div class="tl-time">工作日 09:00-10:00</div>
+                <span class="tl-badge daily">每日</span>
+              </div>
+              <div class="sop-timeline-item" data-sop="weekly" onclick="M3AdManager.switchSOPTab('weekly')">
+                <div class="tl-icon">📅</div>
+                <div class="tl-title">每周操作</div>
+                <div class="tl-time">每周五 14:00-16:00</div>
+                <span class="tl-badge weekly">每周</span>
+              </div>
+              <div class="sop-timeline-item" data-sop="monthly" onclick="M3AdManager.switchSOPTab('monthly')">
+                <div class="tl-icon">📆</div>
+                <div class="tl-title">每月操作</div>
+                <div class="tl-time">每月最后一个工作日</div>
+                <span class="tl-badge monthly">每月</span>
+              </div>
+            </div>
+
+            <div class="sop-steps-panel active" id="sop-panel-daily">
+              <h4 style="font-size:14px;font-weight:700;color:var(--gray-800);margin-bottom:10px;">📋 每日广告操作 SOP</h4>
+              <table class="task-table">
+                <tr><th>步骤</th><th>操作内容</th><th>操作路径</th><th>关注指标</th><th>异常判定</th></tr>
+                <tr><td>1</td><td>检查广告花费</td><td>SellerCenter → 广告概览</td><td>花费 vs 日预算</td><td>花费 ≥ 日预算 80% 需关注</td></tr>
+                <tr><td>2</td><td>查看曝光数据</td><td>SellerCenter → 广告概览</td><td>曝光量、CTR</td><td>曝光 &lt; 昨日 70% 需排查</td></tr>
+                <tr><td>3</td><td>查看点击数据</td><td>SellerCenter → 广告概览</td><td>点击量、点击率</td><td>点击 &lt; 昨日 70% 需排查</td></tr>
+                <tr><td>4</td><td>查看订单数据</td><td>SellerCenter → 广告概览</td><td>订单量、销售额</td><td>订单 = 0 且花费 &gt; €20 需调整</td></tr>
+                <tr><td>5</td><td>记录异常波动</td><td>广告操作日志</td><td>异常说明 + 截图</td><td>任何异常均需记录</td></tr>
+              </table>
+              <div style="margin-top:12px;display:flex;gap:8px;">
+                <button class="btn btn-primary btn-sm" onclick="M3AdManager.openAdjLogForm()">📝 记录每日异常</button>
+                <button class="btn btn-outline btn-sm" onclick="M3AdManager.toggleDailyChecklist()">✅ 每日检查清单</button>
+              </div>
+            </div>
+
+            <div class="sop-steps-panel" id="sop-panel-weekly">
+              <h4 style="font-size:14px;font-weight:700;color:var(--gray-800);margin-bottom:10px;">📋 每周广告操作 SOP</h4>
+              <table class="task-table">
+                <tr><th>步骤</th><th>操作内容</th><th>操作路径</th><th>操作标准</th><th>产出</th></tr>
+                <tr><td>1</td><td>下载广告报表</td><td>SellerCenter → 广告报告 → 选择日期 → 下载</td><td>近7天数据</td><td>广告周报_YYYYMMDD.xlsx</td></tr>
+                <tr><td>2</td><td>关键词分析</td><td>导出报表 → 筛选关键词数据</td><td>按花费排序，识别高/低效词</td><td>关键词分析表</td></tr>
+                <tr><td>3</td><td>高转化词加价</td><td>广告活动 → 关键词管理 → 调整出价</td><td>加价 10%-15%</td><td>调整记录</td></tr>
+                <tr><td>4</td><td>低效词否定</td><td>广告活动 → 关键词管理 → 添加否定词</td><td>ACOS &gt; 毛利率 且 花费 &gt; €10</td><td>否定词列表</td></tr>
+                <tr><td>5</td><td>广告组调整</td><td>广告活动 → 广告组设置</td><td>暂停效果差/测试新方向</td><td>调整记录</td></tr>
+              </table>
+
+              <h4 style="font-size:14px;font-weight:700;margin-top:16px;color:var(--gray-800);">🎯 关键词优化矩阵</h4>
+              <div class="kw-matrix">
+                <div class="kw-matrix-item green"><div class="kwm-label">🟢 高转化词</div><div class="kwm-desc">转化率 ≥ 5% 且 ACOS ≤ 毛利率<br><strong>操作：</strong>加价 10%-15%，放量</div></div>
+                <div class="kw-matrix-item yellow"><div class="kwm-label">🟡 潜力词</div><div class="kwm-desc">点击量高但转化率低（1%-5%）<br><strong>操作：</strong>优化 Listing，暂不加价</div></div>
+                <div class="kw-matrix-item orange"><div class="kwm-label">🟠 观察词</div><div class="kwm-desc">花费高但转化率低（&lt;1%）<br><strong>操作：</strong>下调出价 20%，观察 3-5 天</div></div>
+                <div class="kw-matrix-item red"><div class="kwm-label">🔴 无效词</div><div class="kwm-desc">花费 &gt; €10 且无转化<br><strong>操作：</strong>添加为否定关键词</div></div>
+                <div class="kw-matrix-item gray"><div class="kwm-label">⚪ 低花费词</div><div class="kwm-desc">花费 &lt; €5 无转化<br><strong>操作：</strong>暂不操作，继续观察</div></div>
+              </div>
+
+              <div class="kw-tool-panel" id="kw-tool-panel">
+                <h4>🛠️ 每周关键词分析工具</h4>
+                <div style="margin-bottom:12px;">
+                  <label style="font-size:13px;font-weight:600;color:var(--gray-700);">广告活动：</label>
+                  <select id="kw-analysis-campaign" class="filter-select" style="margin-left:0;" onchange="M3AdManager.renderKeywordTool()">
+                    <option value="campaign_1">厨房电器_SP_01</option>
+                    <option value="campaign_2">DIY工具_SP_01</option>
+                  </select>
+                  <button class="btn btn-outline btn-sm" style="margin-left:8px;" onclick="M3AdManager.addKeywordRow()">+ 添加关键词</button>
+                </div>
+                <div id="kw-bid-rows">
+                  <div class="kw-bid-row">
+                    <span class="kw-name">friteuse sans huile</span>
+                    <span class="kw-metrics">花费 €42.50 | ACOS 28% | 转化 8.2%</span>
+                    <span class="kw-action">
+                      <button class="btn btn-primary btn-sm" style="padding:2px 8px;font-size:11px;" onclick="M3AdManager.adjustBid(this,'up')">▲ 加价</button>
+                      <button class="btn btn-outline btn-sm" style="padding:2px 8px;font-size:11px;" onclick="M3AdManager.adjustBid(this,'down')">▼ 降价</button>
+                      <button class="btn btn-outline btn-sm" style="padding:2px 8px;font-size:11px;color:var(--danger);" onclick="M3AdManager.negateKeyword(this)">⊘ 否定</button>
+                    </span>
+                  </div>
+                  <div class="kw-bid-row">
+                    <span class="kw-name">friteuse à air chaud</span>
+                    <span class="kw-metrics">花费 €58.20 | ACOS 18% | 转化 12.5%</span>
+                    <span class="kw-action">
+                      <button class="btn btn-primary btn-sm" style="padding:2px 8px;font-size:11px;" onclick="M3AdManager.adjustBid(this,'up')">▲ 加价</button>
+                      <button class="btn btn-outline btn-sm" style="padding:2px 8px;font-size:11px;" onclick="M3AdManager.adjustBid(this,'down')">▼ 降价</button>
+                      <button class="btn btn-outline btn-sm" style="padding:2px 8px;font-size:11px;color:var(--danger);" onclick="M3AdManager.negateKeyword(this)">⊘ 否定</button>
+                    </span>
+                  </div>
+                  <div class="kw-bid-row">
+                    <span class="kw-name">friteuse 4.5L</span>
+                    <span class="kw-metrics">花费 €18.90 | ACOS 42% | 转化 2.1%</span>
+                    <span class="kw-action">
+                      <button class="btn btn-primary btn-sm" style="padding:2px 8px;font-size:11px;" onclick="M3AdManager.adjustBid(this,'up')">▲ 加价</button>
+                      <button class="btn btn-outline btn-sm" style="padding:2px 8px;font-size:11px;" onclick="M3AdManager.adjustBid(this,'down')">▼ 降价</button>
+                      <button class="btn btn-outline btn-sm" style="padding:2px 8px;font-size:11px;color:var(--danger);" onclick="M3AdManager.negateKeyword(this)">⊘ 否定</button>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="sop-steps-panel" id="sop-panel-monthly">
+              <h4 style="font-size:14px;font-weight:700;color:var(--gray-800);margin-bottom:10px;">📋 每月广告操作 SOP</h4>
+              <table class="task-table">
+                <tr><th>步骤</th><th>操作内容</th><th>分析维度</th><th>输出</th></tr>
+                <tr><td>1</td><td>ROAS 趋势分析</td><td>近30天 ROAS 走势 vs 盈亏平衡线</td><td>ROAS 趋势图</td></tr>
+                <tr><td>2</td><td>预算利用率分析</td><td>各广告组预算使用率、浪费情况</td><td>预算利用率报告</td></tr>
+                <tr><td>3</td><td>结构优化</td><td>新增潜力广告组 / 暂停低效广告组</td><td>结构调整方案</td></tr>
+                <tr><td>4</td><td>下月预算规划</td><td>基于本月表现，规划下月预算分配</td><td>下月预算计划</td></tr>
+              </table>
+              <button class="btn btn-primary btn-sm" style="margin-top:12px;" onclick="M3AdManager.openMonthlyReview()">📊 打开月度复盘工具</button>
+            </div>
+
+            <div style="margin-top:20px;">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+                <h4 style="font-size:15px;font-weight:700;color:var(--gray-800);">📝 广告调整记录</h4>
+                <button class="btn btn-primary btn-sm" onclick="M3AdManager.openAdjLogForm()">+ 新增调整记录</button>
+              </div>
+              <div id="adj-log-list"></div>
+            </div>
+
+            <div class="card" id="adj-log-form-card" style="display:none;margin-top:16px;border:2px solid var(--primary-light);">
+              <div class="card-header" style="display:flex;align-items:center;justify-content:space-between;">
+                <span style="font-weight:700;">📝 新增广告调整记录</span>
+                <button class="btn btn-outline btn-sm" onclick="M3AdManager.closeAdjLogForm()">✕ 取消</button>
+              </div>
+              <div class="card-body">
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                  <div><label style="font-size:13px;font-weight:600;color:var(--gray-700);">调整日期</label><input type="date" id="adj-date" class="filter-input" style="width:100%;" value="2026-07-28"></div>
+                  <div><label style="font-size:13px;font-weight:600;color:var(--gray-700);">调整人</label><input type="text" id="adj-adjuster" class="filter-input" style="width:100%;" value="运营专员"></div>
+                  <div><label style="font-size:13px;font-weight:600;color:var(--gray-700);">广告活动</label><input type="text" id="adj-campaign" class="filter-input" style="width:100%;" placeholder="如：厨房电器_SP_01"></div>
+                  <div><label style="font-size:13px;font-weight:600;color:var(--gray-700);">调整类型</label><select id="adj-type" class="filter-select" style="width:100%;margin-left:0;"><option value="出价调整">出价调整</option><option value="预算调整">预算调整</option><option value="新增广告">新增广告</option><option value="暂停广告">暂停广告</option></select></div>
+                </div>
+                <div style="margin-top:12px;"><label style="font-size:13px;font-weight:600;color:var(--gray-700);">调整前状态</label><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:4px;"><input type="text" id="adj-before-bid" class="filter-input" style="width:100%;" placeholder="出价，如 €0.35"><input type="text" id="adj-before-spend" class="filter-input" style="width:100%;" placeholder="近7天花费，如 €124.50"><input type="text" id="adj-before-roas" class="filter-input" style="width:100%;" placeholder="近7天 ROAS，如 2.1"></div></div>
+                <div style="margin-top:12px;"><label style="font-size:13px;font-weight:600;color:var(--gray-700);">调整内容</label><textarea id="adj-content" class="filter-input" style="width:100%;min-height:60px;" placeholder="描述具体调整内容..."></textarea></div>
+                <div style="margin-top:12px;"><label style="font-size:13px;font-weight:600;color:var(--gray-700);">调整原因</label><textarea id="adj-reason" class="filter-input" style="width:100%;min-height:60px;" placeholder="说明调整原因和数据分析依据..."></textarea></div>
+                <div style="margin-top:12px;"><label style="font-size:13px;font-weight:600;color:var(--gray-700);">预期效果</label><input type="text" id="adj-expected" class="filter-input" style="width:100%;" placeholder="如：预计曝光量提升 15%，订单量提升 10%"></div>
+                <div style="margin-top:16px;display:flex;gap:8px;"><button class="btn btn-primary" onclick="M3AdManager.saveAdjLog()">💾 保存调整记录</button><button class="btn btn-outline" onclick="M3AdManager.closeAdjLogForm()">取消</button></div>
+              </div>
+            </div>
           </div>
+
+          <!-- Tab 3: 促销活动SOP -->
+          <div class="tab-panel" id="tab-m3-promo-sop">
+            <h4 style="font-size:14px;font-weight:700;color:var(--gray-800);margin-bottom:10px;">📋 Mano 平台促销活动类型</h4>
+            <table class="task-table" style="margin-bottom:16px;">
+              <tr><th>活动类型</th><th>定义</th><th>典型场景</th><th>提报门槛</th><th>准备周期</th></tr>
+              <tr><td>平台大促</td><td>Mano 官方组织的全站大促（黑五、圣诞、夏季大促）</td><td>提升全店销售额</td><td>库存充足、评分达标</td><td>提前 4-6 周</td></tr>
+              <tr><td>品牌日</td><td>品牌专属促销日</td><td>提升品牌认知度</td><td>品牌注册、广告预算</td><td>提前 2-3 周</td></tr>
+              <tr><td>清仓活动</td><td>清理滞销库存</td><td>释放仓储空间、回笼资金</td><td>库存积压、折扣力度大</td><td>提前 1-2 周</td></tr>
+              <tr><td>新品首发</td><td>新品上架促销</td><td>快速获取初始销量和评价</td><td>Listing 完整、库存到位</td><td>提前 1-2 周</td></tr>
+            </table>
+
+            <h4 style="font-size:14px;font-weight:700;color:var(--gray-800);margin-bottom:10px;">✅ 活动提报检查清单</h4>
+            <div id="promo-checklist">
+              <ul class="promo-checklist">
+                <li id="check-inventory"><div class="check-group-title"><span class="check-icon">📦</span> 库存检查</div><div class="check-sub"><input type="checkbox" id="ci1" onchange="M3AdManager.updateCheckResult()"> 活动产品库存 ≥ 预估销量 × 1.5（安全系数）</div><div class="check-sub"><input type="checkbox" id="ci2" onchange="M3AdManager.updateCheckResult()"> 在途库存可在活动结束前到仓</div><div class="check-sub"><input type="checkbox" id="ci3" onchange="M3AdManager.updateCheckResult()"> 无缺货风险（可售天数 ≥ 活动天数 × 2）</div></li>
+                <li id="check-price"><div class="check-group-title"><span class="check-icon">💰</span> 价格/折扣检查</div><div class="check-sub"><input type="checkbox" id="cp1" onchange="M3AdManager.updateCheckResult()"> 折扣力度符合平台门槛（大促要求 ≥ 10% off）</div><div class="check-sub"><input type="checkbox" id="cp2" onchange="M3AdManager.updateCheckResult()"> 划线价 &gt; 销售价</div><div class="check-sub"><input type="checkbox" id="cp3" onchange="M3AdManager.updateCheckResult()"> 活动价覆盖所有成本后仍有利润</div><div class="check-sub"><input type="checkbox" id="cp4" onchange="M3AdManager.updateCheckResult()"> 近30天最低价合规，不违反平台政策</div></li>
+                <li id="check-rating"><div class="check-group-title"><span class="check-icon">⭐</span> 店铺评分检查</div><div class="check-sub"><input type="checkbox" id="cr1" onchange="M3AdManager.updateCheckResult()"> 店铺星级 ≥ 4.0 ★（平台最低门槛）</div><div class="check-sub"><input type="checkbox" id="cr2" onchange="M3AdManager.updateCheckResult()"> 近30天 ODR（订单缺陷率）≤ 1%</div><div class="check-sub"><input type="checkbox" id="cr3" onchange="M3AdManager.updateCheckResult()"> 近7天无严重违规通知</div></li>
+                <li id="check-compliance"><div class="check-group-title"><span class="check-icon">📋</span> 产品合规检查</div><div class="check-sub"><input type="checkbox" id="cc1" onchange="M3AdManager.updateCheckResult()"> 产品在允许参与的类目内</div><div class="check-sub"><input type="checkbox" id="cc2" onchange="M3AdManager.updateCheckResult()"> Listing 完整（标题/描述/图片/属性）</div><div class="check-sub"><input type="checkbox" id="cc3" onchange="M3AdManager.updateCheckResult()"> 无侵权风险（商标/专利/版权）</div><div class="check-sub"><input type="checkbox" id="cc4" onchange="M3AdManager.updateCheckResult()"> 产品评分 ≥ 4.0 ★（如有要求）</div></li>
+              </ul>
+              <div id="check-result" style="margin-top:12px;padding:12px;border-radius:8px;font-size:14px;font-weight:600;display:none;"></div>
+            </div>
+
+            <h4 style="font-size:14px;font-weight:700;margin-top:20px;color:var(--gray-800);">📅 活动前/中/后操作清单</h4>
+            <div class="promo-phase-grid">
+              <div class="promo-phase-card pre"><h4>📋 活动前（T-4周 ~ T-1天）</h4><div class="phase-task"><span class="phase-tag">T-4周</span> 确定活动目标和选品范围</div><div class="phase-task"><span class="phase-tag">T-3周</span> 备货：采购/调拨/入库确认</div><div class="phase-task"><span class="phase-tag">T-2周</span> 素材准备：主图/广告图/A+页面</div><div class="phase-task"><span class="phase-tag">T-1周</span> 活动提报：提交平台审核</div><div class="phase-task"><span class="phase-tag">T-3天</span> 审核状态确认 + 价格锁定</div><div class="phase-task"><span class="phase-tag">T-1天</span> 最终检查：库存/价格/素材/广告</div></div>
+              <div class="promo-phase-card during"><h4>🔴 活动中（T日 ~ T+结束日）</h4><div class="phase-task"><span class="phase-tag">每日</span> 监控销量和 GMV</div><div class="phase-task"><span class="phase-tag">每日</span> 监控库存</div><div class="phase-task"><span class="phase-tag">每日</span> 监控广告花费</div><div class="phase-task"><span class="phase-tag">每日</span> 监控竞品动向</div><div class="phase-task"><span class="phase-tag">每日</span> 监控评价（差评24h回复）</div></div>
+              <div class="promo-phase-card post"><h4>✅ 活动后（T+结束日 ~ T+7天）</h4><div class="phase-task"><span class="phase-tag">T+1天</span> 数据收集</div><div class="phase-task"><span class="phase-tag">T+3天</span> 利润核算</div><div class="phase-task"><span class="phase-tag">T+5天</span> 经验总结</div><div class="phase-task"><span class="phase-tag">T+7天</span> 复盘报告</div></div>
+            </div>
+
+            <h4 style="font-size:14px;font-weight:700;margin-top:20px;color:var(--gray-800);">📊 活动中每日监控面板</h4>
+            <div style="margin-bottom:12px;">
+              <select id="promo-monitor-select" class="filter-select" style="margin-left:0;" onchange="M3AdManager.renderMonitor()">
+                <option value="">-- 新建或选择活动 --</option>
+                <option value="promo_001">夏季大促_厨房电器_202607</option>
+              </select>
+              <button class="btn btn-outline btn-sm" style="margin-left:8px;" onclick="M3AdManager.createPromoActivity()">+ 新建活动</button>
+            </div>
+            <div class="monitor-grid" id="monitor-panel">
+              <div class="monitor-card"><div class="mc-title">💰 今日销售额</div><div class="mc-value">--</div><div class="mc-target">目标：--</div><span class="mc-status">--</span></div>
+              <div class="monitor-card"><div class="mc-title">📦 可售库存</div><div class="mc-value">--</div><div class="mc-target">安全线：--</div><span class="mc-status">--</span></div>
+              <div class="monitor-card"><div class="mc-title">📣 今日广告花费</div><div class="mc-value">--</div><div class="mc-target">预算上限：--</div><span class="mc-status">--</span></div>
+              <div class="monitor-card"><div class="mc-title">🔎 竞品动态</div><div class="mc-value" style="font-size:14px;">--</div><div class="mc-target">需关注项：--</div></div>
+            </div>
+
+            <div class="price-rule-box">
+              <div class="pr-title">⚠️ 划线价与销售价设置规则</div>
+              <div class="pr-row pr-header"><span>价格类型</span><span>Mano 字段名</span><span>设置要求</span></div>
+              <div class="pr-row"><span>划线价</span><span>retail_price_vat_inc</span><span>建议 ≥ 销售价 × 1.2，如 €119.99</span></div>
+              <div class="pr-row"><span>销售价</span><span>product_price_vat_inc</span><span>活动期间实际售价，如 €89.99</span></div>
+              <div style="font-size:12px;color:#92400e;margin-top:8px;">⚠️ <strong>警告：</strong>划线价必须高于销售价，建议设定在近30天销售均价的 1.2-1.5 倍，避免被平台判定为虚假促销。</div>
+            </div>
+          </div>
+
+          <!-- Tab 4: 活动复盘 -->
           <div class="tab-panel" id="tab-m3-review">
-            <table class="task-table">
+            <select id="review-promo-select" class="filter-select" style="margin-left:0;margin-bottom:16px;" onchange="M3AdManager.renderReview()">
+              <option value="">-- 选择已结束的活动 --</option>
+              <option value="promo_001">夏季大促_厨房电器_202607</option>
+            </select>
+
+            <div class="review-summary-grid" id="review-summary">
+              <div class="review-summary-card"><div class="rs-label">活动期总销售额</div><div class="rs-value">--</div><div class="rs-delta">--</div></div>
+              <div class="review-summary-card"><div class="rs-label">销量增量 vs 日常</div><div class="rs-value">--</div><div class="rs-delta">--</div></div>
+              <div class="review-summary-card"><div class="rs-label">活动期转化率</div><div class="rs-value">--</div><div class="rs-delta">--</div></div>
+              <div class="review-summary-card"><div class="rs-label">ROI（增量利润/活动成本）</div><div class="rs-value">--</div><div class="rs-delta">--</div></div>
+            </div>
+
+            <h4 style="font-size:14px;font-weight:700;margin-top:20px;color:var(--gray-800);">📊 复盘维度详情</h4>
+            <table class="task-table" style="margin-top:8px;">
               <tr><th>复盘维度</th><th>数据指标</th><th>分析要点</th></tr>
               <tr><td>销量增量</td><td>活动期 vs 活动前日均</td><td>是否达到预期增量目标</td></tr>
               <tr><td>流量来源</td><td>自然/广告/活动/外部占比</td><td>活动引流效果评估</td></tr>
               <tr><td>转化提升</td><td>活动期转化率 vs 日常</td><td>折扣力度是否合理</td></tr>
-              <tr><td>ROI</td><td>(活动增量利润-活动成本)/活动成本</td><td>是否正向盈利</td></tr>
+              <tr><td>ROI</td><td>(活动增量利润 - 活动成本) / 活动成本</td><td>是否正向盈利</td></tr>
+              <tr><td>广告效率</td><td>活动期 ACOS / ROAS</td><td>广告投入产出比评估</td></tr>
+              <tr><td>库存周转</td><td>活动期销量 / 备货量</td><td>库存预估准确度</td></tr>
             </table>
+
+            <div style="margin-top:20px;">
+              <h4 style="font-size:14px;font-weight:700;color:var(--gray-800);margin-bottom:10px;">📝 经验总结与行动计划</h4>
+              <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;">
+                <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:var(--radius-sm);padding:14px;"><strong style="color:#065f46;font-size:13px;">✅ 做得好的</strong><textarea id="review-good" class="filter-input" style="width:100%;min-height:80px;margin-top:8px;" placeholder="记录本次活动的成功经验..."></textarea></div>
+                <div style="background:#fef2f2;border:1px solid #fecaca;border-radius:var(--radius-sm);padding:14px;"><strong style="color:#991b1b;font-size:13px;">⚠️ 需改进的</strong><textarea id="review-bad" class="filter-input" style="width:100%;min-height:80px;margin-top:8px;" placeholder="记录需要改进的地方..."></textarea></div>
+                <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:var(--radius-sm);padding:14px;"><strong style="color:#1d4ed8;font-size:13px;">💡 可复用的</strong><textarea id="review-reuse" class="filter-input" style="width:100%;min-height:80px;margin-top:8px;" placeholder="记录可复用的策略和方法..."></textarea></div>
+              </div>
+              <div style="margin-top:12px;display:flex;gap:8px;"><button class="btn btn-primary btn-sm" onclick="M3AdManager.saveReview()">💾 保存复盘记录</button><button class="btn btn-outline btn-sm" onclick="M3AdManager.exportReview()">📥 导出复盘报告</button></div>
+            </div>
           </div>
         </div>
       </div>
@@ -7229,6 +7653,267 @@ document.addEventListener('DOMContentLoaded', function() {
     if (e.altKey && e.key === 'ArrowLeft') { history.back(); e.preventDefault(); }
     if (e.altKey && e.key === 'ArrowRight') { history.forward(); e.preventDefault(); }
   });
+
+  // ============================================================
+  // M3AdManager: 广告与促销管理模块
+  // ============================================================
+  const M3AdManager = {
+    _adjLogs: [],
+    _promos: [],
+    _reviews: {},
+
+    init() {
+      this._loadFromStorage();
+      this.renderAdjLogs();
+    },
+
+    _loadFromStorage() {
+      try {
+        this._adjLogs = JSON.parse(localStorage.getItem('mano_ad_adjustment_log') || '[]');
+        this._promos = JSON.parse(localStorage.getItem('mano_promotion_activities') || '[]');
+        this._reviews = JSON.parse(localStorage.getItem('mano_promotion_reviews') || '{}');
+      } catch(e) { this._adjLogs = []; this._promos = []; this._reviews = {}; }
+    },
+
+    _saveAdjLogs() { localStorage.setItem('mano_ad_adjustment_log', JSON.stringify(this._adjLogs)); },
+    _savePromos() { localStorage.setItem('mano_promotion_activities', JSON.stringify(this._promos)); },
+    _saveReviews() { localStorage.setItem('mano_promotion_reviews', JSON.stringify(this._reviews)); },
+
+    switchSOPTab(type) {
+      document.querySelectorAll('#ad-sop-timeline .sop-timeline-item').forEach(el => {
+        el.classList.toggle('active', el.dataset.sop === type);
+      });
+      document.querySelectorAll('#page-module3 .sop-steps-panel').forEach(p => p.classList.remove('active'));
+      const panel = document.getElementById('sop-panel-' + type);
+      if (panel) panel.classList.add('active');
+    },
+
+    openAdjLogForm() {
+      const form = document.getElementById('adj-log-form-card');
+      if (form) form.style.display = 'block';
+      const dateEl = document.getElementById('adj-date');
+      if (dateEl) dateEl.value = new Date().toISOString().slice(0, 10);
+    },
+    closeAdjLogForm() { const f = document.getElementById('adj-log-form-card'); if (f) f.style.display = 'none'; },
+
+    saveAdjLog() {
+      const log = {
+        id: 'adj_' + Date.now(),
+        date: document.getElementById('adj-date').value,
+        adjuster: document.getElementById('adj-adjuster').value || '运营专员',
+        campaign_name: document.getElementById('adj-campaign').value || '',
+        adjustment_type: document.getElementById('adj-type').value,
+        before_state: {
+          bid: document.getElementById('adj-before-bid').value,
+          spend_7d: document.getElementById('adj-before-spend').value,
+          roas_7d: document.getElementById('adj-before-roas').value
+        },
+        adjustment_content: document.getElementById('adj-content').value,
+        reason: document.getElementById('adj-reason').value,
+        expected_effect: document.getElementById('adj-expected').value,
+        follow_up_status: '待复查',
+        created_at: new Date().toISOString()
+      };
+      if (!log.campaign_name || !log.adjustment_content) { showToast('⚠️ 请至少填写广告活动和调整内容'); return; }
+      this._adjLogs.unshift(log);
+      this._saveAdjLogs();
+      this.renderAdjLogs();
+      this.closeAdjLogForm();
+      showToast('✅ 广告调整记录已保存');
+    },
+
+    renderAdjLogs() {
+      const c = document.getElementById('adj-log-list');
+      if (!c) return;
+      if (!this._adjLogs.length) {
+        c.innerHTML = '<div style="text-align:center;padding:24px;color:var(--gray-400);">暂无广告调整记录，点击右上角「+ 新增调整记录」开始记录。</div>';
+        return;
+      }
+      const typeMap = { '出价调整': 'bid', '预算调整': 'budget', '新增广告': 'add', '暂停广告': 'pause' };
+      c.innerHTML = this._adjLogs.slice(0, 10).map(log => `<div class="adj-log-card animate-in">
+        <div class="adj-log-header">
+          <span style="font-weight:600;color:var(--gray-800);">${this._esc(log.campaign_name)}</span>
+          <span style="display:flex;gap:8px;align-items:center;">
+            <span class="adj-type ${typeMap[log.adjustment_type]||'bid'}">${log.adjustment_type}</span>
+            <span class="adj-date">${log.date}</span>
+          </span>
+        </div>
+        <div class="adj-log-body">
+          <div class="adj-row"><strong>调整人：</strong>${this._esc(log.adjuster)}</div>
+          <div class="adj-row"><strong>调整前：</strong>出价 ${this._esc(log.before_state.bid)} | 花费 ${this._esc(log.before_state.spend_7d)} | ROAS ${this._esc(log.before_state.roas_7d)}</div>
+          <div class="adj-row"><strong>调整内容：</strong>${this._esc(log.adjustment_content)}</div>
+          <div class="adj-row"><strong>原因：</strong>${this._esc(log.reason)}</div>
+          <div class="adj-row"><strong>预期效果：</strong>${this._esc(log.expected_effect)}</div>
+          <div class="adj-row"><strong>状态：</strong>${this._esc(log.follow_up_status)}</div>
+        </div>
+      </div>`).join('');
+    },
+
+    renderKeywordTool() { showToast('📊 关键词数据已刷新（示例数据）'); },
+
+    addKeywordRow() {
+      const c = document.getElementById('kw-bid-rows');
+      if (!c) return;
+      const row = document.createElement('div');
+      row.className = 'kw-bid-row animate-in';
+      row.innerHTML = `<span class="kw-name"><input type="text" class="filter-input" style="width:150px;font-size:12px;" placeholder="输入关键词..."></span>
+        <span class="kw-metrics">花费 <input type="text" class="filter-input" style="width:60px;font-size:12px;" placeholder="€0"> | ACOS <input type="text" class="filter-input" style="width:50px;font-size:12px;" placeholder="0%"> | 转化 <input type="text" class="filter-input" style="width:40px;font-size:12px;" placeholder="0%"></span>
+        <span class="kw-action">
+          <button class="btn btn-primary btn-sm" style="padding:2px 8px;font-size:11px;" onclick="M3AdManager.adjustBid(this,'up')">▲ 加价</button>
+          <button class="btn btn-outline btn-sm" style="padding:2px 8px;font-size:11px;" onclick="M3AdManager.adjustBid(this,'down')">▼ 降价</button>
+          <button class="btn btn-outline btn-sm" style="padding:2px 8px;font-size:11px;color:var(--danger);" onclick="M3AdManager.negateKeyword(this)">⊘ 否定</button>
+        </span>`;
+      c.appendChild(row);
+    },
+
+    adjustBid(btn, direction) {
+      const row = btn.closest('.kw-bid-row');
+      const name = row.querySelector('.kw-name').textContent.trim();
+      row.style.background = direction === 'up' ? '#f0fdf4' : '#fff7ed';
+      setTimeout(() => { row.style.background = ''; }, 1500);
+      showToast(`${direction==='up'?'▲ 已加价 12%':'▼ 已降价 20%'}：${name}`);
+    },
+
+    negateKeyword(btn) {
+      const row = btn.closest('.kw-bid-row');
+      const name = row.querySelector('.kw-name').textContent.trim();
+      row.style.textDecoration = 'line-through';
+      row.style.opacity = '0.5';
+      row.querySelector('.kw-action').innerHTML = '<span style="font-size:11px;color:var(--danger);">已否定</span>';
+      showToast(`⊘ 已添加否定关键词：${name}`);
+    },
+
+    toggleDailyChecklist() {
+      let panel = document.getElementById('daily-checklist-panel');
+      if (!panel) {
+        panel = document.createElement('div');
+        panel.id = 'daily-checklist-panel';
+        panel.className = 'kw-tool-panel animate-in';
+        panel.innerHTML = `<h4>✅ 每日检查清单</h4>
+          <ul class="checklist">
+            <li onclick="this.classList.toggle('checked')"><input type="checkbox" onchange="this.parentElement.classList.toggle('checked')"> 检查广告花费是否超预算</li>
+            <li onclick="this.classList.toggle('checked')"><input type="checkbox" onchange="this.parentElement.classList.toggle('checked')"> 查看基础数据（曝光/点击/花费/订单）</li>
+            <li onclick="this.classList.toggle('checked')"><input type="checkbox" onchange="this.parentElement.classList.toggle('checked')"> 记录异常波动（突发下降/上升）</li>
+            <li onclick="this.classList.toggle('checked')"><input type="checkbox" onchange="this.parentElement.classList.toggle('checked')"> 检查是否有订单=0但花费>€20的广告组</li>
+            <li onclick="this.classList.toggle('checked')"><input type="checkbox" onchange="this.parentElement.classList.toggle('checked')"> 截图保存关键指标数据</li>
+          </ul>`;
+        document.getElementById('sop-panel-daily').appendChild(panel);
+      } else { panel.remove(); }
+    },
+
+    openMonthlyReview() { showToast('📊 月度复盘工具已打开（请在活动复盘Tab中查看详细数据）'); },
+
+    updateCheckResult() {
+      const resultEl = document.getElementById('check-result');
+      const sections = ['inventory', 'price', 'rating', 'compliance'];
+      let total = 0, passed = 0;
+      sections.forEach(sec => {
+        const li = document.getElementById('check-' + sec);
+        if (!li) return;
+        const cbs = li.querySelectorAll('input[type="checkbox"]');
+        let secPassed = 0;
+        cbs.forEach(cb => { total++; if (cb.checked) { secPassed++; passed++; } });
+        if (secPassed === cbs.length) { li.classList.add('pass'); li.classList.remove('fail'); }
+        else if (secPassed > 0) { li.classList.add('fail'); li.classList.remove('pass'); }
+        else { li.classList.remove('pass', 'fail'); }
+      });
+      if (passed === total) {
+        resultEl.style.display = 'block'; resultEl.style.background = '#f0fdf4'; resultEl.style.color = '#065f46'; resultEl.style.border = '1px solid #bbf7d0'; resultEl.textContent = '✅ 全部通过，可以提报活动！';
+      } else if (passed > 0) {
+        resultEl.style.display = 'block'; resultEl.style.background = '#fffbeb'; resultEl.style.color = '#92400e'; resultEl.style.border = '1px solid #fde68a'; resultEl.textContent = `⚠️ ${passed}/${total} 项已通过，${total-passed} 项未完成，需整改后提报。`;
+      } else { resultEl.style.display = 'none'; }
+    },
+
+    renderMonitor() {
+      const val = document.getElementById('promo-monitor-select').value;
+      if (!val) { this._resetMonitor(); return; }
+      const data = [
+        { value: '€2,847', target: '目标：€3,000', status: 'on-track', text: '进度良好' },
+        { value: '186 件', target: '安全线：50 件', status: 'on-track', text: '库存充足' },
+        { value: '€198.50', target: '预算上限：€250', status: 'on-track', text: '未超预算' },
+        { value: '竞品A降价5%', target: '需关注项：1', status: 'warning', text: '需关注' }
+      ];
+      document.querySelectorAll('#monitor-panel .monitor-card').forEach((card, i) => {
+        card.querySelector('.mc-value').textContent = data[i].value;
+        card.querySelector('.mc-target').textContent = data[i].target;
+        const s = card.querySelector('.mc-status'); s.textContent = data[i].text; s.className = 'mc-status ' + data[i].status;
+      });
+    },
+    _resetMonitor() {
+      document.querySelectorAll('#monitor-panel .monitor-card').forEach(card => {
+        card.querySelector('.mc-value').textContent = '--';
+        card.querySelector('.mc-target').textContent = '目标：--';
+        card.querySelector('.mc-status').textContent = '--'; card.querySelector('.mc-status').className = 'mc-status';
+      });
+    },
+
+    createPromoActivity() {
+      const name = prompt('请输入促销活动名称：', '夏季大促_厨房电器_202607');
+      if (!name) return;
+      const promo = {
+        id: 'promo_' + Date.now(), activity_name: name, activity_type: '平台大促',
+        start_date: '', end_date: '', selected_products: [], status: '策划中',
+        created_by: '运营专员', created_at: new Date().toISOString()
+      };
+      this._promos.push(promo); this._savePromos();
+      const s = document.getElementById('promo-monitor-select');
+      const o = document.createElement('option'); o.value = promo.id; o.textContent = promo.activity_name; s.appendChild(o); s.value = promo.id;
+      showToast('✅ 促销活动已创建：' + name);
+      this.renderMonitor();
+    },
+
+    renderReview() {
+      const val = document.getElementById('review-promo-select').value;
+      if (!val) { this._resetReview(); return; }
+      const data = [
+        { value: '€12,847', delta: '▲ 32% vs 日常', cls: 'up' },
+        { value: '+€4,205', delta: '▲ 超出目标 18%', cls: 'up' },
+        { value: '6.8%', delta: '▲ 1.2pp vs 日常', cls: 'up' },
+        { value: '3.2x', delta: '正向盈利', cls: 'up' }
+      ];
+      document.querySelectorAll('#review-summary .review-summary-card').forEach((card, i) => {
+        card.querySelector('.rs-value').textContent = data[i].value;
+        const d = card.querySelector('.rs-delta'); d.textContent = data[i].delta; d.className = 'rs-delta ' + data[i].cls;
+      });
+      const review = this._reviews[val];
+      if (review) {
+        document.getElementById('review-good').value = review.good || '';
+        document.getElementById('review-bad').value = review.bad || '';
+        document.getElementById('review-reuse').value = review.reuse || '';
+      }
+    },
+    _resetReview() {
+      document.querySelectorAll('#review-summary .review-summary-card').forEach(card => {
+        card.querySelector('.rs-value').textContent = '--';
+        card.querySelector('.rs-delta').textContent = '--'; card.querySelector('.rs-delta').className = 'rs-delta';
+      });
+    },
+
+    saveReview() {
+      const val = document.getElementById('review-promo-select').value;
+      if (!val) { showToast('⚠️ 请先选择复盘活动'); return; }
+      this._reviews[val] = {
+        good: document.getElementById('review-good').value,
+        bad: document.getElementById('review-bad').value,
+        reuse: document.getElementById('review-reuse').value,
+        saved_at: new Date().toISOString()
+      };
+      this._saveReviews();
+      showToast('✅ 复盘记录已保存');
+    },
+
+    exportReview() { showToast('📥 复盘报告导出功能已触发（实际导出需对接后端服务）'); },
+    uploadScreenshot() {
+      const input = document.createElement('input'); input.type = 'file'; input.accept = 'image/*';
+      input.onchange = (e) => { if (e.target.files.length) showToast('📸 截图已选择，请手动上传至项目资料库「广告调整记录」文件夹'); };
+      input.click();
+    },
+    downloadAdComparison() { showToast('📥 广告类型对比表下载已触发'); },
+    _esc(str) { if (!str) return ''; const d = document.createElement('div'); d.textContent = str; return d.innerHTML; }
+  };
+
+  window.M3AdManager = M3AdManager;
+  M3AdManager.init();
 });
 </script>
     <!-- ===== Modal: 数据管理 ===== -->
