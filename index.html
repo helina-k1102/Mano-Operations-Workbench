@@ -32,6 +32,18 @@
   --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1);
   --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1);
   --transition: 0.2s ease;
+  /* Extended tokens */
+  --radius-xs: 4px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
+  --shadow-xs: 0 1px 2px rgba(0,0,0,0.04);
+  --text-xs: 11px;
+  --text-sm: 12px;
+  --text-base: 14px;
+  --text-md: 16px;
+  --text-lg: 20px;
+  --text-xl: 24px;
+  --text-2xl: 32px;
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body {
@@ -41,6 +53,8 @@ body {
   line-height: 1.6;
   min-height: 100vh;
 }
+.skip-link{position:absolute;top:-100px;left:16px;background:var(--primary);color:#fff;padding:8px 16px;border-radius:0 0 var(--radius-sm) var(--radius-sm);z-index:9999;font-size:14px;text-decoration:none;transition:top 0.2s}
+.skip-link:focus{top:0}
 .app-layout { display: flex; min-height: 100vh; }
 
 /* Sidebar */
@@ -176,6 +190,9 @@ body {
 .btn-danger { background: var(--danger); color: #fff; }
 .btn-danger:hover { background: #b91c1c; }
 .btn-success { background: var(--success); color: #fff; }
+.btn-success:hover { background: #047857; }
+.btn-xs{padding:3px 8px;font-size:11px;height:24px;border-radius:var(--radius-xs)}
+.btn-lg{padding:10px 24px;font-size:14px;height:44px}
 
 /* Filter Bar */
 .filter-bar { display: flex; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; align-items: center; }
@@ -270,8 +287,22 @@ body {
 
 /* Toast */
 .toast-container { position: fixed; top: 20px; right: 20px; z-index: 2000; display: flex; flex-direction: column; gap: 8px; }
-.toast { padding: 12px 20px; border-radius: var(--radius-sm); background: var(--gray-900); color: #fff; font-size: 14px; box-shadow: var(--shadow-lg); animation: slideIn 0.3s ease; }
+.toast { display: flex; align-items: center; padding: 12px 16px; border-radius: var(--radius-sm); color: #fff; font-size: 14px; box-shadow: var(--shadow-lg); animation: slideIn 0.3s ease; }
+.toast-success { background: #065f46; border-left: 4px solid #34d399; }
+.toast-error { background: #991b1b; border-left: 4px solid #f87171; }
+.toast-warning { background: #92400e; border-left: 4px solid #fbbf24; }
+.toast-info { background: var(--gray-900); border-left: 4px solid var(--primary-light); }
+.toast-icon { margin-right: 8px; flex-shrink: 0; }
+.toast-msg { flex: 1; }
+.toast-close { margin-left: 12px; cursor: pointer; opacity: 0.6; font-size: 16px; flex-shrink: 0; padding: 0 4px; line-height: 1; }
+.toast-close:hover { opacity: 1; }
+.toast-container { position: fixed; top: 20px; right: 20px; z-index: 2000; display: flex; flex-direction: column; gap: 8px; max-width: 420px; }
 @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+/* Progress overlay */
+.progress-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.4); z-index:3000; align-items:center; justify-content:center; }
+.progress-modal { background:#fff; border-radius:var(--radius); padding:24px 32px; min-width:280px; text-align:center; box-shadow:var(--shadow-lg); }
+.progress-modal-text { font-size:14px; color:var(--gray-700); font-weight:500; }
 
 /* Progress bar */
 .progress-bar { height: 6px; background: var(--gray-200); border-radius: 3px; overflow: hidden; }
@@ -285,6 +316,9 @@ body {
 .ds-mini-stat strong { color: var(--gray-700); }
 
 @media (max-width: 768px) {
+  .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 99; }
+  .sidebar-overlay.show { display: block; }
+  .sidebar { z-index: 100; }
   .sidebar { transform: translateX(-100%); }
   .sidebar.open { transform: translateX(0); }
   .main-content { margin-left: 0; }
@@ -292,6 +326,19 @@ body {
   .stats-grid { grid-template-columns: 1fr 1fr; }
   .page-content { padding: 16px; }
   .topbar { padding: 12px 16px; }
+}
+/* Mobile: table card mode + modal bottom-sheet */
+@media (max-width: 768px) {
+  table.responsive-table thead { display: none; }
+  table.responsive-table, table.responsive-table tbody, table.responsive-table tr { display: block; width: 100%; }
+  table.responsive-table tr { margin-bottom: 12px; border: 1px solid var(--gray-200); border-radius: var(--radius-sm); padding: 12px; background: #fff; }
+  table.responsive-table td { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid var(--gray-100); font-size: 13px; }
+  table.responsive-table td:last-child { border-bottom: none; }
+  table.responsive-table td::before { content: attr(data-label); font-weight: 600; color: var(--gray-500); font-size: 11px; text-transform: uppercase; letter-spacing: 0.3px; flex-shrink: 0; margin-right: 8px; }
+  .modal-overlay { align-items: flex-end; }
+  .modal { width: 100%; max-width: 100%; border-radius: var(--radius) var(--radius) 0 0; max-height: 90vh; margin: 0; }
+  .filter-bar { flex-direction: column; }
+  .filter-bar .btn { width: 100%; justify-content: center; }
 }
 /* Report Database Module */
 .report-db-section { margin-bottom: 24px; }
@@ -1373,10 +1420,239 @@ body {
 
 /* Toast styles are handled by existing .toast-container */
 
+/* ===== Utility Classes ===== */
+.flex-center{display:flex;align-items:center;justify-content:center}
+.flex-between{display:flex;align-items:center;justify-content:space-between}
+.flex-wrap{flex-wrap:wrap}
+.gap-1{gap:4px}.gap-2{gap:8px}.gap-3{gap:12px}.gap-4{gap:16px}.gap-5{gap:20px}.gap-6{gap:24px}
+.p-0{padding:0}.p-1{padding:4px}.p-2{padding:8px}.p-3{padding:12px}.p-4{padding:16px}.p-5{padding:20px}
+.text-xs{font-size:11px}.text-sm{font-size:12px}.text-base{font-size:14px}.text-md{font-size:16px}.text-lg{font-size:20px}
+.text-center{text-align:center}.text-left{text-align:left}.text-right{text-align:right}
+.text-muted{color:var(--gray-500)}.text-bold{font-weight:600}
+.truncate{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0}
+
+
+/* ===== Operation Log ===== */
+.op-log-item{display:flex;align-items:flex-start;gap:14px;padding:12px 16px;background:#fff;border:1px solid var(--gray-200);border-radius:var(--radius-sm);margin-bottom:6px;transition:all var(--transition)}
+.op-log-item:hover{border-color:var(--primary-light);box-shadow:var(--shadow-sm)}
+.op-log-icon{font-size:16px;flex-shrink:0;width:28px;text-align:center;padding-top:1px}
+.op-log-info{flex:1;min-width:0}
+.op-log-detail{font-size:13px;font-weight:600;color:var(--gray-800);margin-bottom:2px}
+.op-log-meta{font-size:11px;color:var(--gray-500);display:flex;gap:10px;flex-wrap:wrap}
+.op-log-impact{color:var(--warning);font-weight:500}
+
+/* ===== SOP 体系新增样式 ===== */
+.pano-wrap{position:relative;overflow:auto;padding:24px 16px 40px;background:linear-gradient(135deg,#f8fafc 0%,#f1f5f9 50%,#e8eef5 100%);border-radius:var(--radius);border:1px solid var(--gray-200);min-height:620px}
+.pano-flow{display:flex;flex-direction:column;align-items:center;gap:0;position:relative;min-width:680px}
+.pano-node{display:flex;flex-direction:column;align-items:center;cursor:pointer;position:relative;z-index:2;transition:transform var(--transition),filter var(--transition);padding:4px}
+.pano-node:hover{transform:translateY(-3px);filter:none!important}
+.pano-node.dimmed{filter:grayscale(60%) opacity(0.55)}
+.pano-node-box{background:#fff;border:2px solid var(--gray-200);border-radius:var(--radius);padding:14px 18px;text-align:center;box-shadow:var(--shadow-sm);transition:all var(--transition);min-width:150px}
+.pano-node:hover .pano-node-box{box-shadow:var(--shadow-md);border-color:var(--primary-light)}
+.pano-node-box.m1{border-top:3px solid var(--primary)}.pano-node-box.m2{border-top:3px solid #8b5cf6}
+.pano-node-box.m3{border-top:3px solid #f59e0b}.pano-node-box.m4{border-top:3px solid #10b981}
+.pano-node-box.m5{border-top:3px solid #ec4899}.pano-node-box.m6{border-top:3px solid #06b6d4}
+.pano-node-box.m7{border-top:3px solid #f97316}
+.pano-node-icon{font-size:28px;margin-bottom:4px}
+.pano-node-label{font-size:13px;font-weight:700;color:var(--gray-800)}
+.pano-node-sub{font-size:11px;color:var(--gray-500);margin-top:2px}
+.pano-connector{display:flex;flex-direction:column;align-items:center;position:relative;z-index:1}
+.pano-arrow-down{width:2px;height:28px;background:var(--gray-300);position:relative}
+.pano-arrow-down::after{content:'';position:absolute;bottom:-5px;left:50%;transform:translateX(-50%);border-left:6px solid transparent;border-right:6px solid transparent;border-top:7px solid var(--gray-400)}
+.pano-arrow-down.flow-data::after{border-top-color:var(--primary)}
+.pano-arrow-down.flow-alert::after{border-top-color:var(--danger)}
+.pano-arrow-down.flow-feedback::after{border-top-color:#ec4899}
+.pano-arrow-down.flow-strategy::after{border-top-color:#8b5cf6}
+.pano-label{font-size:10px;font-weight:600;padding:2px 8px;border-radius:10px;white-space:nowrap;position:absolute;left:50%;transform:translateX(-50%)}
+.pano-label.data{background:var(--primary-bg);color:var(--primary);top:6px}
+.pano-label.alert{background:var(--danger-bg);color:var(--danger);top:6px}
+.pano-label.feedback{background:#fdf2f8;color:#be185d;top:6px}
+.pano-label.strategy{background:#f5f3ff;color:#7c3aed;top:6px}
+.pano-branch-row{display:flex;align-items:flex-start;justify-content:center;gap:0}
+.pano-split-lines{display:flex;justify-content:space-between;width:380px;position:relative}
+.pano-split-lines::before{content:'';position:absolute;top:0;left:18%;right:18%;height:2px;background:var(--gray-300)}
+.pano-split-col{display:flex;flex-direction:column;align-items:center;gap:4px}
+.pano-split-down{width:2px;height:24px;background:var(--gray-300);position:relative}
+.pano-split-down::after{content:'';position:absolute;bottom:-4px;left:50%;transform:translateX(-50%);border-left:5px solid transparent;border-right:5px solid transparent;border-top:6px solid var(--gray-400)}
+.pano-merge-lines{display:flex;justify-content:space-between;width:380px;position:relative}
+.pano-merge-lines::after{content:'';position:absolute;bottom:0;left:18%;right:18%;height:2px;background:var(--gray-300)}
+.pano-merge-down{width:2px;height:22px;background:var(--gray-300)}
+.pano-branch-node{display:flex;flex-direction:column;align-items:center;cursor:pointer;z-index:2;transition:transform var(--transition)}
+.pano-branch-node:hover{transform:translateY(-2px)}
+.pano-branch-box{background:#fff;border:1.5px solid var(--gray-200);border-radius:var(--radius-sm);padding:10px 14px;text-align:center;box-shadow:var(--shadow-sm);font-size:12px;font-weight:600;color:var(--gray-700);min-width:120px;transition:all var(--transition)}
+.pano-branch-node:hover .pano-branch-box{box-shadow:var(--shadow-md);border-color:var(--primary-light)}
+.pano-loop-arrow{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--gray-500);padding:8px 0}
+.pano-loop-line{width:60px;height:2px;background:var(--gray-300);position:relative}
+.pano-loop-line::after{content:'';position:absolute;right:-4px;top:-4px;border-top:5px solid transparent;border-bottom:5px solid transparent;border-left:6px solid var(--gray-400)}
+.pano-legend{display:flex;gap:20px;flex-wrap:wrap;justify-content:center;padding:14px 20px;background:#fff;border-radius:var(--radius-sm);border:1px solid var(--gray-200);margin-top:20px}
+.pano-legend-item{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--gray-600)}
+.pano-legend-line{width:24px;height:2px;border-radius:1px}
+.pano-legend-line.data{background:var(--primary)}.pano-legend-line.alert{background:var(--danger)}
+.pano-legend-line.feedback{background:#ec4899}.pano-legend-line.strategy{background:#8b5cf6}
+.sop-version-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+@media(max-width:768px){.sop-version-stats{grid-template-columns:repeat(2,1fr)}}
+.sop-vstat-card{background:#fff;border:1px solid var(--gray-200);border-radius:var(--radius);padding:18px 20px;text-align:center;box-shadow:var(--shadow-sm)}
+.sop-vstat-num{font-size:32px;font-weight:800;color:var(--gray-900)}.sop-vstat-label{font-size:13px;color:var(--gray-500);margin-top:4px}
+.sop-vstat-card.accent{border-color:var(--primary-light);background:var(--primary-bg)}
+.sop-vstat-card.accent .sop-vstat-num{color:var(--primary)}
+.sop-vstat-card.warn{border-color:#fcd34d;background:#fffbeb}
+.sop-vstat-card.warn .sop-vstat-num{color:var(--warning)}
+.sop-version-filter{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;align-items:center}
+.sop-version-list{display:flex;flex-direction:column;gap:10px}
+.sop-version-item{background:#fff;border:1px solid var(--gray-200);border-radius:var(--radius-sm);padding:16px 20px;transition:all var(--transition);cursor:pointer}
+.sop-version-item:hover{border-color:var(--primary-light);box-shadow:var(--shadow-sm)}
+.sop-version-item.expanded{border-color:var(--primary-light);background:var(--gray-50)}
+.sop-version-header{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.sop-version-icon{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.sop-version-icon.m1{background:var(--primary-bg)}.sop-version-icon.m2{background:#f5f3ff}
+.sop-version-icon.m3{background:#fffbeb}.sop-version-icon.m4{background:#ecfdf5}
+.sop-version-icon.m5{background:#fdf2f8}.sop-version-icon.m6{background:#ecfeff}
+.sop-version-icon.m7{background:#fff7ed}
+.sop-version-info{flex:1;min-width:180px}
+.sop-version-name{font-size:14px;font-weight:700;color:var(--gray-900)}
+.sop-version-meta{font-size:12px;color:var(--gray-500);margin-top:2px}
+.sop-version-badge{display:inline-block;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:700}
+.sop-version-badge.draft{background:var(--gray-100);color:var(--gray-600)}
+.sop-version-badge.pending{background:var(--warning-bg);color:var(--warning)}
+.sop-version-badge.published{background:var(--success-bg);color:var(--success)}
+.sop-version-badge.rolledback{background:var(--danger-bg);color:var(--danger)}
+.sop-version-actions{display:flex;gap:6px;flex-shrink:0}
+.sop-version-main{flex:1;min-width:0}
+.sop-version-module{font-size:12px;color:var(--gray-500);background:var(--gray-100);padding:2px 8px;border-radius:10px}
+.sop-version-ver{font-size:12px;font-weight:700;color:var(--primary)}
+.sop-version-detail{display:block;padding:12px 0 0;border-top:1px solid var(--gray-100);margin-top:12px;font-size:12px;color:var(--gray-600);line-height:1.8}
+.sop-version-detail strong{color:var(--gray-700)}
+.sop-version-item.expanded .sop-version-detail{display:block}
+.sop-version-dl{display:grid;grid-template-columns:120px 1fr;gap:6px 12px;font-size:13px}
+.sop-version-dl dt{color:var(--gray-500);font-weight:500}.sop-version-dl dd{color:var(--gray-800)}
+.sop-lib-layout{display:grid;grid-template-columns:240px 1fr;gap:20px}
+@media(max-width:900px){.sop-lib-layout{grid-template-columns:1fr}}
+.sop-lib-sidebar{background:#fff;border:1px solid var(--gray-200);border-radius:var(--radius);padding:16px;height:fit-content}
+.sop-lib-tree{list-style:none}
+.sop-lib-tree-item{padding:8px 10px;border-radius:6px;cursor:pointer;font-size:13px;font-weight:500;color:var(--gray-700);transition:all var(--transition);display:flex;align-items:center;gap:8px;margin-bottom:2px}
+.sop-lib-tree-item:hover{background:var(--gray-50)}
+.sop-lib-tree-item.active{background:var(--primary-bg);color:var(--primary);font-weight:700}
+.sop-doc-card{display:flex;align-items:center;gap:14px;padding:14px 18px;background:#fff;border:1px solid var(--gray-200);border-radius:var(--radius-sm);transition:all var(--transition);cursor:pointer}
+.sop-doc-card:hover{border-color:var(--primary-light);box-shadow:var(--shadow-sm)}
+.sop-lib-main{min-width:0}
+.sop-lib-toolbar{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;align-items:center}
+.sop-lib-search{flex:1;min-width:180px}
+.sop-doc-list{display:flex;flex-direction:column;gap:8px}
+.sop-doc-item{display:flex;align-items:center;gap:14px;padding:14px 18px;background:#fff;border:1px solid var(--gray-200);border-radius:var(--radius-sm);transition:all var(--transition);cursor:pointer}
+.sop-doc-item:hover{border-color:var(--primary-light);box-shadow:var(--shadow-sm)}
+.sop-doc-icon{font-size:28px;flex-shrink:0}.sop-doc-info{flex:1;min-width:140px}
+.sop-doc-name{font-size:14px;font-weight:700;color:var(--gray-900)}
+.sop-doc-meta{font-size:12px;color:var(--gray-500);margin-top:2px;display:flex;gap:12px;flex-wrap:wrap}
+.sop-doc-version{font-size:11px;font-weight:700;padding:2px 8px;border-radius:8px;background:var(--primary-bg);color:var(--primary);flex-shrink:0}
+.sop-doc-size{font-size:12px;color:var(--gray-400);flex-shrink:0}
+.sop-doc-actions{display:flex;gap:6px;flex-shrink:0}
+.sop-iter-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+@media(max-width:768px){.sop-iter-stats{grid-template-columns:repeat(2,1fr)}}
+.sop-iter-stat{background:#fff;border:1px solid var(--gray-200);border-radius:var(--radius);padding:18px 20px;text-align:center;box-shadow:var(--shadow-sm)}
+.sop-iter-stat .num{font-size:32px;font-weight:800;color:var(--gray-900)}
+.sop-iter-stat .lbl{font-size:13px;color:var(--gray-500);margin-top:4px}
+.sop-iter-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media(max-width:1024px){.sop-iter-grid{grid-template-columns:1fr}}
+.sop-iter-plan{background:#fff;border:1px solid var(--gray-200);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow-sm)}
+.sop-iter-plan h4{font-size:15px;font-weight:700;color:var(--gray-900);margin-bottom:12px}
+.sop-iter-plan-row{display:flex;align-items:center;gap:10px;padding:8px 0;font-size:13px;color:var(--gray-700)}
+.sop-iter-plan-label{font-weight:600;color:var(--gray-600);min-width:80px}
+.sop-iter-list{display:flex;flex-direction:column;gap:8px}
+.sop-iter-item{display:flex;align-items:center;gap:12px;padding:12px 16px;background:#fff;border:1px solid var(--gray-200);border-radius:var(--radius-sm);transition:all var(--transition)}
+.sop-iter-item:hover{box-shadow:var(--shadow-sm)}
+.sop-iter-item.p-high{border-left:4px solid var(--danger)}
+.sop-iter-item.p-mid{border-left:4px solid var(--warning)}
+.sop-iter-item.p-low{border-left:4px solid var(--gray-300)}
+.sop-iter-prio{padding:3px 10px;border-radius:12px;font-size:11px;font-weight:800;flex-shrink:0}
+.sop-iter-prio.high{background:var(--danger-bg);color:var(--danger)}
+.sop-iter-prio.mid{background:var(--warning-bg);color:var(--warning)}
+.sop-iter-prio.low{background:var(--gray-100);color:var(--gray-600)}
+.sop-iter-info{flex:1;min-width:160px}
+.sop-iter-title{font-size:14px;font-weight:600;color:var(--gray-800)}
+.sop-iter-meta{font-size:12px;color:var(--gray-500);margin-top:2px;display:flex;gap:10px;flex-wrap:wrap}
+.sop-iter-desc{font-size:12px;color:var(--gray-500);margin-top:4px}
+.sop-iter-content{flex:1;min-width:160px}
+.sop-iter-actions{display:flex;gap:4px;flex-shrink:0}
+.sop-fb-item{padding:10px 14px;background:var(--gray-50);border-radius:var(--radius-sm);margin-bottom:6px;font-size:13px}
+.sop-timeline{position:relative;padding-left:28px}
+.sop-timeline::before{content:'';position:absolute;left:9px;top:0;bottom:0;width:2px;background:var(--gray-200)}
+.sop-timeline-item{position:relative;padding-bottom:18px}
+.sop-timeline-item::before{content:'';position:absolute;left:-23px;top:5px;width:10px;height:10px;border-radius:50%;background:var(--primary);border:2px solid #fff;box-shadow:0 0 0 2px var(--primary)}
+.sop-timeline-item.optimized::before{background:var(--success);box-shadow:0 0 0 2px var(--success)}
+.sop-timeline-date{font-size:11px;color:var(--gray-400)}
+.sop-timeline-content{font-size:13px;color:var(--gray-700);margin-top:2px}
+.sop-timeline-content strong{color:var(--gray-900)}
+.sop-training-progress{display:flex;flex-direction:column;gap:8px}
+.sop-training-item{display:flex;align-items:center;gap:12px;padding:12px 16px;background:#fff;border:1px solid var(--gray-200);border-radius:var(--radius-sm);font-size:13px;color:var(--gray-600)}
+.sop-training-item.done{background:var(--success-bg);color:var(--success)}
+.sop-training-item.current{background:var(--primary-bg);color:var(--primary);font-weight:600}
+.sop-training-icon{font-size:18px;flex-shrink:0;width:24px;text-align:center}
+.sop-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.sop-form-grid .full{grid-column:1/-1}
+.sop-form-field{display:flex;flex-direction:column;gap:5px}
+.sop-form-field label{font-size:13px;font-weight:600;color:var(--gray-700)}
+.sop-form-field label .req{color:var(--danger);margin-left:2px}
+.sop-form-field input,.sop-form-field select,.sop-form-field textarea{padding:9px 12px;border:1px solid var(--gray-300);border-radius:var(--radius-sm);font-size:13px;background:#fff;color:var(--gray-800);font-family:inherit;transition:border-color var(--transition)}
+.sop-form-field input:focus,.sop-form-field select:focus,.sop-form-field textarea:focus{border-color:var(--primary);outline:none;box-shadow:0 0 0 3px rgba(37,99,235,0.1)}
+.sop-form-field textarea{resize:vertical;min-height:70px}
+.sop-feedback-card{background:#fff;border:1px solid var(--gray-200);border-radius:var(--radius-sm);padding:14px 18px;margin-bottom:8px}
+.sop-feedback-header{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.sop-feedback-module{font-size:12px;color:var(--gray-500)}
+.sop-feedback-prio{padding:2px 10px;border-radius:10px;font-size:11px;font-weight:700}
+.sop-feedback-prio.high{background:var(--danger-bg);color:var(--danger)}
+.sop-feedback-prio.mid{background:var(--warning-bg);color:var(--warning)}
+.sop-feedback-prio.low{background:var(--gray-100);color:var(--gray-600)}
+.sop-feedback-desc{font-size:13px;color:var(--gray-700);margin-top:6px}
+.sop-feedback-status{font-size:11px;padding:2px 10px;border-radius:10px}
+.sop-feedback-status.adopted{background:var(--success-bg);color:var(--success)}
+.sop-feedback-status.evaluating{background:var(--warning-bg);color:var(--warning)}
+.sop-feedback-status.new{background:var(--primary-bg);color:var(--primary)}
+
+/* ── Data Import Preview Modal ── */
+.import-preview-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px}
+.import-preview-overlay.hidden{display:none}
+.import-preview-box{background:#fff;border-radius:var(--radius-lg);width:100%;max-width:850px;max-height:90vh;display:flex;flex-direction:column;box-shadow:var(--shadow-lg)}
+.import-preview-header{padding:20px 24px;border-bottom:1px solid var(--gray-200);display:flex;align-items:center;justify-content:space-between}
+.import-preview-header h3{font-size:18px;font-weight:700;display:flex;align-items:center;gap:8px}
+.import-preview-body{flex:1;overflow-y:auto;padding:20px 24px}
+.import-preview-footer{padding:16px 24px;border-top:1px solid var(--gray-200);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.import-mapping-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--gray-100)}
+.import-mapping-label{font-size:13px;font-weight:600;min-width:100px;color:var(--gray-700)}
+.import-mapping-select{padding:6px 10px;border:1px solid var(--gray-300);border-radius:var(--radius-sm);font-size:13px;background:#fff;min-width:180px}
+.import-mapping-select option.new-cat{color:var(--primary);font-weight:600}
+.import-preview-table{width:100%;border-collapse:collapse;font-size:12px;margin-top:12px}
+.import-preview-table th{background:var(--gray-100);padding:8px 10px;text-align:left;font-weight:600;font-size:11px;color:var(--gray-600);border-bottom:2px solid var(--gray-200);position:sticky;top:0}
+.import-preview-table td{padding:6px 10px;border-bottom:1px solid var(--gray-100);max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.import-preview-count{font-size:12px;color:var(--gray-500);margin-top:8px}
+.import-auto-match-badge{display:inline-flex;align-items:center;gap:4px;padding:2px 10px;border-radius:10px;font-size:11px;font-weight:600}
+.import-auto-match-badge.exact{background:var(--success-bg);color:var(--success)}
+.import-auto-match-badge.partial{background:var(--warning-bg);color:var(--warning)}
+.import-auto-match-badge.none{background:var(--gray-100);color:var(--gray-500)}
+.import-sheets-tabs{display:flex;gap:4px;margin-bottom:12px;flex-wrap:wrap}
+.import-sheet-tab{padding:6px 14px;border:1px solid var(--gray-200);border-radius:var(--radius-sm);font-size:12px;cursor:pointer;background:var(--gray-50);transition:all var(--transition)}
+.import-sheet-tab:hover{background:var(--gray-100)}
+.import-sheet-tab.active{background:var(--primary);color:#fff;border-color:var(--primary);font-weight:600}
+.import-field-mapping-info{font-size:11px;color:var(--gray-500);margin-top:4px;display:flex;align-items:center;gap:6px}
+/* ── Category Edit Modal ── */
+.cat-edit-field-row{display:flex;align-items:center;gap:8px;padding:6px 0}
+.cat-edit-field-row input{flex:1;padding:6px 10px;border:1px solid var(--gray-300);border-radius:var(--radius-sm);font-size:13px}
+.cat-edit-field-row .btn-icon{padding:4px 8px;font-size:14px;cursor:pointer;border-radius:var(--radius-sm);border:1px solid var(--gray-200);background:var(--gray-50)}
+.cat-edit-field-row .btn-icon.delete{color:var(--danger)}
+.cat-edit-field-row .btn-icon.delete:hover{background:var(--danger-bg)}
+/* ── Empty State for modules ── */
+.module-empty-state{text-align:center;padding:40px 20px;color:var(--gray-400);border:2px dashed var(--gray-200);border-radius:var(--radius);margin:16px 0}
+.module-empty-state .empty-icon{font-size:40px;margin-bottom:12px}
+.module-empty-state .empty-title{font-size:15px;font-weight:600;color:var(--gray-600);margin-bottom:8px}
+.module-empty-state .empty-desc{font-size:13px;color:var(--gray-500);margin-bottom:16px}
+.module-empty-state .empty-action{font-size:12px;color:var(--primary);cursor:pointer;text-decoration:underline}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm" type="module"></script>
+<script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
 </head>
 <body>
+<a href="#main-content" class="skip-link">跳转到主内容</a>
 
 <!-- ===== Login Overlay ===== -->
 <div class="login-overlay show" id="login-overlay">
@@ -1399,7 +1675,8 @@ body {
 
 <div class="app-layout">
   <!-- Sidebar -->
-  <aside class="sidebar" id="sidebar">
+  <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
+  <aside class="sidebar" id="sidebar" role="navigation" aria-label="主导航">
     <div class="sidebar-header">
       <div class="sidebar-logo">
         <div class="icon">📦</div>
@@ -1409,42 +1686,61 @@ body {
     <nav class="sidebar-nav">
       <div class="nav-section">
         <div class="nav-section-title">概览</div>
-        <a class="nav-item" href="#dashboard" data-page="dashboard">
+        <a class="nav-item" href="#dashboard" data-page="dashboard" aria-label="工作台仪表盘">
           <span class="nav-icon">📊</span> 工作台仪表盘
         </a>
-        <a class="nav-item" href="#tasks" data-page="tasks">
+        <a class="nav-item" href="#tasks" data-page="tasks" aria-label="今日任务">
           <span class="nav-icon">✅</span> 今日任务
           <span class="badge" id="task-badge">0</span>
         </a>
-        <a class="nav-item" href="#datasource" data-page="datasource">
+        <a class="nav-item" href="#datasource" data-page="datasource" aria-label="数据中心">
           <span class="nav-icon">🗄️</span> 数据中心
         </a>
       </div>
       <div class="nav-section">
         <div class="nav-section-title">运营模块</div>
-        <a class="nav-item" href="#module1" data-page="module1"><span class="nav-icon">🏪</span> 店铺健康监控</a>
-        <a class="nav-item" href="#module2" data-page="module2"><span class="nav-icon">🔍</span> 选品与Listing</a>
-        <a class="nav-item" href="#module3" data-page="module3"><span class="nav-icon">📣</span> 广告与促销</a>
-        <a class="nav-item" href="#module4" data-page="module4"><span class="nav-icon">📦</span> 库存与供应链</a>
-        <a class="nav-item" href="#module5" data-page="module5"><span class="nav-icon">⭐</span> 评价与客服</a>
-        <a class="nav-item" href="#module6" data-page="module6"><span class="nav-icon">🔎</span> 竞品调研</a>
-        <a class="nav-item" href="#module7" data-page="module7"><span class="nav-icon">📈</span> 数据复盘</a>
+        <a class="nav-item" href="#module1" data-page="module1" aria-label="店铺健康监控"><span class="nav-icon">🏪</span> 店铺健康监控</a>
+        <a class="nav-item" href="#module2" data-page="module2" aria-label="选品与Listing"><span class="nav-icon">🔍</span> 选品与Listing</a>
+        <a class="nav-item" href="#module3" data-page="module3" aria-label="广告与促销"><span class="nav-icon">📣</span> 广告与促销</a>
+        <a class="nav-item" href="#module4" data-page="module4" aria-label="库存与供应链"><span class="nav-icon">📦</span> 库存与供应链</a>
+        <a class="nav-item" href="#module5" data-page="module5" aria-label="评价与客服"><span class="nav-icon">⭐</span> 评价与客服</a>
+        <a class="nav-item" href="#module6" data-page="module6" aria-label="竞品调研"><span class="nav-icon">🔎</span> 竞品调研</a>
+        <a class="nav-item" href="#module7" data-page="module7" aria-label="数据复盘"><span class="nav-icon">📈</span> 数据复盘</a>
       </div>
       <div class="nav-section">
         <div class="nav-section-title">工具</div>
-        <a class="nav-item" href="#sop-viewer" data-page="sop-viewer"><span class="nav-icon">📋</span> SOP 完整视图</a>
-        <a class="nav-item" href="#reports" data-page="reports"><span class="nav-icon">📄</span> 报告生成</a>
+        <a class="nav-item" href="#sop-viewer" data-page="sop-viewer" aria-label="SOP完整视图"><span class="nav-icon">📋</span> SOP 完整视图</a>
+        <a class="nav-item" href="#reports" data-page="reports" aria-label="报告生成"><span class="nav-icon">📄</span> 报告生成</a>
       </div>
+    
+      <div class="nav-section">
+        <div class="nav-section-title">日志</div>
+        <a class="nav-item" href="#op-log" data-page="op-log" aria-label="操作日志"><span class="nav-icon">📜</span> 操作日志</a>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-title">SOP 体系</div>
+        <a class="nav-item" href="#sop-versions" data-page="sop-versions" aria-label="SOP版本管理"><span class="nav-icon">📋</span> SOP 版本管理</a>
+        <a class="nav-item" href="#sop-library" data-page="sop-library" aria-label="SOP资料库"><span class="nav-icon">📂</span> SOP 资料库</a>
+        <a class="nav-item" href="#sop-iterations" data-page="sop-iterations" aria-label="SOP迭代优化"><span class="nav-icon">🔄</span> SOP 迭代优化</a>
+      </div>
+
     </nav>
     <div class="sidebar-footer">
       <div style="margin-bottom:6px;">🟢 Mano 运营工作台 v1.0.0</div>
+      <div style="margin-bottom:6px;cursor:pointer;" onclick="DataService.setSource(DataService.getSource()==='local'?'mock':'local')">
+        <span class="ds-source-indicator local">💾 本地</span>
+      </div>
+      <div style="margin-bottom:4px;font-size:10px;color:var(--gray-500);cursor:pointer;" 
+           onclick="ModuleRegistry.exportDependencyCSV()" title="Ctrl+Shift+M 查看模块依赖图 · 点击导出 CSV">
+        🧩 <span id="mr-mod-count">15</span>模块 · 5层架构
+      </div>
       <a class="nav-item" style="font-size:12px;padding:8px 0;" onclick="navigateTo('dashboard');DataManager.openModal();return false;" href="javascript:void(0)"><span class="nav-icon">💾</span> 数据管理</a>
     </div>
   </aside>
 
   <!-- Main Content -->
-  <main class="main-content" id="main-content">
-    <header class="topbar">
+  <main class="main-content" id="main-content" role="main">
+    <header class="topbar" role="banner">
       <div class="topbar-left">
         <button class="btn btn-outline btn-sm" id="menu-toggle" style="display:none;">☰</button>
         <div>
@@ -1472,6 +1768,7 @@ body {
         <button class="tab-btn" data-dtab="alerts">🔔 预警中心<span class="wr-tab-badge" id="wr-alert-tab-badge" style="display:none;">0</span></button>
         <button class="tab-btn" data-dtab="push">📨 推送设置</button>
         <button class="tab-btn" data-dtab="history">🗂️ 历史周报</button>
+        <button class="tab-btn" data-dtab="panorama">🏗️ 全景图</button>
       </div>
 
       <!-- ===== Tab: 周报看板 ===== -->
@@ -1486,6 +1783,7 @@ body {
             <button class="btn btn-outline btn-sm" onclick="weeklyReport.previewReport()">📄 预览周报</button>
             <button class="btn btn-outline btn-sm" onclick="weeklyReport.exportPDF()">🖨️ 导出PDF</button>
             <button class="btn btn-outline btn-sm" onclick="weeklyReport.shareReport()">🔗 分享</button>
+            <button class="btn btn-outline btn-sm" onclick="exportToPDF('dtab-weekly','Mano周报看板')">📥 导出 PDF</button>
           </div>
         </div>
 
@@ -1644,6 +1942,7 @@ body {
           <div class="card-header">
             <span class="card-title">📋 预警处理列表</span>
             <div style="display:flex;gap:8px;align-items:center;">
+              <button class="btn btn-outline btn-sm" id="wr-alert-export-btn" onclick="const rows=[['级别','标题','模块','状态']]; document.querySelectorAll('.wr-alert-item').forEach(el=>{rows.push([el.querySelector('.wr-lv-badge')?.textContent||'',el.querySelector('.wr-alert-title')?.textContent||'',el.querySelector('.wr-alert-meta span:first-child')?.textContent||'',el.querySelector('.wr-status-badge')?.textContent||''])}); exportToExcel(rows,'预警清单导出')">📥 导出 Excel</button>
               <select class="filter-select" id="wr-alert-filter-status" onchange="weeklyReport.renderAlertCenter()">
                 <option value="all">全部状态</option>
                 <option value="open">未处理</option>
@@ -1761,6 +2060,28 @@ body {
       </div>
     </div>
 
+    
+      <div class="dtab-panel" id="dtab-panorama"><div class="pano-wrap"><div class="pano-flow">
+<div class="pano-node" data-module="module6" onmouseenter="PanoManager.highlight('module6')" onmouseleave="PanoManager.clearHighlight()" onclick="Router.navigate('module6')"><div class="pano-node-box m6"><div class="pano-node-icon">🔎</div><div class="pano-node-label">竞品调研</div><div class="pano-node-sub">模块六 · 竞品变化/市场机会</div></div></div>
+<div class="pano-connector"><div class="pano-arrow-down flow-data" style="position:relative;"><span class="pano-label data">数据流</span></div></div>
+<div class="pano-node" data-module="module2" onmouseenter="PanoManager.highlight('module2')" onmouseleave="PanoManager.clearHighlight()" onclick="Router.navigate('module2')"><div class="pano-node-box m2"><div class="pano-node-icon">🔍</div><div class="pano-node-label">选品与Listing优化</div><div class="pano-node-sub">模块二 · 选品打分/关键词/Listing撰写</div></div></div>
+<div class="pano-connector"><div class="pano-arrow-down flow-data" style="position:relative;"><span class="pano-label data">新品上架</span></div></div>
+<div class="pano-node" data-module="module3" onmouseenter="PanoManager.highlight('module3')" onmouseleave="PanoManager.clearHighlight()" onclick="Router.navigate('module3')"><div class="pano-node-box m3"><div class="pano-node-icon">📣</div><div class="pano-node-label">广告与促销管理</div><div class="pano-node-sub">模块三 · 广告SOP/促销活动/复盘</div></div></div>
+<div class="pano-connector"><div class="pano-arrow-down flow-data" style="position:relative;"><span class="pano-label data">流量/订单/广告数据</span></div></div>
+<div class="pano-node" data-module="module1" onmouseenter="PanoManager.highlight('module1')" onmouseleave="PanoManager.clearHighlight()" onclick="Router.navigate('module1')"><div class="pano-node-box m1" style="border-width:3px;min-width:180px;"><div class="pano-node-icon">🏪</div><div class="pano-node-label">店铺健康与数据监控</div><div class="pano-node-sub">模块一 · 核心数据中枢</div></div></div>
+<div class="pano-connector"><div class="pano-arrow-down flow-alert" style="position:relative;"><span class="pano-label alert">异常预警/数据发现</span></div></div>
+<div class="pano-branch-row"><div class="pano-split-lines"><div class="pano-split-col"><div class="pano-split-down"></div><div class="pano-branch-node" onclick="Router.navigate('module2')"><div class="pano-branch-box">🔍 选品优化<br><span style="font-size:10px;color:var(--gray-400);">模块二</span></div></div></div><div class="pano-split-col"><div class="pano-split-down"></div><div class="pano-branch-node" onclick="Router.navigate('module3')"><div class="pano-branch-box">📣 广告调整<br><span style="font-size:10px;color:var(--gray-400);">模块三</span></div></div></div><div class="pano-split-col"><div class="pano-split-down"></div><div class="pano-branch-node" onclick="Router.navigate('module4')"><div class="pano-branch-box">📦 库存调整<br><span style="font-size:10px;color:var(--gray-400);">模块四</span></div></div></div></div></div>
+<div class="pano-branch-row" style="margin-top:4px;"><div class="pano-merge-lines"><div class="pano-merge-down"></div><div class="pano-merge-down"></div><div class="pano-merge-down"></div></div></div>
+<div class="pano-connector"><div class="pano-arrow-down flow-strategy" style="position:relative;"><span class="pano-label strategy">策略闭环</span></div></div>
+<div class="pano-node" data-module="module4" onmouseenter="PanoManager.highlight('module4')" onmouseleave="PanoManager.clearHighlight()" onclick="Router.navigate('module4')"><div class="pano-node-box m4"><div class="pano-node-icon">📦</div><div class="pano-node-label">库存与供应链协同</div><div class="pano-node-sub">模块四 · 补货计算/库存预警</div></div></div>
+<div class="pano-connector"><div class="pano-arrow-down flow-data" style="position:relative;"><span class="pano-label data">库存状态/订单履约</span></div></div>
+<div class="pano-node" data-module="module5" onmouseenter="PanoManager.highlight('module5')" onmouseleave="PanoManager.clearHighlight()" onclick="Router.navigate('module5')"><div class="pano-node-box m5"><div class="pano-node-icon">⭐</div><div class="pano-node-label">客户评价与差评管理</div><div class="pano-node-sub">模块五 · 评价监控/差评回复/话术模板</div></div></div>
+<div class="pano-connector"><div class="pano-arrow-down flow-feedback" style="position:relative;"><span class="pano-label feedback">客户反馈</span></div></div>
+<div class="pano-node" data-module="module7" onmouseenter="PanoManager.highlight('module7')" onmouseleave="PanoManager.clearHighlight()" onclick="Router.navigate('module7')"><div class="pano-node-box m7"><div class="pano-node-icon">📈</div><div class="pano-node-label">销售数据分析与策略调整</div><div class="pano-node-sub">模块七 · 销售复盘/报告生成/策略输出</div></div></div>
+<div class="pano-loop-arrow"><div class="pano-loop-line"></div><span style="color:#7c3aed;font-weight:600;">策略输出 → 回到竞品调研/选品优化（闭环）</span><div class="pano-loop-line"></div></div>
+</div><div class="pano-legend"><div class="pano-legend-item"><span class="pano-legend-line data"></span> 数据流</div><div class="pano-legend-item"><span class="pano-legend-line alert"></span> 异常触发</div><div class="pano-legend-item"><span class="pano-legend-line strategy"></span> 策略闭环</div><div class="pano-legend-item"><span class="pano-legend-line feedback"></span> 客户反馈</div></div></div></div>
+
+
     <!-- ===== Modal: 预警处理 ===== -->
     <div class="modal-overlay" id="wr-alert-modal">
       <div class="modal">
@@ -1820,6 +2141,7 @@ body {
             <span class="report-tip-trigger">?<span class="report-tip-content">存储与管理运营报表：销售/流量/广告/库存等</span></span>
           </div>
           <div style="display:flex;gap:8px;">
+            <button class="btn btn-outline btn-sm" onclick="DataService.setSource('local'); const ds=DataService.getAll('datasource'); const rows=[['类目','指标','值']]; for(const[k,v]of Object.entries(ds||{})){ if(v.data) v.data.forEach(r=>rows.push([k,...r.slice(0,2)])) } exportToExcel(rows,'数据中心导出','数据中心')">📥 导出 Excel</button>
             <button class="btn btn-primary btn-sm" onclick="reportShowAddForm()">+ 新增报表</button>
           </div>
         </div>
@@ -1872,15 +2194,15 @@ body {
         <div class="card-body">
           <div class="alert alert-info">
             💡 <strong>数据中心说明：</strong>所有运营相关数据统一在此管理。各模块（仪表盘/库存/广告等）会自动引用此处的数据。修改数据后，切换到对应模块即可看到更新。<br>
-            📌 支持直接点击单元格编辑、拖拽上传 CSV/JSON 文件批量导入、类目折叠展开。
+            📌 支持直接点击单元格编辑、拖拽上传 XLSX/CSV/JSON 文件批量导入（自动识别数据类型并映射）、类目折叠展开。
           </div>
 
           <!-- Import zone -->
           <div class="import-zone" id="import-zone">
             <div style="font-size:32px;margin-bottom:8px;">📂</div>
             <div style="font-weight:600;margin-bottom:4px;">拖拽文件到此处或点击上传</div>
-            <div style="font-size:12px;color:var(--gray-500);">支持 .csv / .json / .xlsx 格式</div>
-            <input type="file" id="import-file-input" style="display:none;" accept=".csv,.json,.xlsx" multiple>
+            <div style="font-size:12px;color:var(--gray-500);">支持 .xlsx / .xls / .csv / .json 格式（自动识别并映射到对应类目）</div>
+            <input type="file" id="import-file-input" style="display:none;" accept=".csv,.json,.xlsx,.xls" multiple>
           </div>
 
           <!-- Data categories -->
@@ -2865,6 +3187,7 @@ body {
             </div>
             <div class="workbench-steps" id="wb-steps"></div>
             <div class="workbench-actions">
+              <button class="btn btn-outline btn-sm" onclick="const rows=[['SKU','产品','库存','状态']]; document.querySelectorAll('#page-module4 .task-table tbody tr').forEach(tr=>{const tds=tr.querySelectorAll('td'); if(tds.length>=4)rows.push([tds[0]?.textContent||'',tds[1]?.textContent||'',tds[2]?.textContent||'',tds[3]?.textContent||''])}); exportToExcel(rows,'库存数据导出')">📥 导出 Excel</button>
               <button class="btn btn-outline btn-sm" onclick="wbNewProject()">🔄 新建项目</button>
               <button class="btn btn-outline btn-sm" onclick="wbToggleFileTree()">📁 查看贴标文件结构</button>
               <button class="btn btn-primary btn-sm" onclick="wbExportZip()">📤 导出完整文件包</button>
@@ -3581,7 +3904,47 @@ body {
         </div>
       </div>
     </div>
-    </div><!-- /page-content -->
+    </div>
+    <!-- ============ PAGE: SOP 版本管理 ============ -->
+    <div class="page" id="page-sop-versions">
+      <div class="sop-version-stats" id="sop-version-stats">
+        <div class="sop-vstat-card"><div class="sop-vstat-num" id="sv-total">0</div><div class="sop-vstat-label">总变更数</div></div>
+        <div class="sop-vstat-card accent"><div class="sop-vstat-num" id="sv-monthly">0</div><div class="sop-vstat-label">本月变更</div></div>
+        <div class="sop-vstat-card warn"><div class="sop-vstat-num" id="sv-pending">0</div><div class="sop-vstat-label">待审批变更</div></div>
+        <div class="sop-vstat-card"><div class="sop-vstat-num">7</div><div class="sop-vstat-label">覆盖模块</div></div>
+      </div>
+      <div class="card"><div class="card-header"><span class="card-title">版本记录</span><div style="display:flex;gap:8px;"><button class="btn btn-outline btn-sm" onclick="SOPVersionManager.exportLog()">导出变更日志</button><button class="btn btn-primary btn-sm" onclick="SOPVersionManager.openAddModal()">+ 记录变更</button></div></div>
+      <div class="card-body"><div class="sop-version-filter"><select class="filter-select" id="sv-module-filter" onchange="SOPVersionManager.render()"><option value="all">全部模块</option><option>模块一：店铺健康与数据监控</option><option>模块二：选品与Listing优化</option><option>模块三：广告与促销管理</option><option>模块四：库存与供应链协同</option><option>模块五：客户评价与差评管理</option><option>模块六：竞品与市场调研</option><option>模块七：销售数据分析与策略调整</option></select><select class="filter-select" id="sv-status-filter" onchange="SOPVersionManager.render()"><option value="all">全部状态</option><option value="draft">草稿</option><option value="pending">待审批</option><option value="published">已发布</option><option value="rolledback">已回滚</option></select></div><div class="sop-version-list" id="sv-list"></div></div></div>
+      <div class="modal-overlay" id="sv-add-modal"><div class="modal" style="max-width:650px;"><div class="modal-header"><h3>记录 SOP 变更</h3><button class="modal-close" onclick="SOPVersionManager.closeAddModal()">✕</button></div><div class="modal-body"><div class="sop-form-grid"><div class="sop-form-field"><label>所属模块 <span class="req">*</span></label><select id="sv-form-module" required aria-required="true"><option value="">请选择</option><option>模块一：店铺健康与数据监控</option><option>模块二：选品与Listing优化</option><option>模块三：广告与促销管理</option><option>模块四：库存与供应链协同</option><option>模块五：客户评价与差评管理</option><option>模块六：竞品与市场调研</option><option>模块七：销售数据分析与策略调整</option></select></div><div class="sop-form-field"><label>SOP名称 <span class="req">*</span></label><input type="text" id="sv-form-sopname" placeholder="如：店铺健康数据监控SOP" required aria-required="true"></div><div class="sop-form-field"><label>变更版本号 <span class="req">*</span></label><input type="text" id="sv-form-version" placeholder="如 v2.3（留空自动生成）" required aria-required="true"></div><div class="sop-form-field"><label>变更日期 <span class="req">*</span></label><input type="date" id="sv-form-date" required aria-required="true"></div><div class="sop-form-field"><label>负责人 <span class="req">*</span></label><input type="text" id="sv-form-responsible" placeholder="如：运营负责人" required aria-required="true"></div><div class="sop-form-field"><label>审批人</label><input type="text" id="sv-form-approver" placeholder="如：团队负责人"></div><div class="sop-form-field full"><label>变更内容 <span class="req">*</span></label><textarea id="sv-form-content" placeholder="具体修改了什么内容..." required aria-required="true"></textarea></div><div class="sop-form-field full"><label>变更原因 <span class="req">*</span></label><textarea id="sv-form-reason" placeholder="为什么需要做这个变更..." required aria-required="true"></textarea></div><div class="sop-form-field full"><label>影响范围</label><input type="text" id="sv-form-impact" placeholder="如：模块一·预警规则配置"></div><div class="sop-form-field"><label>变更状态</label><select id="sv-form-status"><option value="draft">草稿</option><option value="pending">待审批</option><option value="published">已发布</option></select></div></div></div><div class="modal-footer"><button class="btn btn-outline" onclick="SOPVersionManager.closeAddModal()">取消</button><button class="btn btn-primary" onclick="SOPVersionManager.saveChange()">保存变更</button></div></div></div>
+    </div>
+    <!-- ============ PAGE: SOP 资料库 ============ -->
+    <div class="page" id="page-sop-library">
+      <div class="sop-lib-layout"><div class="sop-lib-sidebar"><div style="font-size:14px;font-weight:700;color:var(--gray-800);margin-bottom:12px;">资料库目录</div><ul class="sop-lib-tree" id="sop-lib-tree"></ul><div style="margin-top:16px;padding-top:12px;border-top:1px solid var(--gray-100);"><button class="btn btn-outline btn-sm" style="width:100%;" onclick="SOPLibrary._uploadTrigger()">上传文档</button><input type="file" id="sop-lib-file-input" style="display:none;" accept=".docx,.xlsx,.pdf,.png,.jpg" multiple onchange="SOPLibrary._handleFileUpload(this.files)"></div></div><div class="sop-lib-main"><div class="sop-lib-toolbar"><input type="text" class="filter-input sop-lib-search" id="sop-lib-search" placeholder="搜索文档名称..." oninput="SOPLibrary.render()"><select class="filter-select" id="sop-lib-type-filter" onchange="SOPLibrary.render()"><option value="all">全部类型</option><option value=".docx">.docx 文档</option><option value=".xlsx">.xlsx 表格</option><option value=".pdf">.pdf 报告</option><option value=".png">图片截图</option></select></div><div style="font-size:13px;color:var(--gray-500);margin-bottom:10px;" id="sop-lib-breadcrumb">全部文档</div><div class="sop-doc-list" id="sop-lib-list"></div><div id="sop-lib-empty" class="report-empty" style="display:none;"><div class="report-empty-icon">📁</div><div class="report-empty-title">该目录下暂无文档</div><div class="report-empty-desc">点击左侧"上传文档"添加第一个文件</div></div></div></div>
+    </div>
+    <!-- ============ PAGE: SOP 迭代优化看板 ============ -->
+    <div class="page" id="page-sop-iterations">
+      <div class="sop-iter-stats" id="sop-iter-stats"><div class="sop-iter-stat"><div class="num" id="si-review-count">0</div><div class="lbl">本月回顾次数</div></div><div class="sop-iter-stat"><div class="num" id="si-feedback-count">0</div><div class="lbl">收集反馈数</div></div><div class="sop-iter-stat" style="border-color:#fcd34d;background:#fffbeb;"><div class="num" style="color:var(--warning);" id="si-pending-count">0</div><div class="lbl">待优化项</div></div><div class="sop-iter-stat" style="border-color:#a7f3d0;background:#ecfdf5;"><div class="num" style="color:var(--success);" id="si-done-count">0</div><div class="lbl">已优化项</div></div></div>
+      <div class="sop-iter-grid"><div><div class="sop-iter-plan"><h4>本月回顾计划</h4><div class="sop-iter-plan-row"><span class="sop-iter-plan-label">下次回顾：</span><span id="si-next-review" style="font-weight:600;">2026-08-01（下周一）</span></div><div class="sop-iter-plan-row"><span class="sop-iter-plan-label">回顾内容：</span>各模块SOP执行情况评估、反馈收集、优化项确认</div><div class="sop-iter-plan-row"><span class="sop-iter-plan-label">参与人员：</span>运营团队全体</div><div style="margin-top:12px;display:flex;gap:8px;"><button class="btn btn-primary btn-sm" onclick="SOPIterationBoard.startReview()">开始回顾</button><button class="btn btn-outline btn-sm" onclick="SOPIterationBoard.editPlan()">编辑计划</button></div></div><div class="card" style="margin-top:20px;"><div class="card-header"><span class="card-title">待优化项</span><button class="btn btn-outline btn-sm" onclick="SOPIterationBoard.openFeedbackModal()">+ 提交反馈</button></div><div class="card-body"><div class="sop-iter-list" id="si-iteration-list"></div><div id="si-iter-empty" class="report-empty" style="display:none;"><div class="report-empty-icon">🎉</div><div class="report-empty-title">暂无待优化项</div></div></div></div></div><div><div class="card"><div class="card-header"><span class="card-title">最近反馈</span></div><div class="card-body"><div id="si-feedback-list"></div><div id="si-fb-empty" class="report-empty" style="display:none;"><div class="report-empty-icon">📭</div><div class="report-empty-title">暂无反馈记录</div></div></div></div><div class="card" style="margin-top:20px;"><div class="card-header"><span class="card-title">优化历史</span></div><div class="card-body"><div class="sop-timeline" id="si-timeline"></div></div></div><div class="card" style="margin-top:20px;"><div class="card-header"><span class="card-title">SOP 培训中心</span></div><div class="card-body"><div style="font-size:13px;color:var(--gray-600);margin-bottom:12px;">欢迎加入 Mano 运营团队！请按顺序完成以下 SOP 学习：</div><div class="sop-training-progress" id="si-training-progress"></div><div style="margin-top:12px;font-size:12px;color:var(--gray-500);">学习进度：<strong id="si-training-done">0</strong>/7 模块已完成 ｜ 预估完成时间：2.5 小时</div><div style="margin-top:8px;display:flex;gap:8px;"><button class="btn btn-primary btn-sm" onclick="SOPIterationBoard.continueTraining()">继续学习</button><button class="btn btn-outline btn-sm" onclick="showToast('培训资料下载已触发')">下载资料</button></div></div></div></div></div>
+      <div class="modal-overlay" id="si-feedback-modal"><div class="modal" style="max-width:600px;"><div class="modal-header"><h3>提交 SOP 反馈</h3><button class="modal-close" onclick="SOPIterationBoard.closeFeedbackModal()">✕</button></div><div class="modal-body"><div class="sop-form-grid"><div class="sop-form-field"><label>反馈人 <span class="req">*</span></label><input type="text" id="si-fb-author" readonly style="background:var(--gray-50);"></div><div class="sop-form-field"><label>所属模块 <span class="req">*</span></label><select id="si-fb-module" required aria-required="true"><option value="">请选择</option><option>模块一：店铺健康与数据监控</option><option>模块二：选品与Listing优化</option><option>模块三：广告与促销管理</option><option>模块四：库存与供应链协同</option><option>模块五：客户评价与差评管理</option><option>模块六：竞品与市场调研</option><option>模块七：销售数据分析与策略调整</option></select></div><div class="sop-form-field"><label>反馈类型 <span class="req">*</span></label><select id="si-fb-type" required aria-required="true"><option value="">请选择</option><option>流程优化建议</option><option>流程痛点</option><option>新增需求</option><option>删除需求</option></select></div><div class="sop-form-field"><label>紧急程度 <span class="req">*</span></label><select id="si-fb-priority" required aria-required="true"><option value="high">高</option><option value="mid" selected>中</option><option value="low">低</option></select></div><div class="sop-form-field full"><label>问题描述 <span class="req">*</span></label><textarea id="si-fb-desc" placeholder="具体描述遇到的问题或改进建议..." required aria-required="true"></textarea></div><div class="sop-form-field full"><label>改进建议</label><textarea id="si-fb-suggestion" placeholder="你建议如何改进..."></textarea></div></div></div><div class="modal-footer"><button class="btn btn-outline" onclick="SOPIterationBoard.closeFeedbackModal()">取消</button><button class="btn btn-primary" onclick="SOPIterationBoard.submitFeedback()">提交反馈</button></div></div></div>
+    </div>
+    <!-- ============ PAGE: 操作日志 ============ -->
+    <div class="page" id="page-op-log">
+      <div class="op-log-toolbar" style="margin-bottom:16px;">
+        <div class="flex-between flex-wrap gap-3" style="margin-bottom:12px;">
+          <div class="flex-wrap gap-2">
+            <select class="filter-select" id="op-log-action-filter" onchange="OperationLog.render('op-log-list')"><option value="all">全部操作类型</option></select>
+            <select class="filter-select" id="op-log-module-filter" onchange="OperationLog.render('op-log-list')"><option value="all">全部模块</option></select>
+            <input type="date" class="filter-select" id="op-log-date-from" onchange="OperationLog.render('op-log-list')" title="开始日期">
+            <input type="date" class="filter-select" id="op-log-date-to" onchange="OperationLog.render('op-log-list')" title="结束日期">
+            <input type="text" class="filter-input" id="op-log-search" placeholder="搜索操作记录..." oninput="OperationLog.render('op-log-list')" style="min-width:180px;">
+          </div>
+          <button class="btn btn-outline btn-sm" onclick="OperationLog.exportCSV()">📥 导出 CSV</button>
+        </div>
+      </div>
+      <div id="op-log-stats" style="margin-bottom:16px;"></div>
+      <div id="op-log-list"></div>
+    </div>
+<!-- /page-content -->
   </main>
 </div>
 
@@ -3670,11 +4033,183 @@ const PAGE_META = {
   module6:    { title: '🔎 竞品调研',           breadcrumb: '运营模块 / 竞品调研' },
   module7:    { title: '📈 数据复盘',           breadcrumb: '运营模块 / 数据复盘' },
   'sop-viewer': { title: '📋 SOP 完整视图',    breadcrumb: '工具 / SOP 完整视图' },
-  reports:    { title: '📄 报告生成',           breadcrumb: '工具 / 报告生成' }
+  reports:    { title: '📄 报告生成',           breadcrumb: '工具 / 报告生成' },
+  'sop-versions': { title: '📋 SOP 版本管理', breadcrumb: 'SOP 体系 / 版本管理' },
+  'sop-library': { title: '📂 SOP 资料库', breadcrumb: 'SOP 体系 / 资料库' },
+  'sop-iterations': { title: '🔄 SOP 迭代优化', breadcrumb: 'SOP 体系 / 迭代优化' },
+  'op-log': { title: '📜 操作日志', breadcrumb: '日志 / 操作日志' }
 };
 
 const VALID_PAGES = Object.keys(PAGE_META);
 
+// ============================================================
+// 0. MODULE REGISTRY — 模块注册器（指令 8 模块化重构基础设施）
+// ============================================================
+// 架构分层：
+//   core/    — Router, Storage, Toast, ModuleRegistry
+//   services/ — DataService, OperationLog, CloudSync
+//   modules/  — KWLib, ListingWorkbench/ListingTracker, weeklyReport, M5Reviews,
+//               alertRules, M3AdManager, PanoManager, DS/report/replenishment
+//   sop/      — SOPVersionManager, SOPLibrary, SOPIterationBoard
+//   ui/       — DataManager, PatchLog
+//
+// 每个模块：/* @module <name> / @layer <core|services|modules|sop|ui> / @depends <mod,...> */
+// ============================================================
+const ModuleRegistry = {
+  _modules: {},
+  _initOrder: [],
+  _status: {},  // 'registered' | 'initialized' | 'error'
+  _errors: [],
+
+  /** 注册模块 */
+  register(name, config) {
+    this._modules[name] = {
+      name,
+      layer: config.layer || 'modules',
+      depends: config.depends || [],
+      init: config.init || null,
+      render: config.render || null,
+      description: config.description || ''
+    };
+    this._status[name] = 'registered';
+    return this;
+  },
+
+  /** 获取模块 */
+  get(name) { return this._modules[name] || null; },
+
+  /** 拓扑排序初始化 */
+  async initAll() {
+    const order = this._topoSort();
+    this._initOrder = order;
+    for (const name of order) {
+      const mod = this._modules[name];
+      if (!mod || !mod.init) continue;
+      try {
+        if (typeof showToast === 'function') showToast(`初始化模块：${name}`, 'info');
+        mod.init();
+        this._status[name] = 'initialized';
+      } catch(e) {
+        this._status[name] = 'error';
+        this._errors.push({ module: name, error: e.message });
+        console.error(`ModuleRegistry: ${name} init failed —`, e);
+      }
+    }
+    if (this._errors.length > 0) {
+      console.warn(`ModuleRegistry: ${this._errors.length} module(s) failed to init`);
+    }
+    return this;
+  },
+
+  /** 渲染指定模块 */
+  render(name) {
+    const mod = this._modules[name];
+    if (mod && mod.render) mod.render();
+  },
+
+  /** 渲染所有已注册模块 */
+  renderAll() {
+    for (const name of this._initOrder) {
+      const mod = this._modules[name];
+      if (mod && mod.render) {
+        try { mod.render(); } catch(e) { console.error(`ModuleRegistry: ${name} render failed —`, e); }
+      }
+    }
+  },
+
+  /** 拓扑排序（Kahn 算法） */
+  _topoSort() {
+    const inDegree = {};
+    const adj = {};
+    for (const name of Object.keys(this._modules)) {
+      inDegree[name] = 0;
+      adj[name] = [];
+    }
+    for (const [name, mod] of Object.entries(this._modules)) {
+      for (const dep of mod.depends) {
+        if (this._modules[dep]) {
+          adj[dep].push(name);
+          inDegree[name] = (inDegree[name] || 0) + 1;
+        }
+      }
+    }
+    const queue = Object.keys(inDegree).filter(n => inDegree[n] === 0);
+    const sorted = [];
+    while (queue.length > 0) {
+      const n = queue.shift();
+      sorted.push(n);
+      for (const m of (adj[n] || [])) {
+        inDegree[m]--;
+        if (inDegree[m] === 0) queue.push(m);
+      }
+    }
+    // Append any remaining (circular deps)
+    for (const name of Object.keys(this._modules)) {
+      if (!sorted.includes(name)) sorted.push(name);
+    }
+    return sorted;
+  },
+
+  /** 获取模块依赖图（用于调试/文档） */
+  getDependencyGraph() {
+    const graph = {};
+    for (const [name, mod] of Object.entries(this._modules)) {
+      graph[name] = {
+        layer: mod.layer,
+        depends: mod.depends,
+        dependents: [],
+        description: mod.description
+      };
+    }
+    for (const [name, deps] of Object.entries(graph)) {
+      for (const dep of deps.depends) {
+        if (graph[dep]) graph[dep].dependents.push(name);
+      }
+    }
+    return graph;
+  },
+
+  /** 统计 */
+  stats() {
+    const byLayer = {};
+    for (const mod of Object.values(this._modules)) {
+      byLayer[mod.layer] = (byLayer[mod.layer] || 0) + 1;
+    }
+    return { total: Object.keys(this._modules).length, byLayer, initOrder: this._initOrder, errors: this._errors };
+  },
+
+  /** 导出依赖图 CSV */
+  exportDependencyCSV() {
+    const graph = this.getDependencyGraph();
+    const rows = [['模块','层级','依赖数','被依赖数','依赖列表','被依赖列表','描述']];
+    for (const [name, g] of Object.entries(graph)) {
+      rows.push([name, g.layer, g.depends.length, g.dependents.length, g.depends.join(';'), g.dependents.join(';'), g.description]);
+    }
+    if (typeof exportToExcel === 'function') exportToExcel(rows, '模块依赖图');
+    else if (typeof showToast === 'function') showToast('exportToExcel 未就绪', 'warning');
+  }
+};
+
+// ============================================================
+// 模块注册（在模块定义前完成注册，init 钩子在 DOMContentLoaded 中触发）
+// ============================================================
+ModuleRegistry.register('Router',       { layer:'core',     depends:[],  description:'Hash路由与页面切换' });
+ModuleRegistry.register('DataService',  { layer:'services', depends:['Router'], description:'统一数据服务层（mock/local/api）' });
+ModuleRegistry.register('OperationLog', { layer:'services', depends:['Router'], description:'全局操作日志与审计追溯' });
+ModuleRegistry.register('DataManager',  { layer:'ui',       depends:['DataService','Router'], description:'数据备份/恢复/导入导出' });
+ModuleRegistry.register('CloudSync',    { layer:'services', depends:['DataService','Router'], description:'云端数据同步' });
+ModuleRegistry.register('weeklyReport', { layer:'modules',  depends:['DataService'], description:'周报看板与图表渲染' });
+ModuleRegistry.register('KWLib',        { layer:'modules',  depends:['DataService'], description:'关键词词库管理' });
+ModuleRegistry.register('ListingWorkbench', { layer:'modules', depends:['KWLib'], description:'Listing撰写工作台' });
+ModuleRegistry.register('ListingTracker',   { layer:'modules', depends:['ListingWorkbench'], description:'Listing优化效果追踪' });
+ModuleRegistry.register('M5Reviews',    { layer:'modules',  depends:['DataService'], description:'客户评价与差评管理' });
+ModuleRegistry.register('PanoManager',  { layer:'modules',  depends:['Router'], description:'运营工作流全景图' });
+ModuleRegistry.register('SOPVersionManager',{ layer:'sop',  depends:['DataService'], description:'SOP版本管理与变更追踪' });
+ModuleRegistry.register('SOPLibrary',   { layer:'sop',      depends:['DataService'], description:'SOP资料库文档归档' });
+ModuleRegistry.register('SOPIterationBoard',{ layer:'sop',  depends:['DataService','OperationLog'], description:'SOP迭代优化看板' });
+ModuleRegistry.register('PatchLog',     { layer:'ui',       depends:[],  description:'变更日志补丁记录' });
+
+/* @module Router @layer core @depends none — Hash路由与页面切换 */
 const Router = {
   _history: [],
   _current: 'dashboard',
@@ -3710,7 +4245,11 @@ const Router = {
     if (page === 'module5') { renderM5NegReviews(); }
     if (page === 'module6') { renderM6Competitors(); }
     if (page === 'module7') { renderM7Sales(); renderM7Actions(); }
-  },
+
+    if (page === 'sop-versions') { SOPVersionManager.render(); }
+    if (page === 'sop-library') { SOPLibrary.render(); }
+    if (page === 'sop-iterations') { SOPIterationBoard.render(); }
+    if (page === 'op-log') { OperationLog.render('op-log-list'); renderOpLogFilters(); }  },
 
   navigate(page, pushState = true) {
     if (!VALID_PAGES.includes(page)) page = 'dashboard';
@@ -3909,6 +4448,48 @@ function saveDS(ds) {
 
 let DS = loadDS();
 
+// ── 字段映射规则：用于上传文件时自动识别数据类型 ──
+const FIELD_MAPPING_RULES = {
+  '店铺KPI':    { keywords: ['ODR','缺陷率','发货率','退货率','回复率','追踪号','KPI','kpi','指标'] },
+  '广告数据':   { keywords: ['花费','曝光','点击','转化','ACOS','acos','ROAS','roas','广告','campaign','spend','impression','click','ctr','CPC','cpc'] },
+  '库存数据':   { keywords: ['SKU','sku','库存','日均销量','可售天数','在售','inventory','stock','销量'] },
+  '销售数据':   { keywords: ['GMV','gmv','销售额','订单量','客单价','sales','revenue','order'] },
+  '利润数据':   { keywords: ['利润','成本','佣金','物流','退货','margin','profit','净利'] },
+  '竞品监控':   { keywords: ['竞品','concurrent','competitor','评分','review','监控'] },
+  '品类分析':   { keywords: ['品类','占比','category','环比','品类结构','TOP产品'] },
+  '流量来源':   { keywords: ['流量','曝光','点击率','traffic','source','自然搜索','广告流量'] },
+  '差评分析':   { keywords: ['差评','评价','星级','差评类型','review'] },
+  '行动项':     { keywords: ['行动','action','负责人','截止','审批','策略'] },
+  '关键词库':   { keywords: ['关键词','keyword','搜索量','竞争度'] }
+};
+
+function getFieldMappingRules() {
+  try {
+    const saved = localStorage.getItem('mano_field_mapping');
+    return saved ? JSON.parse(saved) : FIELD_MAPPING_RULES;
+  } catch(e) { return FIELD_MAPPING_RULES; }
+}
+
+function saveFieldMappingRules(rules) {
+  localStorage.setItem('mano_field_mapping', JSON.stringify(rules));
+}
+
+function autoDetectCategory(headers, fileName) {
+  const rules = getFieldMappingRules();
+  const headerLower = headers.map(h => h.toLowerCase()).join(' ');
+  const fileNameLower = fileName.toLowerCase();
+  let bestCategory = null, bestScore = 0;
+  for (const [cat, rule] of Object.entries(rules)) {
+    let score = 0;
+    for (const kw of rule.keywords) {
+      if (headerLower.includes(kw.toLowerCase())) score += 3;
+      if (fileNameLower.includes(kw.toLowerCase())) score += 2;
+    }
+    if (score > bestScore) { bestScore = score; bestCategory = cat; }
+  }
+  return { category: bestCategory, score: bestScore, confidence: bestScore >= 6 ? 'exact' : bestScore >= 3 ? 'partial' : 'none' };
+}
+
 function dsGet(category) { return DS[category] || null; }
 
 function dsSet(category, data) {
@@ -3993,6 +4574,89 @@ function dsDeleteCategory(category) {
   showToast('🗑️ 类目已删除');
 }
 
+// ── 类目元数据编辑 ──
+function dsEditCategoryMeta(category) {
+  const cat = DS[category];
+  if (!cat) return;
+  const newLabel = prompt('修改类目名称：', cat.label);
+  if (!newLabel || newLabel === cat.label) return;
+  const oldKey = category;
+  cat.label = newLabel;
+  // 如果类目名变了，需要更新 key
+  if (oldKey !== newLabel) {
+    DS[newLabel] = cat;
+    delete DS[oldKey];
+    // Update field mapping rules if they reference old key
+    try {
+      const rules = getFieldMappingRules();
+      if (rules[oldKey]) { rules[newLabel] = rules[oldKey]; delete rules[oldKey]; saveFieldMappingRules(rules); }
+    } catch(e) {}
+  }
+  saveDS(DS);
+  renderAllDSCategories();
+  refreshAllModuleViews();
+  showToast('✅ 类目已更新：' + newLabel);
+}
+
+// ── 克隆类目 ──
+function dsCloneCategory(category) {
+  const cat = DS[category];
+  if (!cat) return;
+  const newName = prompt('请输入克隆后的类目名称：', cat.label + '（副本）');
+  if (!newName || DS[newName]) { if (DS[newName]) showToast('⚠️ 类目名称已存在'); return; }
+  DS[newName] = {
+    label: newName,
+    icon: cat.icon || '📋',
+    fields: [...cat.fields],
+    data: cat.data.map(r => [...r])
+  };
+  saveDS(DS);
+  renderAllDSCategories();
+  refreshAllModuleViews();
+  showToast('📋 已克隆类目：' + newName);
+}
+
+// ── 字段管理 ──
+function dsAddField(category) {
+  const cat = DS[category];
+  if (!cat) return;
+  const fieldName = prompt('请输入新字段名称：');
+  if (!fieldName) return;
+  if (cat.fields.includes(fieldName)) { showToast('⚠️ 字段名已存在'); return; }
+  cat.fields.push(fieldName);
+  // 为已有数据行添加空值
+  cat.data.forEach(r => r.push(''));
+  saveDS(DS);
+  renderAllDSCategories();
+  showToast('✅ 已添加字段：' + fieldName);
+}
+
+function dsRenameField(category, fieldIndex) {
+  const cat = DS[category];
+  if (!cat || !cat.fields[fieldIndex]) return;
+  const oldName = cat.fields[fieldIndex];
+  const newName = prompt('重命名字段：', oldName);
+  if (!newName || newName === oldName) return;
+  cat.fields[fieldIndex] = newName;
+  saveDS(DS);
+  renderAllDSCategories();
+  refreshAllModuleViews();
+  showToast('✅ 字段已重命名：' + oldName + ' → ' + newName);
+}
+
+function dsDeleteField(category, fieldIndex) {
+  const cat = DS[category];
+  if (!cat || !cat.fields[fieldIndex]) return;
+  const fieldName = cat.fields[fieldIndex];
+  if (!confirm(`确定删除字段"${fieldName}"吗？该字段下的所有数据将丢失，且不可恢复。`)) return;
+  cat.fields.splice(fieldIndex, 1);
+  cat.data.forEach(r => r.splice(fieldIndex, 1));
+  saveDS(DS);
+  renderAllDSCategories();
+  refreshAllModuleViews();
+  showToast('🗑️ 字段已删除：' + fieldName);
+}
+
 function closeDSModal() {
   document.getElementById('ds-modal').classList.remove('show');
 }
@@ -4021,11 +4685,18 @@ function renderAllDSCategories() {
         </div>
         <div style="display:flex;align-items:center;gap:8px;">
           <button class="btn btn-outline btn-sm" onclick="event.stopPropagation();dsAddRecord('${cat}')">+ 添加</button>
+          <button class="btn btn-outline btn-sm" onclick="event.stopPropagation();dsEditCategoryMeta('${cat}')" title="编辑类目名称/图标" style="font-size:11px;">✏️</button>
+          <button class="btn btn-outline btn-sm" onclick="event.stopPropagation();dsCloneCategory('${cat}')" title="克隆类目结构" style="font-size:11px;">📋</button>
           <button class="btn btn-sm btn-danger" onclick="event.stopPropagation();dsDeleteCategory('${cat}')" style="font-size:11px;">🗑️</button>
           <span class="ds-category-arrow">▼</span>
         </div>
       </div>
       <div class="ds-category-body">
+        <div style="display:flex;align-items:center;gap:8px;padding:8px 0;flex-wrap:wrap;">
+          <span style="font-size:11px;color:var(--gray-500);">字段：</span>
+          ${c.fields.map((f, fi) => `<span style="font-size:11px;background:var(--gray-100);padding:2px 8px;border-radius:4px;display:inline-flex;align-items:center;gap:4px;">${escapeHtml(f)}<span style="cursor:pointer;color:var(--gray-400);" onclick="event.stopPropagation();dsRenameField('${cat}',${fi})" title="重命名">✏️</span><span style="cursor:pointer;color:var(--danger);" onclick="event.stopPropagation();dsDeleteField('${cat}',${fi})" title="删除字段">×</span></span>`).join('')}
+          <button class="btn btn-outline btn-sm" onclick="event.stopPropagation();dsAddField('${cat}')" style="font-size:11px;padding:2px 8px;">+ 添加字段</button>
+        </div>
         <div class="ds-table-wrap">
           <table class="ds-table">
             <thead><tr>${c.fields.map(f => `<th>${f}</th>`).join('')}<th style="width:80px;">操作</th></tr></thead>
@@ -4151,6 +4822,14 @@ function renderM1KPI() {
   const tbody = document.querySelector('#m1-kpi-table tbody') || document.getElementById('m1-kpi-table');
   const kpi = dsGet('店铺KPI');
   if (!kpi || !tbody) return;
+  if (!kpi.data || kpi.data.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="5"><div class="module-empty-state">
+      <div class="empty-icon">🏪</div>
+      <div class="empty-title">暂无店铺KPI数据</div>
+      <div class="empty-desc">请前往 <a href="#datasource" style="color:var(--primary);">数据中心</a> 上传店铺KPI报表（CSV/XLSX），或手动添加数据</div>
+    </div></td></tr>`;
+    return;
+  }
   tbody.innerHTML = kpi.data.map(r => `<tr>
     <td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td>
     <td><span class="status-badge ${r[4]==='正常'?'done':'pending'}">${r[4]}</span></td>
@@ -4163,12 +4842,18 @@ function renderM2Keywords() {
   const tbody2 = document.getElementById('m2-comp-table');
   if (tbody2) {
     const comp = dsGet('竞品监控');
-    if (comp) {
+    if (comp && comp.data && comp.data.length > 0) {
       tbody2.innerHTML = '<tr><th>竞品名称</th><th>价格</th><th>评分</th><th>Review数</th><th>近期变化</th><th>监控状态</th></tr>' +
         comp.data.map(r => {
           const sc = r[5] === '稳定' ? 'done' : 'pending';
           return `<tr>${r.map((c,i) => i===5 ? `<td><span class="status-badge ${sc}">${c}</span></td>` : `<td>${c}</td>`).join('')}</tr>`;
         }).join('');
+    } else {
+      tbody2.innerHTML = `<tr><td colspan="6"><div class="module-empty-state">
+        <div class="empty-icon">🔎</div>
+        <div class="empty-title">暂无竞品监控数据</div>
+        <div class="empty-desc">请前往 <a href="#datasource" style="color:var(--primary);">数据中心</a> 上传竞品报表，或手动添加竞品记录</div>
+      </div></td></tr>`;
     }
   }
 }
@@ -4176,6 +4861,7 @@ function renderM2Keywords() {
 // ============================================================
 // 关键词研究工作台 (Keyword Research Workbench)
 // ============================================================
+/* @module KWLib @layer modules @depends DataService — 关键词词库管理 */
 const KWLib = {
   // 内置品牌词库（法语市场常见品牌）
   DEFAULT_BRANDS: ['Seb', 'KitchenAid', "De'Longhi", 'Philips', 'Moulinex', 'Rowenta', 'Bosch', 'Siemens', 'Miele', 'Dyson', 'Krups', 'Magimix', 'Tefal', 'Riviera', 'Bar', 'Arthur Martin', 'Whirlpool', 'Brandt', 'Faure', 'Vedette', 'Essentielb', 'Proline'],
@@ -5033,6 +5719,7 @@ const KWLib = {
 // ============================================================
 // Listing 撰写工作台 (Listing Writing Workbench)
 // ============================================================
+/* @module ListingWorkbench @layer modules @depends KWLib — Listing撰写工作台 */
 const ListingWorkbench = {
   currentStep: 1,
   currentProduct: null,
@@ -5516,6 +6203,7 @@ const ListingWorkbench = {
 // ============================================================
 // 优化效果追踪 (Optimization Tracking)
 // ============================================================
+/* @module ListingTracker @layer modules @depends ListingWorkbench — Listing优化效果追踪 */
 const ListingTracker = {
   init() {
     this._ensureStorage();
@@ -5716,6 +6404,14 @@ function renderM4StatusTable() {
   const tbody = document.getElementById('m4-inv-table');
   const inv = dsGet('库存数据');
   if (!inv || !tbody) return;
+  if (!inv.data || inv.data.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="6"><div class="module-empty-state">
+      <div class="empty-icon">📦</div>
+      <div class="empty-title">暂无库存数据</div>
+      <div class="empty-desc">请前往 <a href="#datasource" style="color:var(--primary);">数据中心</a> 上传库存报表（含 SKU/库存/日均销量 等字段），数据将自动更新到此表格</div>
+    </div></td></tr>`;
+    return;
+  }
   tbody.innerHTML = '<tr><th>SKU</th><th>当前库存</th><th>日均销量</th><th>可售天数</th><th>在途库存</th><th>状态</th></tr>' +
     inv.data.map(r => {
       let statusClass = 'done', statusText = r[4] || '正常';
@@ -6093,6 +6789,7 @@ function updateAlertStatus(alertId, status) {
 // ============================================================
 // Module 5: 客户评价与差评管理 — 完整引擎
 // ============================================================
+/* @module M5Reviews @layer modules @depends DataService — 客户评价与差评管理 */
 const M5Reviews = {
   // -- Data stores --
   _reviews: null,
@@ -6544,11 +7241,11 @@ function renderM6Competitors() {
 
   // Summary stats
   if (summaryEl) {
-    const total = comp.data.length;
-    const direct = comp.data.filter(r => r[1] === '直接竞品').length;
-    const benchmark = comp.data.filter(r => r[1] === '头部标杆').length;
-    const newcomer = comp.data.filter(r => r[1] === '新进入者').length;
-    const attention = comp.data.filter(r => r[6] && r[6].includes('关注')).length;
+    const total = comp.data ? comp.data.length : 0;
+    const direct = comp.data ? comp.data.filter(r => r[1] === '直接竞品').length : 0;
+    const benchmark = comp.data ? comp.data.filter(r => r[1] === '头部标杆').length : 0;
+    const newcomer = comp.data ? comp.data.filter(r => r[1] === '新进入者').length : 0;
+    const attention = comp.data ? comp.data.filter(r => r[6] && r[6].includes('关注')).length : 0;
     summaryEl.innerHTML = `
       <div class="stat-card"><div class="stat-card-header"><span class="stat-card-label">监控总数</span><div class="stat-card-icon blue">🔎</div></div><div class="stat-card-value">${total}</div><div class="stat-card-change up">竞品</div></div>
       <div class="stat-card"><div class="stat-card-header"><span class="stat-card-label">直接竞品</span><div class="stat-card-icon blue">🎯</div></div><div class="stat-card-value">${direct}</div><div class="stat-card-change">同品类同价格带</div></div>
@@ -6566,7 +7263,7 @@ function renderM6Competitors() {
   });
 
   tbody.innerHTML = '<tr><th>竞品名称</th><th>类型</th><th>价格</th><th>评分</th><th>Review数</th><th>近期变化</th><th>监控状态</th></tr>' +
-    filtered.map(r => {
+    (filtered.length > 0 ? filtered.map(r => {
       const sc = (r[6] && r[6].includes('稳定')) ? 'done' : 'pending';
       const typeTag = r[1] === '直接竞品' ? '🎯' : r[1] === '头部标杆' ? '🏆' : '🆕';
       return `<tr>
@@ -6576,7 +7273,12 @@ function renderM6Competitors() {
         <td>${r[5]}</td>
         <td><span class="status-badge ${sc}">${r[6]}</span></td>
       </tr>`;
-    }).join('');
+    }).join('')
+    : `<tr><td colspan="7"><div class="module-empty-state">
+      <div class="empty-icon">🔎</div>
+      <div class="empty-title">${filterVal === 'all' ? '暂无竞品监控数据' : '该筛选条件下无竞品'}</div>
+      <div class="empty-desc">请前往 <a href="#datasource" style="color:var(--primary);">数据中心</a> 上传竞品报表或手动添加竞品记录</div>
+    </div></td></tr>`);
 
   // French market calendar
   if (calendarEl) {
@@ -6616,59 +7318,83 @@ function renderM7Sales() {
   const category = dsGet('品类分析');
   const traffic = dsGet('流量来源');
 
+  // Helper: empty state for table
+  const emptyTbl = (colspan, icon, title, desc) =>
+    `<tr><td colspan="${colspan}"><div class="module-empty-state"><div class="empty-icon">${icon}</div><div class="empty-title">${title}</div><div class="empty-desc">${desc}</div></div></td></tr>`;
+
   // KPI stat cards
-  if (kpiStats && sales) {
-    kpiStats.innerHTML = `
-      <div class="stat-card"><div class="stat-card-header"><span class="stat-card-label">月度 GMV</span><div class="stat-card-icon blue">💶</div></div><div class="stat-card-value">€87,350</div><div class="stat-card-change up">环比 +11.7%</div></div>
-      <div class="stat-card"><div class="stat-card-header"><span class="stat-card-label">订单量</span><div class="stat-card-icon green">📦</div></div><div class="stat-card-value">1,245</div><div class="stat-card-change up">环比 +11.2%</div></div>
-      <div class="stat-card"><div class="stat-card-header"><span class="stat-card-label">客单价</span><div class="stat-card-icon amber">🏷️</div></div><div class="stat-card-value">€70.2</div><div class="stat-card-change up">环比 +0.6%</div></div>
-      <div class="stat-card"><div class="stat-card-header"><span class="stat-card-label">净利润率</span><div class="stat-card-icon red">📊</div></div><div class="stat-card-value">17.5%</div><div class="stat-card-change up">同比 +1.8pp</div></div>
-    `;
+  if (kpiStats) {
+    if (sales && sales.data && sales.data.length > 0) {
+      kpiStats.innerHTML = `
+        <div class="stat-card"><div class="stat-card-header"><span class="stat-card-label">月度 GMV</span><div class="stat-card-icon blue">💶</div></div><div class="stat-card-value">€87,350</div><div class="stat-card-change up">环比 +11.7%</div></div>
+        <div class="stat-card"><div class="stat-card-header"><span class="stat-card-label">订单量</span><div class="stat-card-icon green">📦</div></div><div class="stat-card-value">1,245</div><div class="stat-card-change up">环比 +11.2%</div></div>
+        <div class="stat-card"><div class="stat-card-header"><span class="stat-card-label">客单价</span><div class="stat-card-icon amber">🏷️</div></div><div class="stat-card-value">€70.2</div><div class="stat-card-change up">环比 +0.6%</div></div>
+        <div class="stat-card"><div class="stat-card-header"><span class="stat-card-label">净利润率</span><div class="stat-card-icon red">📊</div></div><div class="stat-card-value">17.5%</div><div class="stat-card-change up">同比 +1.8pp</div></div>
+      `;
+    } else {
+      kpiStats.innerHTML = `<div class="module-empty-state" style="grid-column:1/-1;"><div class="empty-icon">📈</div><div class="empty-title">暂无销售数据</div><div class="empty-desc">请前往 <a href="#datasource" style="color:var(--primary);">数据中心</a> 上传销售报表</div></div>`;
+    }
   }
 
-  if (salesTable && sales) {
-    salesTable.innerHTML = '<tr><th>维度</th><th>本月</th><th>上月</th><th>环比</th><th>去年同期</th><th>同比</th></tr>' +
-      sales.data.map(r => `<tr>${r.map((c,i) => {
-        if (i >= 3 && typeof c === 'string' && c.startsWith('+')) return `<td style="color:var(--success);font-weight:600;">${c}</td>`;
-        if (i >= 3 && typeof c === 'string' && c.startsWith('-')) return `<td style="color:var(--danger);font-weight:600;">${c}</td>`;
-        if (i === 0) return `<td style="font-weight:600;">${c}</td>`;
-        return `<td>${c}</td>`;
-      }).join('')}</tr>`).join('');
-  }
-
-  if (profitTable && profit) {
-    profitTable.innerHTML = '<tr><th>项目</th><th>金额</th><th>占销售收入比例</th></tr>' +
-      profit.data.map((r,i) => {
-        const isTotal = (i === profit.data.length - 1);
-        const style = isTotal ? 'font-weight:700;background:var(--primary-bg);' : '';
-        return `<tr style="${style}">${r.map((c,j) => {
-          if (j === 2 && typeof c === 'string' && c.includes('%') && isTotal) return `<td style="color:var(--success);font-weight:700;">${c}</td>`;
-          if (j === 0 && isTotal) return `<td style="font-weight:700;">${c}</td>`;
+  if (salesTable) {
+    if (sales && sales.data && sales.data.length > 0) {
+      salesTable.innerHTML = '<tr><th>维度</th><th>本月</th><th>上月</th><th>环比</th><th>去年同期</th><th>同比</th></tr>' +
+        sales.data.map(r => `<tr>${r.map((c,i) => {
+          if (i >= 3 && typeof c === 'string' && c.startsWith('+')) return `<td style="color:var(--success);font-weight:600;">${c}</td>`;
+          if (i >= 3 && typeof c === 'string' && c.startsWith('-')) return `<td style="color:var(--danger);font-weight:600;">${c}</td>`;
+          if (i === 0) return `<td style="font-weight:600;">${c}</td>`;
           return `<td>${c}</td>`;
-        }).join('')}</tr>`;
-      }).join('');
+        }).join('')}</tr>`).join('');
+    } else {
+      salesTable.innerHTML = emptyTbl(6, '📈', '暂无销售数据', '请前往 <a href="#datasource" style="color:var(--primary);">数据中心</a> 上传销售趋势报表');
+    }
+  }
+
+  if (profitTable) {
+    if (profit && profit.data && profit.data.length > 0) {
+      profitTable.innerHTML = '<tr><th>项目</th><th>金额</th><th>占销售收入比例</th></tr>' +
+        profit.data.map((r,i) => {
+          const isTotal = (i === profit.data.length - 1);
+          const style = isTotal ? 'font-weight:700;background:var(--primary-bg);' : '';
+          return `<tr style="${style}">${r.map((c,j) => {
+            if (j === 2 && typeof c === 'string' && c.includes('%') && isTotal) return `<td style="color:var(--success);font-weight:700;">${c}</td>`;
+            if (j === 0 && isTotal) return `<td style="font-weight:700;">${c}</td>`;
+            return `<td>${c}</td>`;
+          }).join('')}</tr>`;
+        }).join('');
+    } else {
+      profitTable.innerHTML = emptyTbl(3, '💰', '暂无利润数据', '请前往 <a href="#datasource" style="color:var(--primary);">数据中心</a> 上传利润核算报表');
+    }
   }
 
   // Category analysis
-  if (categoryTable && category) {
-    categoryTable.innerHTML = '<tr><th>品类</th><th>本月销售额</th><th>占比</th><th>上月销售额</th><th>环比增长</th><th>利润率</th><th>TOP产品</th></tr>' +
-      category.data.map(r => `<tr>${r.map((c,i) => {
-        if (i === 1) return `<td style="font-weight:600;">${c}</td>`;
-        if (i === 4 && typeof c === 'string' && c.startsWith('+')) return `<td style="color:var(--success);">${c}</td>`;
-        if (i === 0) return `<td><strong>${c.split(' (')[0]}</strong><br><span style="font-size:11px;color:var(--gray-400);">${c.split(' (')[1]?.replace(')','') || ''}</span></td>`;
-        return `<td>${c}</td>`;
-      }).join('')}</tr>`).join('');
+  if (categoryTable) {
+    if (category && category.data && category.data.length > 0) {
+      categoryTable.innerHTML = '<tr><th>品类</th><th>本月销售额</th><th>占比</th><th>上月销售额</th><th>环比增长</th><th>利润率</th><th>TOP产品</th></tr>' +
+        category.data.map(r => `<tr>${r.map((c,i) => {
+          if (i === 1) return `<td style="font-weight:600;">${c}</td>`;
+          if (i === 4 && typeof c === 'string' && c.startsWith('+')) return `<td style="color:var(--success);">${c}</td>`;
+          if (i === 0) return `<td><strong>${c.split(' (')[0]}</strong><br><span style="font-size:11px;color:var(--gray-400);">${c.split(' (')[1]?.replace(')','') || ''}</span></td>`;
+          return `<td>${c}</td>`;
+        }).join('')}</tr>`).join('');
+    } else {
+      categoryTable.innerHTML = emptyTbl(7, '📊', '暂无品类分析数据', '请前往 <a href="#datasource" style="color:var(--primary);">数据中心</a> 上传品类结构报表');
+    }
   }
 
   // Traffic analysis
-  if (trafficTable && traffic) {
-    trafficTable.innerHTML = '<tr><th>流量来源</th><th>曝光量</th><th>点击量</th><th>点击率</th><th>转化率</th><th>销售额贡献</th><th>环比变化</th></tr>' +
-      traffic.data.map(r => `<tr>${r.map((c,i) => {
-        if (i === 6 && typeof c === 'string' && c.startsWith('+')) return `<td style="color:var(--success);">${c}</td>`;
-        if (i === 6 && typeof c === 'string' && c.startsWith('-')) return `<td style="color:var(--danger);">${c}</td>`;
-        if (i === 0) return `<td style="font-weight:600;">${c}</td>`;
-        return `<td>${c}</td>`;
-      }).join('')}</tr>`).join('');
+  if (trafficTable) {
+    if (traffic && traffic.data && traffic.data.length > 0) {
+      trafficTable.innerHTML = '<tr><th>流量来源</th><th>曝光量</th><th>点击量</th><th>点击率</th><th>转化率</th><th>销售额贡献</th><th>环比变化</th></tr>' +
+        traffic.data.map(r => `<tr>${r.map((c,i) => {
+          if (i === 6 && typeof c === 'string' && c.startsWith('+')) return `<td style="color:var(--success);">${c}</td>`;
+          if (i === 6 && typeof c === 'string' && c.startsWith('-')) return `<td style="color:var(--danger);">${c}</td>`;
+          if (i === 0) return `<td style="font-weight:600;">${c}</td>`;
+          return `<td>${c}</td>`;
+        }).join('')}</tr>`).join('');
+    } else {
+      trafficTable.innerHTML = emptyTbl(7, '🔍', '暂无流量来源数据', '请前往 <a href="#datasource" style="color:var(--primary);">数据中心</a> 上传流量来源分析报表');
+    }
   }
 }
 
@@ -6862,12 +7588,67 @@ function calcReplenish() {
   calcReplenishV2();
 }
 
-function showToast(msg) {
+function showToast(msg, type, duration) {
+  type = type || 'info'; duration = duration || 3000;
   const container = document.getElementById('toast-container');
   const toast = document.createElement('div');
-  toast.className = 'toast'; toast.textContent = msg;
+  const icons = { success: '✅', error: '❌', warning: '⚠️', info: 'ℹ️' };
+  const icon = icons[type] || icons.info;
+  toast.className = 'toast toast-' + type;
+  toast.innerHTML = '<span class="toast-icon">' + icon + '</span><span class="toast-msg">' + msg + '</span><span class="toast-close" onclick="this.parentElement.remove()">✕</span>';
   container.appendChild(toast);
-  setTimeout(() => toast.remove(), 3000);
+  var timer = setTimeout(function() { if (toast.parentElement) toast.remove(); }, duration);
+  toast.addEventListener('mouseenter', function() { clearTimeout(timer); });
+  toast.addEventListener('mouseleave', function() {
+    timer = setTimeout(function() { if (toast.parentElement) toast.remove(); }, 2000);
+  });
+  // Auto-log significant operations
+  if (type === 'success' && (msg.indexOf('保存') > -1 || msg.indexOf('创建') > -1 || msg.indexOf('删除') > -1)) {
+    OperationLog.log(msg.indexOf('删除') > -1 ? 'delete' : (msg.indexOf('创建') > -1 ? 'create' : 'save'),
+      msg.replace(/^[^\s]+\s/, ''), { module: (document.getElementById('page-title') || {}).textContent || '' });
+  }
+}
+
+function trapFocus(modalEl) {
+  const focusable = modalEl.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+  if (focusable.length === 0) return;
+  const first = focusable[0];
+  const last = focusable[focusable.length - 1];
+  first.focus();
+  modalEl.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') { modalEl.classList.remove('show'); return; }
+    if (e.key !== 'Tab') return;
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  });
+}
+
+function withLoading(el, asyncFn, loadingText) {
+  if (typeof el === 'string') el = document.getElementById(el) || document.querySelector(el);
+  if (!el) return asyncFn();
+  var isBtn = el.tagName === 'BUTTON';
+  var origHTML = el.innerHTML; var origDisabled = el.disabled;
+  if (isBtn) { el.disabled = true; el.innerHTML = loadingText || '⏳ 处理中...'; }
+  return asyncFn().finally(function() {
+    if (isBtn) { el.disabled = origDisabled; el.innerHTML = origHTML; }
+  }).catch(function(e) { showToast('操作失败：' + (e.message || '未知错误'), 'error'); throw e; });
+}
+
+function showProgress(text, pct) {
+  var overlay = document.getElementById('progress-overlay');
+  if (!overlay) {
+    overlay = document.createElement('div'); overlay.id = 'progress-overlay';
+    overlay.innerHTML = '<div class="progress-modal"><div class="progress-modal-text"></div><div class="progress-bar" style="margin-top:10px;"><div class="progress-fill success" style="width:0%;"></div></div></div>';
+    overlay.className = 'progress-overlay';
+    document.body.appendChild(overlay);
+  }
+  overlay.style.display = 'flex';
+  overlay.querySelector('.progress-modal-text').textContent = text || '处理中...';
+  overlay.querySelector('.progress-fill').style.width = (pct || 0) + '%';
+}
+function hideProgress() {
+  var overlay = document.getElementById('progress-overlay');
+  if (overlay) overlay.style.display = 'none';
 }
 
 // ============================================================
@@ -8016,6 +8797,7 @@ function resolveDataRefsInText(text) {
 // ============================================================
 window.router = Router; // 兼容 HTML 中的小写 router.navigate 调用
 
+/* @module weeklyReport @layer modules @depends DataService — 周报看板与图表渲染 */
 const weeklyReport = {
   weeks: [],          // 全部周数据（含去年同期字段），索引越大越近
   viewIdx: -1,        // 当前查看的周（-1 = 默认上周）
@@ -8362,6 +9144,15 @@ const weeklyReport = {
 
   // ---------- 渲染：图表 ----------
   renderCharts() {
+    // Lazy load: only render if weekly tab is visible
+    const weeklyPanel = document.getElementById('dtab-weekly');
+    if (!weeklyPanel || !weeklyPanel.classList.contains('active')) return;
+    // Debounce: skip rapid consecutive calls
+    if (this._chartTimer) clearTimeout(this._chartTimer);
+    this._chartTimer = setTimeout(() => this._doRenderCharts(), 50);
+  },
+
+  _doRenderCharts() {
     this.drawCombo('wr-chart-sales', this.chartRanges.sales, {
       bar: w => w.gmv, barColor: '#2563eb', barFmt: v => '€' + this._fmtAxis(v),
       line: w => w.orders, lineColor: '#059669',
@@ -8874,6 +9665,8 @@ const weeklyReport = {
   switchTab(id) {
     document.querySelectorAll('#dashboard-tabs .tab-btn').forEach(b => b.classList.toggle('active', b.dataset.dtab === id));
     document.querySelectorAll('#page-dashboard .dtab-panel').forEach(p => p.classList.toggle('active', p.id === 'dtab-' + id));
+    // Clean up chart timers when leaving weekly tab
+    if (id !== 'weekly' && weeklyReport._chartTimer) { clearTimeout(weeklyReport._chartTimer); weeklyReport._chartTimer = null; }
     if (id === 'weekly') setTimeout(() => this.renderCharts(), 30);
   },
   bindEvents() {
@@ -8908,51 +9701,239 @@ const weeklyReport = {
 };
 
 // ============================================================
-// 8. FILE IMPORT (renumbered from 7)
+// 8. FILE IMPORT — 增强版：支持 XLSX/CSV/JSON + 自动映射 + 预览确认
 // ============================================================
+let _importTempData = null; // 暂存待确认的导入数据
+
 function handleFileImport(file) {
   const ext = file.name.split('.').pop().toLowerCase();
+  if (!['json','csv','xlsx','xls'].includes(ext)) {
+    showToast('❌ 不支持的文件格式，请使用 .xlsx / .csv / .json');
+    return;
+  }
+  if (ext === 'xlsx' || ext === 'xls') {
+    handleXLSXImport(file);
+  } else if (ext === 'csv') {
+    handleCSVImport(file);
+  } else if (ext === 'json') {
+    handleJSONImport(file);
+  }
+}
+
+// ── XLSX 导入（使用 SheetJS） ──
+function handleXLSXImport(file) {
   const reader = new FileReader();
   reader.onload = function(ev) {
-    if (ext === 'json') {
-      try {
-        const data = JSON.parse(ev.target.result);
-        if (typeof data === 'object' && !Array.isArray(data)) {
-          DS = data;
-        } else {
-          const name = file.name.replace(/\.json$/i, '');
-          DS[name] = { label: name, icon: '📋', fields: Object.keys(data[0]||{}), data: data.map(r => Object.values(r)) };
-        }
-        saveDS(DS); renderAllDSCategories(); refreshAllModuleViews();
-        showToast('✅ 已导入：' + file.name);
-      } catch(e) { showToast('❌ JSON 解析失败'); }
-    } else if (ext === 'csv') {
-      const lines = ev.target.result.split('\n').filter(l => l.trim());
-      if (lines.length < 2) { showToast('❌ CSV 格式不正确'); return; }
-      const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g,''));
-      const rows = lines.slice(1).map(l => {
-        const cols = []; let inQuote = false, cur = '';
-        for (const ch of l) {
-          if (ch === '"') { inQuote = !inQuote; continue; }
-          if (ch === ',' && !inQuote) { cols.push(cur.trim()); cur = ''; continue; }
-          cur += ch;
-        }
-        cols.push(cur.trim());
-        return cols;
+    try {
+      const workbook = XLSX.read(ev.target.result, { type: 'array' });
+      const sheetNames = workbook.SheetNames;
+      if (sheetNames.length === 0) { showToast('❌ 文件中没有工作表'); return; }
+      // 解析所有 Sheet
+      const sheets = {};
+      sheetNames.forEach(name => {
+        const ws = workbook.Sheets[name];
+        const raw = XLSX.utils.sheet_to_json(ws, { header: 1, defval: '' });
+        if (raw.length < 2) return;
+        const headers = raw[0].map(h => String(h).trim()).filter(h => h);
+        if (headers.length === 0) return;
+        const rows = raw.slice(1).map(r => {
+          const row = [];
+          for (let i = 0; i < headers.length; i++) {
+            row.push(r[i] !== undefined ? String(r[i]).trim() : '');
+          }
+          return row;
+        }).filter(r => r.some(c => c !== ''));
+        if (rows.length > 0) sheets[name] = { headers, rows };
       });
-      const name = file.name.replace(/\.csv$/i, '');
-      DS[name] = { label: name, icon: '📋', fields: headers, data: rows };
-      saveDS(DS); renderAllDSCategories(); refreshAllModuleViews();
-      showToast('✅ 已导入：' + file.name);
-    }
+      if (Object.keys(sheets).length === 0) { showToast('❌ 未检测到有效数据'); return; }
+      showImportPreview(sheets, file.name);
+    } catch(e) { showToast('❌ XLSX 解析失败：' + e.message); }
   };
-  if (ext === 'json') reader.readAsText(file);
-  else reader.readAsText(file);
+  reader.readAsArrayBuffer(file);
 }
+
+// ── CSV 导入 ──
+function handleCSVImport(file) {
+  const reader = new FileReader();
+  reader.onload = function(ev) {
+    const lines = ev.target.result.split('\n').filter(l => l.trim());
+    if (lines.length < 2) { showToast('❌ CSV 格式不正确'); return; }
+    const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g,''));
+    const rows = lines.slice(1).map(l => {
+      const cols = []; let inQuote = false, cur = '';
+      for (const ch of l) {
+        if (ch === '"') { inQuote = !inQuote; continue; }
+        if (ch === ',' && !inQuote) { cols.push(cur.trim()); cur = ''; continue; }
+        cur += ch;
+      }
+      cols.push(cur.trim());
+      return cols;
+    }).filter(r => r.some(c => c !== ''));
+    if (rows.length === 0) { showToast('❌ 未检测到有效数据行'); return; }
+    const sheetName = file.name.replace(/\.csv$/i, '');
+    showImportPreview({ [sheetName]: { headers, rows } }, file.name);
+  };
+  reader.readAsText(file);
+}
+
+// ── JSON 导入 ──
+function handleJSONImport(file) {
+  const reader = new FileReader();
+  reader.onload = function(ev) {
+    try {
+      const data = JSON.parse(ev.target.result);
+      if (typeof data === 'object' && !Array.isArray(data)) {
+        // 检查是否是 DS 格式
+        const isDS = Object.values(data).some(v => v && v.fields && v.data);
+        if (isDS) {
+          DS = data;
+          saveDS(DS); renderAllDSCategories(); refreshAllModuleViews();
+          showToast('✅ 已导入完整数据源：' + file.name);
+          OperationLog.log('import', '导入完整数据源', { module: '数据中心', detail: file.name });
+          return;
+        }
+      }
+      // 单个表格数据
+      const arr = Array.isArray(data) ? data : [data];
+      if (arr.length === 0) { showToast('❌ JSON 数据为空'); return; }
+      const headers = Object.keys(arr[0]);
+      const rows = arr.map(r => headers.map(h => String(r[h] || '')));
+      const sheetName = file.name.replace(/\.json$/i, '');
+      showImportPreview({ [sheetName]: { headers, rows } }, file.name);
+    } catch(e) { showToast('❌ JSON 解析失败'); }
+  };
+  reader.readAsText(file);
+}
+
+// ── 导入预览弹窗 ──
+function showImportPreview(sheets, fileName) {
+  _importTempData = { sheets, fileName };
+  const sheetNames = Object.keys(sheets);
+  let activeSheet = sheetNames[0];
+  let mappingOverrides = {};
+
+  function renderPreview(sheetName) {
+    const sheet = sheets[sheetName];
+    const detection = autoDetectCategory(sheet.headers, sheetName);
+    const existingCats = Object.keys(DS);
+    const confidenceBadge = detection.confidence === 'exact'
+      ? '<span class="import-auto-match-badge exact">✅ 高置信度匹配</span>'
+      : detection.confidence === 'partial'
+        ? '<span class="import-auto-match-badge partial">⚠️ 部分匹配</span>'
+        : '<span class="import-auto-match-badge none">🆕 将创建新类目</span>';
+
+    const targetCat = mappingOverrides[sheetName] || detection.category || '';
+
+    let catOptions = '';
+    if (!targetCat || !existingCats.includes(targetCat)) {
+      catOptions += `<option value="" class="new-cat" ${!targetCat?'selected':''}>🆕 创建新类目："${sheetName}"</option>`;
+    }
+    existingCats.forEach(c => {
+      catOptions += `<option value="${c}" ${c === targetCat ? 'selected' : ''}>${DS[c].icon || '📋'} ${DS[c].label}</option>`;
+    });
+    if (targetCat && !existingCats.includes(targetCat)) {
+      catOptions += `<option value="" class="new-cat" selected>🆕 创建新类目："${targetCat || sheetName}"</option>`;
+    }
+
+    const previewRows = sheet.rows.slice(0, 5);
+
+    return `
+      ${sheetNames.length > 1 ? `<div class="import-sheets-tabs">${sheetNames.map(n =>
+        `<div class="import-sheet-tab ${n === activeSheet ? 'active' : ''}" onclick="switchImportSheet('${n}')">📄 ${n}</div>`
+      ).join('')}</div>` : ''}
+      <div class="import-mapping-row">
+        <span class="import-mapping-label">📂 目标类目：</span>
+        <select class="import-mapping-select" id="import-target-cat" onchange="updateImportMapping('${sheetName}', this.value)">
+          ${catOptions}
+        </select>
+        ${confidenceBadge}
+      </div>
+      <div class="import-field-mapping-info">
+        📋 检测到 <strong>${sheet.headers.length}</strong> 个字段：${sheet.headers.join('、')}
+      </div>
+      <div style="overflow-x:auto;max-height:260px;overflow-y:auto;border:1px solid var(--gray-200);border-radius:var(--radius-sm);margin-top:8px;">
+        <table class="import-preview-table">
+          <thead><tr>${sheet.headers.map(h => `<th>${h}</th>`).join('')}</tr></thead>
+          <tbody>${previewRows.map(r => `<tr>${r.map(c => `<td title="${escapeHtml(c)}">${escapeHtml(c)}</td>`).join('')}</tr>`).join('')}</tbody>
+        </table>
+      </div>
+      <div class="import-preview-count">共 <strong>${sheet.rows.length}</strong> 行数据（预览前 5 行）</div>
+    `;
+  }
+
+  function renderAll() {
+    const body = document.getElementById('import-preview-body');
+    body.innerHTML = renderPreview(activeSheet);
+    document.getElementById('import-preview-overlay').classList.remove('hidden');
+    document.getElementById('import-preview-filename').textContent = fileName;
+  }
+
+  window.switchImportSheet = function(name) {
+    activeSheet = name;
+    renderAll();
+  };
+  window.updateImportMapping = function(sheetName, value) {
+    mappingOverrides[sheetName] = value;
+    renderAll();
+  };
+  window.confirmImport = function() {
+    let importedCount = 0;
+    for (const [sheetName, sheet] of Object.entries(sheets)) {
+      const targetCat = mappingOverrides[sheetName] || autoDetectCategory(sheet.headers, sheetName).category || sheetName;
+      if (DS[targetCat]) {
+        // 映射到已有类目：尝试按字段名匹配，否则直接追加
+        const existingFields = DS[targetCat].fields;
+        const newHeaders = sheet.headers;
+        // 对齐字段：以已有 fields 为准，新字段填充空值
+        const alignedRows = sheet.rows.map(r => {
+          const aligned = new Array(existingFields.length).fill('');
+          newHeaders.forEach((h, i) => {
+            const idx = existingFields.findIndex(f => f.toLowerCase() === h.toLowerCase());
+            if (idx >= 0) aligned[idx] = r[i];
+          });
+          return aligned;
+        }).filter(r => r.some(c => c !== ''));
+        DS[targetCat].data.push(...alignedRows);
+      } else {
+        // 创建新类目
+        DS[targetCat] = { label: targetCat, icon: '📋', fields: sheet.headers, data: sheet.rows };
+      }
+      importedCount += sheet.rows.length;
+    }
+    saveDS(DS);
+    renderAllDSCategories();
+    refreshAllModuleViews();
+    closeImportPreview();
+    showToast(`✅ 已导入 ${importedCount} 条数据到 ${Object.keys(sheets).length} 个类目`);
+    OperationLog.log('import', '批量导入数据', { module: '数据中心', detail: `${Object.keys(sheets).length} sheets, ${importedCount} rows` });
+  };
+  window.closeImportPreview = function() {
+    document.getElementById('import-preview-overlay').classList.add('hidden');
+    _importTempData = null;
+  };
+  window.skipImport = function() {
+    closeImportPreview();
+    showToast('已取消导入');
+  };
+
+  // 初始化映射覆盖
+  for (const [sn, s] of Object.entries(sheets)) {
+    const detection = autoDetectCategory(s.headers, sn);
+    if (detection.category && DS[detection.category]) {
+      mappingOverrides[sn] = detection.category;
+    }
+  }
+
+  renderAll();
+}
+
+// ── 保留旧版直导（JSON 完整数据源恢复用）──
+function dsImportJSON() { /* 保持原有逻辑不变 */ }
 
 // ============================================================
 // 8.5 DATA MANAGER — IndexedDB + 导入/导出/备份
 // ============================================================
+/* @module DataManager @layer ui @depends DataService,Router — 数据备份/恢复/导入导出 */
 const DataManager = {
   dbReady: false,
   _dbName: 'ManoWorkbenchDB', _rptStore: 'reports',
@@ -9136,6 +10117,7 @@ const DataManager = {
 // ============================================================
 // 9.5 CLOUD SYNC — Supabase 云端数据持久化
 // ============================================================
+/* @module CloudSync @layer services @depends DataService,Router — 云端数据同步 */
 const CloudSync = {
   supabase: null,
   user: null,
@@ -9390,8 +10372,785 @@ const origAlertSave = alertSave;
 alertSave = function() { origAlertSave(); CloudSync.hookDataSave('mano_alert_rules'); };
 
 // ============================================================
+// 8.2 Data Export Utilities (CSV / PDF)
+// ============================================================
+function exportToExcel(data, filename, sheetName) {
+  const csv = '\uFEFF' + data.map(row => row.map(cell => {
+    const v = String(cell || '');
+    return v.includes(',') || v.includes('"') || v.includes('\n') ? '"' + v.replace(/"/g,'""') + '"' : v;
+  }).join(',')).join('\n');
+  const blob = new Blob([csv], {type:'text/csv;charset=utf-8'});
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+  a.download = (filename || 'export') + '.csv';
+  a.click();
+  if (typeof showToast === 'function') showToast('已导出为 CSV（可用 Excel 打开）', 'success');
+}
+
+function exportToPDF(elementId, title) {
+  const el = document.getElementById(elementId);
+  if (!el) { showToast('导出内容未找到', 'error'); return; }
+  const printWin = window.open('', '_blank', 'width=1000,height=800');
+  const styles = document.querySelector('style').outerHTML;
+  printWin.document.write(`
+    <!DOCTYPE html><html><head><meta charset="UTF-8"><title>${title||'导出报告'}</title>
+    ${styles}
+    <style>body{background:#fff;padding:24px;font-size:13px} .sidebar,.topbar,.btn,.filter-bar{display:none!important} .card{box-shadow:none;border:1px solid #ddd} .page{display:block!important} @media print{@page{size:A4;margin:15mm}}</style>
+    </head><body><h1 style="margin-bottom:16px;">${title||'导出报告'}</h1>
+    ${el.innerHTML}
+    <script>setTimeout(()=>window.print(),500)<\/script>
+    </body></html>
+  `);
+  printWin.document.close();
+  if (typeof showToast === 'function') showToast('PDF 导出已触发（使用浏览器打印 → 另存为 PDF）', 'success');
+}
+
+// ============================================================
+// 8.3 OperationLog — 全局操作日志
+// ============================================================
+/* @module OperationLog @layer services @depends Router — 全局操作日志 */
+const OperationLog = {
+  STORAGE_KEY: 'mano_operation_log', MAX_DAYS: 30, _log: null,
+
+  _load() {
+    if (this._log) return this._log;
+    try { const raw = localStorage.getItem(this.STORAGE_KEY); this._log = raw ? JSON.parse(raw) : []; } catch(e) { this._log = []; }
+    const cutoff = Date.now() - this.MAX_DAYS * 86400000;
+    this._log = this._log.filter(e => e._ts >= cutoff);
+    return this._log;
+  },
+
+  _save() { try { localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this._log)); } catch(e) {} },
+
+  log(action, detail, metadata) {
+    this._load();
+    this._log.unshift({
+      id: 'log_' + Date.now() + '_' + Math.random().toString(36).slice(2,6),
+      _ts: Date.now(), time: new Date().toISOString(),
+      action: action, detail: detail || '',
+      operator: (metadata && metadata.operator) || '运营专员',
+      module: (metadata && metadata.module) || '',
+      impact: (metadata && metadata.impact) || ''
+    });
+    if (this._log.length > 500) this._log = this._log.slice(0, 500);
+    this._save();
+  },
+
+  getAll() { return this._load(); },
+
+  query(options) {
+    if (!options) options = {};
+    let entries = this._load();
+    if (options.action) entries = entries.filter(e => e.action === options.action);
+    if (options.module) entries = entries.filter(e => e.module === options.module);
+    if (options.from) entries = entries.filter(e => e._ts >= new Date(options.from).getTime());
+    if (options.to) entries = entries.filter(e => e._ts <= new Date(options.to).getTime());
+    if (options.search) entries = entries.filter(e => e.detail.includes(options.search) || e.operator.includes(options.search));
+    return entries;
+  },
+
+  getActions() { const a = new Set(); this._load().forEach(e => a.add(e.action)); return [...a].sort(); },
+  getModules() { const m = new Set(); this._load().forEach(e => { if(e.module) m.add(e.module); }); return [...m].sort(); },
+
+  render(containerId) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    const af = document.getElementById('op-log-action-filter');
+    const mf = document.getElementById('op-log-module-filter');
+    const df = document.getElementById('op-log-date-from');
+    const dt = document.getElementById('op-log-date-to');
+    const sr = document.getElementById('op-log-search');
+    const entries = this.query({
+      action: (af && af.value !== 'all') ? af.value : null,
+      module: (mf && mf.value !== 'all') ? mf.value : null,
+      from: df ? df.value : null, to: dt ? dt.value : null,
+      search: sr ? sr.value : null
+    });
+    if (entries.length === 0) {
+      container.innerHTML = '<div class="report-empty"><div class="report-empty-icon">📭</div><div class="report-empty-title">暂无操作记录</div></div>';
+      const statsEl = document.getElementById('op-log-stats'); if(statsEl) statsEl.innerHTML = '<span>📊 总记录：<strong>0</strong></span>';
+      return;
+    }
+    const labels = { data_import:'📥 数据导入', data_export:'📤 数据导出', save:'💾 保存', delete:'🗑️ 删除', create:'➕ 新增', update:'✏️ 更新', status_change:'🔄 状态变更', alert_resolve:'✅ 预警处理', task_complete:'✅ 任务完成', config_change:'⚙️ 配置变更', login:'🔑 登录', logout:'👋 退出' };
+    container.innerHTML = entries.map(e => '<div class="op-log-item"><div class="op-log-icon">'+(labels[e.action]||'📌')+'</div><div class="op-log-info"><div class="op-log-detail">'+e.detail+'</div><div class="op-log-meta"><span>'+e.operator+'</span><span>'+e.module+'</span><span>'+new Date(e._ts).toLocaleString('zh-CN')+'</span>'+(e.impact?'<span class="op-log-impact">影响：'+e.impact+'</span>':'')+'</div></div></div>').join('');
+    const all = this.getAll();
+    const today = all.filter(e => e._ts >= new Date(new Date().toDateString()).getTime()).length;
+    const statsEl = document.getElementById('op-log-stats'); if(statsEl) statsEl.innerHTML = '<span style="margin-right:16px;">📊 总记录：<strong>'+all.length+'</strong></span><span>今日：<strong>'+today+'</strong></span>';
+  },
+
+  exportCSV() {
+    const entries = this._load();
+    const csv = '\uFEFF时间,操作人,操作类型,详情,模块,影响范围\n' + entries.map(e => [e.time, e.operator, e.action, e.detail, e.module||'', e.impact||''].join(',')).join('\n');
+    const blob = new Blob([csv], {type:'text/csv;charset=utf-8'});
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+    a.download = '操作日志_' + new Date().toISOString().slice(0,10) + '.csv';
+    a.click();
+    if (typeof showToast === 'function') showToast('操作日志已导出为 CSV', 'success');
+  }
+};
+
+OperationLog.log('config_change', 'DataService 统一数据服务层初始化', {module:'系统',operator:'系统'});
+OperationLog.log('config_change', 'Toast 组件升级为多类型支持', {module:'系统',operator:'系统'});
+OperationLog.log('config_change', '移动端响应式侧边栏遮罩适配', {module:'系统',operator:'系统'});
+
+// ============================================================
+// 8.4 DataService — 统一数据服务层
+// ============================================================
+/* @module DataService @layer services @depends Router — 统一数据服务层 */
+const DataService = {
+  _source: 'local',
+  _registry: {},
+  _cache: {},
+
+  setSource(source) {
+    if (!['mock','local','api'].includes(source)) return;
+    this._source = source; this._cache = {};
+    document.querySelectorAll('.ds-source-indicator').forEach(el => {
+      el.textContent = source === 'mock' ? '📦 Mock' : source === 'local' ? '💾 本地' : '☁️ API';
+      el.className = 'ds-source-indicator ' + source;
+    });
+    if (typeof showToast === 'function') showToast(`数据源已切换为「${{mock:'模拟数据',local:'本地存储',api:'API'}[source]}」`, 'info');
+  },
+
+  getSource() { return this._source; },
+
+  register(name, config) {
+    this._registry[name] = {
+      storageKey: config.storageKey || ('mano_' + name),
+      defaults: config.defaults,
+      mockData: config.mockData || (typeof config.defaults === 'function' ? config.defaults() : config.defaults),
+      idField: config.idField || 'id'
+    };
+  },
+
+  _getConfig(name) {
+    if (!this._registry[name]) throw new Error(`DataService: entity "${name}" not registered`);
+    return this._registry[name];
+  },
+
+  _clone(data) { try { return JSON.parse(JSON.stringify(data)); } catch(e) { return data; } },
+
+  getAll(name) {
+    const cfg = this._getConfig(name);
+    if (this._cache[name]) return this._clone(this._cache[name]);
+    let data;
+    if (this._source === 'mock') {
+      data = this._clone(cfg.mockData);
+    } else if (this._source === 'local') {
+      try {
+        const raw = localStorage.getItem(cfg.storageKey);
+        if (raw) { data = JSON.parse(raw); }
+        else {
+          data = typeof cfg.defaults === 'function' ? cfg.defaults() : this._clone(cfg.defaults);
+          localStorage.setItem(cfg.storageKey, JSON.stringify(data));
+        }
+      } catch(e) {
+        data = typeof cfg.defaults === 'function' ? cfg.defaults() : this._clone(cfg.defaults);
+      }
+    } else {
+      data = this._clone(cfg.mockData);
+    }
+    this._cache[name] = this._clone(data);
+    return this._clone(data);
+  },
+
+  getById(name, id) {
+    const all = this.getAll(name);
+    const cfg = this._getConfig(name);
+    if (Array.isArray(all)) return all.find(item => item[cfg.idField] === id) || null;
+    return all[id] || null;
+  },
+
+  add(name, item) {
+    const cfg = this._getConfig(name);
+    const all = this.getAll(name);
+    if (!item[cfg.idField]) item[cfg.idField] = name + '_' + Date.now();
+    if (Array.isArray(all)) { all.unshift(item); }
+    else { all[item[cfg.idField]] = item; }
+    this.save(name, all);
+    return item;
+  },
+
+  update(name, id, updates) {
+    const cfg = this._getConfig(name);
+    const all = this.getAll(name);
+    if (Array.isArray(all)) {
+      const idx = all.findIndex(item => item[cfg.idField] === id);
+      if (idx === -1) return null;
+      all[idx] = { ...all[idx], ...updates };
+    } else {
+      if (!all[id]) return null;
+      all[id] = { ...all[id], ...updates };
+    }
+    this.save(name, all);
+    return Array.isArray(all) ? all.find(item => item[cfg.idField] === id) : all[id];
+  },
+
+  delete(name, id) {
+    const cfg = this._getConfig(name);
+    const all = this.getAll(name);
+    if (Array.isArray(all)) {
+      const idx = all.findIndex(item => item[cfg.idField] === id);
+      if (idx === -1) return false;
+      all.splice(idx, 1);
+    } else {
+      if (!all[id]) return false;
+      delete all[id];
+    }
+    this.save(name, all);
+    return true;
+  },
+
+  save(name, data) {
+    const cfg = this._getConfig(name);
+    this._cache[name] = this._clone(data);
+    if (this._source === 'local') {
+      try { localStorage.setItem(cfg.storageKey, JSON.stringify(data)); } catch(e) {}
+    }
+  },
+
+  clearCache(name) {
+    if (name) { delete this._cache[name]; }
+    else { this._cache = {}; }
+  }
+};
+
+// Register all entities
+(function registerAll() {
+  const entities = {
+    datasource: {
+      storageKey: 'mano_datasource',
+      defaults: {},
+      idField: null
+    },
+    sopVersions: {
+      storageKey: 'mano_sop_versions',
+      defaults: [{id:'sv_001',module:'模块一：店铺健康与数据监控',sopName:'店铺健康数据监控SOP',version:'v2.3',date:'2026-07-29',content:'预警阈值调整',reason:'Q3转化率下行',impact:'模块一·预警规则',responsible:'运营负责人',approver:'团队负责人',status:'published'},{id:'sv_002',module:'模块二：选品与Listing优化',sopName:'选品与Listing优化SOP',version:'v1.8',date:'2026-07-25',content:'新增AI关键词建议',reason:'提升效率',impact:'模块二·关键词Tab',responsible:'运营专员',approver:'运营负责人',status:'published'},{id:'sv_003',module:'模块三：广告与促销管理',sopName:'广告与促销管理SOP',version:'v1.2',date:'2026-07-20',content:'促销检查清单优化',reason:'平台政策更新',impact:'模块三·促销检查',responsible:'运营专员',approver:'运营负责人',status:'published'},{id:'sv_004',module:'模块四：库存与供应链协同',sopName:'库存与供应链协同SOP',version:'v1.1',date:'2026-07-15',content:'季节性备货系数调整',reason:'Q3旺季',impact:'模块四·季节性备货',responsible:'运营负责人',approver:'团队负责人',status:'pending'},{id:'sv_005',module:'模块一：店铺健康与数据监控',sopName:'店铺健康数据监控SOP',version:'v2.4',date:'2026-07-30',content:'新增ROAS自动预警',reason:'人工监控效率低',impact:'模块一·ROAS预警',responsible:'运营负责人',approver:'',status:'draft'}]
+    },
+    sopLibrary: {
+      storageKey: 'mano_sop_library',
+      defaults: [{id:'lib_001',name:'店铺健康数据监控SOP_v2.3.docx',folder:'模块一：店铺健康与数据监控',type:'.docx',version:'v2.3',updatedAt:'2026-07-29',size:'245 KB',author:'运营负责人'},{id:'lib_002',name:'选品与Listing优化SOP_v1.8.docx',folder:'模块二：选品与Listing优化',type:'.docx',version:'v1.8',updatedAt:'2026-07-25',size:'312 KB',author:'运营专员'},{id:'lib_003',name:'广告与促销管理SOP_v1.2.docx',folder:'模块三：广告与促销管理',type:'.docx',version:'v1.2',updatedAt:'2026-07-20',size:'198 KB',author:'运营专员'},{id:'lib_004',name:'库存与供应链协同SOP_v1.1.docx',folder:'模块四：库存与供应链协同',type:'.docx',version:'v1.1',updatedAt:'2026-07-15',size:'275 KB',author:'运营负责人'},{id:'lib_005',name:'客户评价与差评管理SOP_v1.0.docx',folder:'模块五：客户评价与差评管理',type:'.docx',version:'v1.0',updatedAt:'2026-07-10',size:'180 KB',author:'运营专员'},{id:'lib_006',name:'竞品与市场调研SOP_v1.0.docx',folder:'模块六：竞品与市场调研',type:'.docx',version:'v1.0',updatedAt:'2026-07-05',size:'220 KB',author:'运营专员'},{id:'lib_007',name:'销售数据分析与策略调整SOP_v1.0.docx',folder:'模块七：销售数据分析与策略调整',type:'.docx',version:'v1.0',updatedAt:'2026-07-01',size:'290 KB',author:'运营负责人'},{id:'lib_008',name:'周报模板_v1.0.xlsx',folder:'模块一：店铺健康与数据监控',type:'.xlsx',version:'v1.0',updatedAt:'2026-06-28',size:'48 KB',author:'运营专员'},{id:'lib_009',name:'法语回复话术模板库_v1.0.xlsx',folder:'模块五：客户评价与差评管理',type:'.xlsx',version:'v1.0',updatedAt:'2026-06-20',size:'156 KB',author:'运营专员'},{id:'lib_010',name:'新员工SOP培训手册_v1.0.pdf',folder:'培训材料',type:'.pdf',version:'v1.0',updatedAt:'2026-07-29',size:'1.2 MB',author:'运营负责人'}]
+    },
+    sopIterations: {
+      storageKey: 'mano_sop_iterations',
+      defaults: [{id:'iter_001',title:'转化率预警阈值调整',module:'模块一',priority:'high',status:'pending',proposedBy:'运营专员',desc:'转化率阈值需从2%调整为1.8%',reviewDate:'2026-08-01',assignedTo:'运营负责人'},{id:'iter_002',title:'新增法语错拼词识别',module:'模块二',priority:'high',status:'evaluating',proposedBy:'运营专员',desc:'关键词研究需增加法语错拼词识别',reviewDate:'2026-08-01',assignedTo:'运营专员'},{id:'iter_003',title:'促销复盘ROI自动计算',module:'模块三',priority:'mid',status:'planned',proposedBy:'团队负责人',desc:'促销复盘需增加ROI自动计算',reviewDate:'2026-08-15',assignedTo:'运营负责人'}]
+    },
+    sopFeedback: {
+      storageKey: 'mano_sop_feedback',
+      defaults: [{id:'fb_001',author:'运营专员',module:'模块二',date:'2026-07-28',type:'流程优化建议',desc:'关键词研究Tab加载速度慢',suggestion:'增加缓存机制',priority:'mid',status:'已采纳'},{id:'fb_002',author:'运营专员',module:'模块一',date:'2026-07-25',type:'流程痛点',desc:'每日数据拉取需手动登录',suggestion:'对接API自动拉取',priority:'high',status:'评估中'},{id:'fb_003',author:'运营专员',module:'模块五',date:'2026-07-22',type:'新增需求',desc:'需要增加法语语法检查',suggestion:'集成校对工具',priority:'low',status:'已记录'},{id:'fb_004',author:'运营专员',module:'模块四',date:'2026-07-18',type:'流程优化建议',desc:'补货计算器需增加历史趋势',suggestion:'展示近90天销量曲线',priority:'mid',status:'已规划'}]
+    }
+  };
+  for (const [name, cfg] of Object.entries(entities)) {
+    DataService.register(name, cfg);
+  }
+})();
+
+// ============================================================
+// 8.5 SOP 体系四大管理器
+// ============================================================
+
+// --- PanoManager: 运营工作流全景图 ---
+/* @module PanoManager @layer modules @depends Router — 运营工作流全景图 */
+const PanoManager = {
+  highlight(moduleId) {
+    const all = document.querySelectorAll('.pano-node');
+    const related = { module6:['module6','module2'], module2:['module2','module3','module1','module7'], module3:['module3','module1'], module1:['module1','module2','module3','module4'], module4:['module4','module1','module5'], module5:['module5','module4','module7'], module7:['module7','module5','module6','module2'] };
+    const set = new Set(related[moduleId] || [moduleId]);
+    all.forEach(n => { const id = n.dataset.module; n.classList.toggle('dimmed', !set.has(id)); });
+  },
+  clearHighlight() {
+    document.querySelectorAll('.pano-node').forEach(n => n.classList.remove('dimmed'));
+  }
+};
+
+// --- SOPVersionManager: SOP 版本管理 ---
+/* @module SOPVersionManager @layer sop @depends DataService — SOP版本管理与变更追踪 */
+const SOPVersionManager = {
+  STORAGE_KEY: 'mano_sop_versions',
+
+  _defaults() {
+    return [
+      { id:'sv_001', module:'模块一：店铺健康与数据监控', sopName:'店铺健康数据监控SOP', version:'v2.3', date:'2026-07-29', content:'预警阈值调整（转化率阈值从2%调整为1.8%）', reason:'法国市场Q3转化率整体下行', impact:'模块一·预警规则配置', responsible:'运营负责人', approver:'团队负责人', status:'published' },
+      { id:'sv_002', module:'模块二：选品与Listing优化', sopName:'选品与Listing优化SOP', version:'v1.8', date:'2026-07-25', content:'新增AI关键词建议模块', reason:'提升关键词研究效率', impact:'模块二·关键词研究Tab', responsible:'运营专员', approver:'运营负责人', status:'published' },
+      { id:'sv_003', module:'模块三：广告与促销管理', sopName:'广告与促销管理SOP', version:'v1.2', date:'2026-07-20', content:'促销检查清单优化，新增合规检查', reason:'平台政策更新', impact:'模块三·促销检查清单', responsible:'运营专员', approver:'运营负责人', status:'published' },
+      { id:'sv_004', module:'模块四：库存与供应链协同', sopName:'库存与供应链协同SOP', version:'v1.1', date:'2026-07-15', content:'季节性备货系数调整', reason:'Q3旺季备货需求变化', impact:'模块四·季节性备货', responsible:'运营负责人', approver:'团队负责人', status:'pending' },
+      { id:'sv_005', module:'模块一：店铺健康与数据监控', sopName:'店铺健康数据监控SOP', version:'v2.4', date:'2026-07-30', content:'新增ROAS自动预警规则', reason:'人工监控效率低', impact:'模块一·ROAS预警', responsible:'运营负责人', approver:'', status:'draft' }
+    ];
+  },
+
+  _load() { try { const d = localStorage.getItem(this.STORAGE_KEY); return d ? JSON.parse(d) : this._defaults(); } catch(e) { return this._defaults(); } },
+  _save(data) { localStorage.setItem(this.STORAGE_KEY, JSON.stringify(data)); },
+
+  getAll() { return this._load(); },
+
+  render() {
+    const data = this._load();
+    const modFilter = (document.getElementById('sv-module-filter') || {}).value || 'all';
+    const stFilter = (document.getElementById('sv-status-filter') || {}).value || 'all';
+    let filtered = data;
+    if (modFilter !== 'all') filtered = filtered.filter(v => v.module === modFilter);
+    if (stFilter !== 'all') filtered = filtered.filter(v => v.status === stFilter);
+
+    // Update stat cards
+    const now = new Date(); const thisMonth = data.filter(v => v.date && v.date.startsWith(now.toISOString().slice(0,7))).length;
+    const pending = data.filter(v => v.status === 'pending').length;
+    const totalEl = document.getElementById('sv-total'); if (totalEl) totalEl.textContent = data.length;
+    const monthEl = document.getElementById('sv-monthly'); if (monthEl) monthEl.textContent = thisMonth;
+    const pendEl = document.getElementById('sv-pending'); if (pendEl) pendEl.textContent = pending;
+
+    const listEl = document.getElementById('sv-list');
+    if (!listEl) return;
+    if (filtered.length === 0) { listEl.innerHTML = `<div class="report-empty"><div class="report-empty-icon">📋</div><div class="report-empty-title">暂无匹配的版本记录</div></div>`; return; }
+
+    const statusLabel = { draft:'草稿', pending:'待审批', published:'已发布', rolledback:'已回滚' };
+    const statusCls = { draft:'pending', pending:'warning', published:'done', rolledback:'overdue' };
+    listEl.innerHTML = filtered.map(v => `
+      <div class="sop-version-item">
+        <div class="sop-version-main">
+          <div class="sop-version-header">
+            <span class="sop-version-module">${v.module}</span>
+            <span class="sop-version-ver">${v.version}</span>
+            <span class="status-badge ${statusCls[v.status] || 'pending'}">${statusLabel[v.status] || v.status}</span>
+          </div>
+          <div class="sop-version-name">📄 ${v.sopName}</div>
+          <div class="sop-version-meta">
+            <span>📅 ${v.date}</span><span>👤 ${v.responsible}</span>
+            ${v.approver ? `<span>✅ ${v.approver}</span>` : ''}
+          </div>
+          <div class="sop-version-detail">
+            <div><strong>变更内容：</strong>${v.content}</div>
+            <div><strong>变更原因：</strong>${v.reason}</div>
+            ${v.impact ? `<div><strong>影响范围：</strong>${v.impact}</div>` : ''}
+          </div>
+        </div>
+        <div class="sop-version-actions">
+          ${v.status === 'draft' ? `<button class="btn btn-sm btn-outline" onclick="SOPVersionManager.changeStatus('${v.id}','pending')">提交审批</button>` : ''}
+          ${v.status === 'pending' ? `<button class="btn btn-sm btn-success" onclick="SOPVersionManager.changeStatus('${v.id}','published')">批准发布</button><button class="btn btn-sm btn-outline" onclick="SOPVersionManager.changeStatus('${v.id}','draft')">退回草稿</button>` : ''}
+          ${v.status === 'published' ? `<button class="btn btn-sm btn-outline" onclick="SOPVersionManager.changeStatus('${v.id}','rolledback')">回滚</button>` : ''}
+          <button class="btn btn-sm btn-danger" onclick="SOPVersionManager.deleteChange('${v.id}')">删除</button>
+        </div>
+      </div>
+    `).join('');
+    this._updateStats();
+  },
+
+  _updateStats() {
+    const data = this._load();
+    const now = new Date(); const thisMonth = data.filter(v => v.date && v.date.startsWith(now.toISOString().slice(0,7))).length;
+    const pending = data.filter(v => v.status === 'pending').length;
+    const totalEl = document.getElementById('sv-total'); if (totalEl) totalEl.textContent = data.length;
+    const monthEl = document.getElementById('sv-monthly'); if (monthEl) monthEl.textContent = thisMonth;
+    const pendEl = document.getElementById('sv-pending'); if (pendEl) pendEl.textContent = pending;
+  },
+
+  changeStatus(id, newStatus) {
+    const data = this._load(); const idx = data.findIndex(v => v.id === id);
+    if (idx === -1) return;
+    data[idx].status = newStatus;
+    if (newStatus === 'published') data[idx].approver = data[idx].approver || '运营负责人';
+    this._save(data); this.render();
+    showToast(`变更 ${id} 状态已更新为「${({draft:'草稿',pending:'待审批',published:'已发布',rolledback:'已回滚'})[newStatus]}」`);
+  },
+
+  deleteChange(id) {
+    if (!confirm('确定删除此变更记录？此操作不可撤销。')) return;
+    const data = this._load(); this._save(data.filter(v => v.id !== id));
+    this.render(); showToast('变更记录已删除');
+  },
+
+  openAddModal() {
+    document.getElementById('sv-form-date').value = new Date().toISOString().slice(0,10);
+    document.getElementById('sv-form-module').value = '';
+    document.getElementById('sv-form-sopname').value = '';
+    document.getElementById('sv-form-version').value = '';
+    document.getElementById('sv-form-responsible').value = '';
+    document.getElementById('sv-form-approver').value = '';
+    document.getElementById('sv-form-content').value = '';
+    document.getElementById('sv-form-reason').value = '';
+    document.getElementById('sv-form-impact').value = '';
+    document.getElementById('sv-form-status').value = 'draft';
+    document.getElementById('sv-add-modal').classList.add('show');
+  },
+
+  closeAddModal() { document.getElementById('sv-add-modal').classList.remove('show'); },
+
+  saveChange() {
+    const m = document.getElementById('sv-form-module').value;
+    const sn = document.getElementById('sv-form-sopname').value.trim();
+    const d = document.getElementById('sv-form-date').value;
+    const ct = document.getElementById('sv-form-content').value.trim();
+    const rs = document.getElementById('sv-form-reason').value.trim();
+    if (!m || !sn || !d || !ct || !rs) { showToast('请填写所有必填字段'); return; }
+    let ver = document.getElementById('sv-form-version').value.trim();
+    if (!ver) {
+      const data = this._load(); const modVers = data.filter(v => v.module === m);
+      const maxV = modVers.reduce((max, v) => { const n = parseFloat(v.version.replace('v','')); return n > max ? n : max; }, 0);
+      ver = 'v' + (maxV + 0.1).toFixed(1);
+    }
+    const entry = {
+      id: 'sv_' + Date.now(), module: m, sopName: sn, version: ver, date: d,
+      content: ct, reason: rs,
+      impact: document.getElementById('sv-form-impact').value.trim(),
+      responsible: document.getElementById('sv-form-responsible').value.trim() || '运营专员',
+      approver: document.getElementById('sv-form-approver').value.trim(),
+      status: document.getElementById('sv-form-status').value
+    };
+    const data = this._load(); data.unshift(entry); this._save(data);
+    this.closeAddModal(); this.render();
+    showToast(`版本记录 ${ver} 已保存`);
+  },
+
+  exportLog() {
+    const data = this._load();
+    const csv = 'ID,模块,SOP名称,版本,日期,变更内容,变更原因,影响范围,负责人,审批人,状态\n' +
+      data.map(v => [v.id,v.module,v.sopName,v.version,v.date,v.content,v.reason,v.impact||'',v.responsible,v.approver||'',v.status].join(',')).join('\n');
+    const blob = new Blob(['\uFEFF'+csv], {type:'text/csv;charset=utf-8'});
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+    a.download = 'SOP版本变更日志_' + new Date().toISOString().slice(0,10) + '.csv';
+    a.click(); showToast('变更日志已导出');
+  }
+};
+
+// --- SOPLibrary: SOP 资料库 ---
+/* @module SOPLibrary @layer sop @depends DataService — SOP资料库文档归档 */
+const SOPLibrary = {
+  STORAGE_KEY: 'mano_sop_library',
+  _currentFolder: 'all',
+
+  _defaults() {
+    return [
+      { id:'lib_001', name:'店铺健康数据监控SOP_v2.3.docx', folder:'模块一：店铺健康与数据监控', type:'.docx', version:'v2.3', updatedAt:'2026-07-29', size:'245 KB', author:'运营负责人' },
+      { id:'lib_002', name:'选品与Listing优化SOP_v1.8.docx', folder:'模块二：选品与Listing优化', type:'.docx', version:'v1.8', updatedAt:'2026-07-25', size:'312 KB', author:'运营专员' },
+      { id:'lib_003', name:'广告与促销管理SOP_v1.2.docx', folder:'模块三：广告与促销管理', type:'.docx', version:'v1.2', updatedAt:'2026-07-20', size:'198 KB', author:'运营专员' },
+      { id:'lib_004', name:'库存与供应链协同SOP_v1.1.docx', folder:'模块四：库存与供应链协同', type:'.docx', version:'v1.1', updatedAt:'2026-07-15', size:'275 KB', author:'运营负责人' },
+      { id:'lib_005', name:'客户评价与差评管理SOP_v1.0.docx', folder:'模块五：客户评价与差评管理', type:'.docx', version:'v1.0', updatedAt:'2026-07-10', size:'180 KB', author:'运营专员' },
+      { id:'lib_006', name:'竞品与市场调研SOP_v1.0.docx', folder:'模块六：竞品与市场调研', type:'.docx', version:'v1.0', updatedAt:'2026-07-05', size:'220 KB', author:'运营专员' },
+      { id:'lib_007', name:'销售数据分析与策略调整SOP_v1.0.docx', folder:'模块七：销售数据分析与策略调整', type:'.docx', version:'v1.0', updatedAt:'2026-07-01', size:'290 KB', author:'运营负责人' },
+      { id:'lib_008', name:'周报模板_v1.0.xlsx', folder:'模块一：店铺健康与数据监控', type:'.xlsx', version:'v1.0', updatedAt:'2026-06-28', size:'48 KB', author:'运营专员' },
+      { id:'lib_009', name:'法语回复话术模板库_v1.0.xlsx', folder:'模块五：客户评价与差评管理', type:'.xlsx', version:'v1.0', updatedAt:'2026-06-20', size:'156 KB', author:'运营专员' },
+      { id:'lib_010', name:'新员工SOP培训手册_v1.0.pdf', folder:'培训材料', type:'.pdf', version:'v1.0', updatedAt:'2026-07-29', size:'1.2 MB', author:'运营负责人' }
+    ];
+  },
+
+  _load() { try { const d = localStorage.getItem(this.STORAGE_KEY); return d ? JSON.parse(d) : this._defaults(); } catch(e) { return this._defaults(); } },
+  _save(data) { localStorage.setItem(this.STORAGE_KEY, JSON.stringify(data)); },
+
+  getAll() { return this._load(); },
+
+  getFolders() {
+    const data = this._load(); const folders = new Set();
+    data.forEach(d => folders.add(d.folder));
+    // Ensure standard order
+    const order = ['模块一：店铺健康与数据监控','模块二：选品与Listing优化','模块三：广告与促销管理','模块四：库存与供应链协同','模块五：客户评价与差评管理','模块六：竞品与市场调研','模块七：销售数据分析与策略调整','SOP 版本变更日志','培训材料'];
+    return order.filter(f => folders.has(f));
+  },
+
+  render() {
+    const data = this._load();
+    const search = (document.getElementById('sop-lib-search') || {}).value || '';
+    const typeFilter = (document.getElementById('sop-lib-type-filter') || {}).value || 'all';
+
+    // Render tree
+    const treeEl = document.getElementById('sop-lib-tree');
+    if (treeEl) {
+      const folders = this.getFolders();
+      const allCount = data.length;
+      treeEl.innerHTML = `
+        <li class="sop-lib-tree-item ${this._currentFolder==='all'?'active':''}" data-folder="all" onclick="SOPLibrary.selectFolder('all')">
+          <span>📁</span> 全部文档 <span style="color:var(--gray-400);font-size:11px;">(${allCount})</span>
+        </li>
+        ${folders.map(f => {
+          const cnt = data.filter(d => d.folder === f).length;
+          return `<li class="sop-lib-tree-item ${this._currentFolder===f?'active':''}" data-folder="${f}" onclick="SOPLibrary.selectFolder('${f.replace(/'/g,"\\'")}')">
+            <span>📁</span> ${f} <span style="color:var(--gray-400);font-size:11px;">(${cnt})</span>
+          </li>`;
+        }).join('')}
+      `;
+    }
+
+    // Render breadcrumb
+    const bcEl = document.getElementById('sop-lib-breadcrumb');
+    if (bcEl) bcEl.textContent = this._currentFolder === 'all' ? '全部文档' : this._currentFolder;
+
+    // Filter
+    let filtered = data;
+    if (this._currentFolder !== 'all') filtered = filtered.filter(d => d.folder === this._currentFolder);
+    if (search) filtered = filtered.filter(d => d.name.toLowerCase().includes(search.toLowerCase()));
+    if (typeFilter !== 'all') filtered = filtered.filter(d => d.type === typeFilter);
+
+    // Render list
+    const listEl = document.getElementById('sop-lib-list');
+    const emptyEl = document.getElementById('sop-lib-empty');
+    if (!listEl) return;
+    if (filtered.length === 0) {
+      listEl.innerHTML = '';
+      if (emptyEl) emptyEl.style.display = 'block';
+      return;
+    }
+    if (emptyEl) emptyEl.style.display = 'none';
+
+    const typeIcons = { '.docx':'📄', '.xlsx':'📊', '.pdf':'📕', '.png':'🖼️', '.jpg':'🖼️' };
+    const typeColors = { '.docx':'#eff6ff', '.xlsx':'#ecfdf5', '.pdf':'#fef2f2', '.png':'#f5f3ff', '.jpg':'#f5f3ff' };
+    listEl.innerHTML = filtered.map(d => `
+      <div class="sop-doc-card">
+        <div class="sop-doc-icon" style="background:${typeColors[d.type]||'var(--gray-100)'}">${typeIcons[d.type]||'📄'}</div>
+        <div class="sop-doc-info">
+          <div class="sop-doc-name">${d.name}</div>
+          <div class="sop-doc-meta">
+            <span>${d.version}</span><span>${d.updatedAt}</span><span>${d.size}</span><span>👤 ${d.author}</span>
+          </div>
+        </div>
+        <div class="sop-doc-actions">
+          <button class="btn btn-sm btn-outline" onclick="showToast('预览功能：${d.name.replace(/'/g,"\\'")}')">预览</button>
+          <button class="btn btn-sm btn-outline" onclick="showToast('下载已触发：${d.name.replace(/'/g,"\\'")}')">下载</button>
+        </div>
+      </div>
+    `).join('');
+  },
+
+  selectFolder(folder) {
+    this._currentFolder = folder;
+    this.render();
+  },
+
+  _uploadTrigger() {
+    document.getElementById('sop-lib-file-input').click();
+  },
+
+  _handleFileUpload(files) {
+    if (!files || files.length === 0) return;
+    const data = this._load();
+    Array.from(files).forEach(f => {
+      const ext = '.' + f.name.split('.').pop().toLowerCase();
+      const folder = this._currentFolder === 'all' ? '未分类' : this._currentFolder;
+      data.unshift({
+        id: 'lib_' + Date.now() + '_' + Math.random().toString(36).slice(2,6),
+        name: f.name, folder: folder, type: ext,
+        version: 'v1.0', updatedAt: new Date().toISOString().slice(0,10),
+        size: f.size > 1024*1024 ? (f.size/(1024*1024)).toFixed(1)+' MB' : Math.round(f.size/1024)+' KB',
+        author: '运营专员'
+      });
+    });
+    this._save(data);
+    this.render();
+    showToast(`已上传 ${files.length} 个文件`);
+  }
+};
+
+// --- SOPIterationBoard: SOP 迭代优化看板 ---
+/* @module SOPIterationBoard @layer sop @depends DataService,OperationLog — SOP迭代优化看板 */
+const SOPIterationBoard = {
+  ITER_KEY: 'mano_sop_iterations',
+  FB_KEY: 'mano_sop_feedback',
+
+  _defaultIterations() {
+    return [
+      { id:'iter_001', title:'转化率预警阈值调整', module:'模块一：店铺健康与数据监控', priority:'high', status:'pending', proposedBy:'运营专员', desc:'根据Q3数据，转化率阈值需从2%调整为1.8%', reviewDate:'2026-08-01', assignedTo:'运营负责人' },
+      { id:'iter_002', title:'新增法语错拼词识别', module:'模块二：选品与Listing优化', priority:'high', status:'evaluating', proposedBy:'运营专员', desc:'关键词研究需增加法语错拼词识别功能', reviewDate:'2026-08-01', assignedTo:'运营专员' },
+      { id:'iter_003', title:'促销复盘ROI自动计算', module:'模块三：广告与促销管理', priority:'mid', status:'planned', proposedBy:'团队负责人', desc:'促销复盘需增加ROI自动计算功能', reviewDate:'2026-08-15', assignedTo:'运营负责人' },
+    ];
+  },
+
+  _defaultFeedback() {
+    return [
+      { id:'fb_001', author:'运营专员', module:'模块二：选品与Listing优化', date:'2026-07-28', type:'流程优化建议', desc:'关键词研究Tab加载速度慢，建议优化缓存', suggestion:'增加缓存机制，减少重复加载', priority:'mid', status:'已采纳' },
+      { id:'fb_002', author:'运营专员', module:'模块一：店铺健康与数据监控', date:'2026-07-25', type:'流程痛点', desc:'每日数据拉取需要手动登录多个后台', suggestion:'建议对接API实现自动拉取', priority:'high', status:'评估中' },
+      { id:'fb_003', author:'运营专员', module:'模块五：客户评价与差评管理', date:'2026-07-22', type:'新增需求', desc:'需要增加法语语法检查功能', suggestion:'集成法语语法校对工具', priority:'low', status:'已记录' },
+      { id:'fb_004', author:'运营专员', module:'模块四：库存与供应链协同', date:'2026-07-18', type:'流程优化建议', desc:'补货计算器需增加历史销量趋势参考', suggestion:'在计算器旁展示近90天销量曲线', priority:'mid', status:'已规划' }
+    ];
+  },
+
+  _defaultHistory() {
+    return [
+      { date:'2026-07-15', title:'模块一·预警阈值调整', status:'已上线', result:'转化率提升8%' },
+      { date:'2026-07-08', title:'模块二·新增AI关键词建议', status:'已上线', result:'效率提升30%' },
+      { date:'2026-06-28', title:'模块三·促销检查清单优化', status:'已上线', result:'活动提报无遗漏' },
+    ];
+  },
+
+  _loadIter() { try { const d = localStorage.getItem(this.ITER_KEY); return d ? JSON.parse(d) : this._defaultIterations(); } catch(e) { return this._defaultIterations(); } },
+  _loadFB() { try { const d = localStorage.getItem(this.FB_KEY); return d ? JSON.parse(d) : this._defaultFeedback(); } catch(e) { return this._defaultFeedback(); } },
+  _saveIter(d) { localStorage.setItem(this.ITER_KEY, JSON.stringify(d)); },
+  _saveFB(d) { localStorage.setItem(this.FB_KEY, JSON.stringify(d)); },
+
+  render() {
+    this._renderStats();
+    this._renderIterations();
+    this._renderFeedback();
+    this._renderTimeline();
+    this._renderTraining();
+  },
+
+  _renderStats() {
+    const fb = this._loadFB();
+    const iter = this._loadIter();
+    const pending = iter.filter(i => i.status === 'pending' || i.status === 'evaluating').length;
+    const done = iter.filter(i => i.status === 'done' || i.status === 'online').length;
+    const rcEl = document.getElementById('si-review-count'); if (rcEl) rcEl.textContent = '1';
+    const fcEl = document.getElementById('si-feedback-count'); if (fcEl) fcEl.textContent = fb.length;
+    const pcEl = document.getElementById('si-pending-count'); if (pcEl) pcEl.textContent = pending;
+    const dcEl = document.getElementById('si-done-count'); if (dcEl) dcEl.textContent = done;
+  },
+
+  _renderIterations() {
+    const iter = this._loadIter();
+    const listEl = document.getElementById('si-iteration-list');
+    const emptyEl = document.getElementById('si-iter-empty');
+    if (!listEl) return;
+    const active = iter.filter(i => i.status !== 'done' && i.status !== 'online');
+    if (active.length === 0) { listEl.innerHTML = ''; if (emptyEl) emptyEl.style.display = 'block'; return; }
+    if (emptyEl) emptyEl.style.display = 'none';
+
+    const prioLabel = { high:'🔴 高优先级', mid:'🟡 中优先级', low:'🟢 低优先级' };
+    const statusLabel = { pending:'待评估', evaluating:'评估中', planned:'已规划', done:'已完成', online:'已上线' };
+    const sorted = [...active].sort((a,b) => ({high:0,mid:1,low:2})[a.priority] - ({high:0,mid:1,low:2})[b.priority]);
+
+    listEl.innerHTML = sorted.map(i => `
+      <div class="sop-iter-item">
+        <div class="sop-iter-priority ${i.priority}">${prioLabel[i.priority] || i.priority}</div>
+        <div class="sop-iter-content">
+          <div class="sop-iter-title">${i.title}</div>
+          <div class="sop-iter-meta">
+            <span>${i.module}</span><span>建议人：${i.proposedBy}</span><span>负责人：${i.assignedTo}</span>
+            <span class="status-badge ${i.status==='pending'?'pending':i.status==='evaluating'?'warning':'done'}">${statusLabel[i.status] || i.status}</span>
+          </div>
+          <div class="sop-iter-desc">${i.desc}</div>
+        </div>
+        <div class="sop-iter-actions">
+          <button class="btn btn-sm btn-outline" onclick="SOPIterationBoard.advanceIter('${i.id}')">推进</button>
+          <button class="btn btn-sm btn-outline" onclick="SOPIterationBoard.completeIter('${i.id}')">完成</button>
+        </div>
+      </div>
+    `).join('');
+  },
+
+  _renderFeedback() {
+    const fb = this._loadFB();
+    const listEl = document.getElementById('si-feedback-list');
+    const emptyEl = document.getElementById('si-fb-empty');
+    if (!listEl) return;
+    if (fb.length === 0) { listEl.innerHTML = ''; if (emptyEl) emptyEl.style.display = 'block'; return; }
+    if (emptyEl) emptyEl.style.display = 'none';
+    const recent = fb.slice(-5).reverse();
+    listEl.innerHTML = recent.map(f => `
+      <div class="sop-fb-item">
+        <div><strong>${f.author}</strong> · ${f.module}</div>
+        <div style="font-size:13px;color:var(--gray-700);margin:2px 0;">${f.desc}</div>
+        <div style="font-size:11px;color:var(--gray-400);">${f.date} · ${f.type} · ${f.status}</div>
+      </div>
+    `).join('');
+  },
+
+  _renderTimeline() {
+    const hist = this._defaultHistory();
+    const tlEl = document.getElementById('si-timeline');
+    if (!tlEl) return;
+    tlEl.innerHTML = hist.map(h => `
+      <div class="timeline-item done">
+        <div class="timeline-time">${h.date}</div>
+        <div class="timeline-content"><strong>${h.title}</strong> — ${h.status} · ${h.result}</div>
+      </div>
+    `).join('');
+  },
+
+  _renderTraining() {
+    const progEl = document.getElementById('si-training-progress');
+    if (!progEl) return;
+    const modules = ['店铺健康与数据监控','选品与Listing优化','广告与促销管理','库存与供应链协同','客户评价与差评管理','竞品与市场调研','销售数据分析与策略调整'];
+    const done = Math.floor(Math.random() * 4); // Simulated progress
+    document.getElementById('si-training-done').textContent = done;
+    progEl.innerHTML = modules.map((m,i) => {
+      const completed = i < done;
+      const current = i === done;
+      return `<div class="sop-training-item ${completed?'done':''} ${current?'current':''}">
+        <span class="sop-training-icon">${completed?'✅':current?'📖':'☐'}</span>
+        <span>模块${i<6?'一二三四五六七'[i]:'七'}：${m}</span>
+        <span style="margin-left:auto;font-size:11px;color:var(--gray-400);">${completed?'已学习':current?'进行中':'待学习'}</span>
+      </div>`;
+    }).join('');
+  },
+
+  advanceIter(id) {
+    const iter = this._loadIter(); const idx = iter.findIndex(i => i.id === id);
+    if (idx === -1) return;
+    const flow = { pending:'evaluating', evaluating:'planned', planned:'done' };
+    iter[idx].status = flow[iter[idx].status] || iter[idx].status;
+    this._saveIter(iter); this.render();
+    showToast('迭代项已推进');
+  },
+
+  completeIter(id) {
+    const iter = this._loadIter(); const idx = iter.findIndex(i => i.id === id);
+    if (idx === -1) return;
+    iter[idx].status = 'done';
+    this._saveIter(iter); this.render();
+    showToast('迭代项已标记完成');
+  },
+
+  openFeedbackModal() {
+    document.getElementById('si-fb-author').value = '运营专员';
+    document.getElementById('si-feedback-modal').classList.add('show');
+  },
+
+  closeFeedbackModal() { document.getElementById('si-feedback-modal').classList.remove('show'); },
+
+  submitFeedback() {
+    const m = document.getElementById('si-fb-module').value;
+    const t = document.getElementById('si-fb-type').value;
+    const desc = document.getElementById('si-fb-desc').value.trim();
+    if (!m || !t || !desc) { showToast('请填写所有必填字段'); return; }
+    const fb = this._loadFB();
+    fb.push({
+      id: 'fb_' + Date.now(), author: document.getElementById('si-fb-author').value,
+      module: m, date: new Date().toISOString().slice(0,10), type: t, desc: desc,
+      suggestion: document.getElementById('si-fb-suggestion').value.trim(),
+      priority: document.getElementById('si-fb-priority').value, status: '已记录'
+    });
+    this._saveFB(fb);
+    // Also add to iterations if priority is high
+    if (document.getElementById('si-fb-priority').value === 'high') {
+      const iter = this._loadIter();
+      iter.push({ id:'iter_'+Date.now(), title: desc.slice(0,30), module:m, priority:'high', status:'pending', proposedBy: document.getElementById('si-fb-author').value, desc:desc, reviewDate:'', assignedTo:'运营负责人' });
+      this._saveIter(iter);
+    }
+    this.closeFeedbackModal(); this.render();
+    showToast('反馈已提交');
+  },
+
+  startReview() { showToast('回顾流程已启动，请按月度回顾流程执行（Step1-5）'); },
+  editPlan() { showToast('回顾计划编辑功能已打开'); },
+  continueTraining() { showToast('培训模块已打开，请继续学习'); }
+};
+
+// PatchLog
+/* @module PatchLog @layer ui @depends none — 变更日志补丁记录 */
+const PatchLog = {
+  _log: [],
+  add(location, change, reason) {
+    this._log.push({ no: this._log.length + 1, time: new Date().toISOString(), location, change, reason });
+    try { localStorage.setItem('mano_patch_log', JSON.stringify(this._log)); } catch(e) {}
+  }
+};
+PatchLog.add('index.html', '新增 SOP 体系四大功能板块：运营工作流全景图、SOP版本管理、SOP资料库、SOP迭代优化看板', '用户需求：运营SOP体系整体串联与迭代优化');
+PatchLog.add('index.html', '侧边栏新增「SOP 体系」导航分组（3个子页面）', '用户需求');
+PatchLog.add('index.html', 'Dashboard 新增「全景图」Tab', '用户需求');
+PatchLog.add('index.html', 'PAGE_META 新增 sop-versions, sop-library, sop-iterations 路由', '用户需求');
+
+
 // 9. INIT
 // ============================================================
+// ============================================================
+// 8.6 renderOpLogFilters
+// ============================================================
+function renderOpLogFilters() {
+  var actions = OperationLog.getActions();
+  var modules = OperationLog.getModules();
+  var actionSel = document.getElementById('op-log-action-filter');
+  var modSel = document.getElementById('op-log-module-filter');
+  if (actionSel) actionSel.innerHTML = '<option value="all">全部操作类型</option>' + actions.map(function(a) { return '<option value="'+a+'">'+a+'</option>'; }).join('');
+  if (modSel) modSel.innerHTML = '<option value="all">全部模块</option>' + modules.map(function(m) { return '<option value="'+m+'">'+m+'</option>'; }).join('');
+}
+
+
 document.addEventListener('DOMContentLoaded', function() {
   // Date
   const now = new Date();
@@ -9400,6 +11159,20 @@ document.addEventListener('DOMContentLoaded', function() {
   // Router init
   Router.init();
 
+  // Module registry — init all registered modules in dependency order
+  ModuleRegistry.initAll().then(() => {
+    // Log stats on dev console
+    const stats = ModuleRegistry.stats();
+    console.log(`ModuleRegistry: ${stats.total} modules in ${Object.keys(stats.byLayer).join('/')} layers`,
+      stats.errors.length ? `(${stats.errors.length} errors)` : '(all OK)',
+      '\nInit order:', stats.initOrder.join(' → '));
+  });
+
+  // SOP 体系页面渲染
+  SOPVersionManager.render();
+  SOPLibrary.render();
+  SOPIterationBoard.render();
+  OperationLog.log('login', '用户登录工作台', {module:'系统'});
   // Initial renders (defer to CloudSync flow)
   renderTasks();
   renderSOPTable();
@@ -9451,12 +11224,27 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('convertio-modal').addEventListener('click', function(e) { if (e.target === this) this.classList.remove('show'); });
   document.getElementById('dm-modal').addEventListener('click', function(e) { if (e.target === this) DataManager.closeModal(); });
   document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') { closeModal(); closeDSModal(); reportCloseModal(); document.getElementById('convertio-modal').classList.remove('show'); weeklyReport.closeAlertModal(); weeklyReport.closeReportModal(); weeklyReport.closeDrill(); DataManager.closeModal(); }
+    if (e.key === 'Escape') { closeModal(); closeDSModal(); reportCloseModal(); document.getElementById('convertio-modal').classList.remove('show'); weeklyReport.closeAlertModal(); weeklyReport.closeReportModal(); weeklyReport.closeDrill(); DataManager.closeModal(); SOPVersionManager.closeAddModal(); SOPIterationBoard.closeFeedbackModal(); }
+    // Dev shortcut: Ctrl+Shift+M → ModuleRegistry stats
+    if (e.ctrlKey && e.shiftKey && e.key === 'M') {
+      e.preventDefault();
+      const stats = ModuleRegistry.stats();
+      alert(`模块注册器统计\n━━━━━━━━━━\n总模块：${stats.total}\n层级分布：${JSON.stringify(stats.byLayer)}\n初始化顺序：${stats.initOrder.join(' → ')}\n错误：${stats.errors.length}个\n━━━━━━━━━━\n详情见浏览器控制台`);
+      console.table(ModuleRegistry.getDependencyGraph());
+      showToast(`模块注册器：${stats.total}个模块，${stats.errors.length}个错误`, stats.errors.length ? 'warning' : 'success');
+    }
   });
 
   // Menu toggle mobile
+  function toggleSidebar() {
+    var sidebar = document.getElementById('sidebar');
+    var overlay = document.getElementById('sidebar-overlay');
+    var isOpen = sidebar.classList.contains('open');
+    if (isOpen) { sidebar.classList.remove('open'); if(overlay) overlay.classList.remove('show'); }
+    else { sidebar.classList.add('open'); if(overlay) overlay.classList.add('show'); }
+  }
   document.getElementById('menu-toggle').addEventListener('click', function() {
-    document.getElementById('sidebar').classList.toggle('open');
+    toggleSidebar();
   });
   function checkResponsive() {
     document.getElementById('menu-toggle').style.display = window.innerWidth <= 768 ? 'block' : 'none';
@@ -9768,6 +11556,24 @@ document.addEventListener('DOMContentLoaded', function() {
             <button class="btn btn-outline" onclick="document.getElementById('dm-import-input').click()">📤 导入数据恢复（选择备份文件）</button>
             <input type="file" id="dm-import-input" accept=".json" style="display:none;" onchange="DataManager.importAll(this.files[0])">
             <button class="btn btn-danger btn-sm" onclick="DataManager.clearAll()" style="margin-top:8px;">🗑️ 清除所有数据</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== Modal: 数据导入预览 ===== -->
+    <div class="import-preview-overlay hidden" id="import-preview-overlay">
+      <div class="import-preview-box">
+        <div class="import-preview-header">
+          <h3>📥 数据导入预览 — <span id="import-preview-filename" style="font-size:14px;color:var(--gray-600);"></span></h3>
+          <button class="modal-close" onclick="closeImportPreview()">×</button>
+        </div>
+        <div class="import-preview-body" id="import-preview-body"></div>
+        <div class="import-preview-footer">
+          <div style="font-size:12px;color:var(--gray-500);">💡 请确认字段映射和目标类目是否正确</div>
+          <div style="display:flex;gap:8px;">
+            <button class="btn btn-outline" onclick="skipImport()">取消</button>
+            <button class="btn btn-primary" onclick="confirmImport()">✅ 确认导入</button>
           </div>
         </div>
       </div>
